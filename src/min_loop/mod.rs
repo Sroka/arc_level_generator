@@ -17,7 +17,8 @@ fn generate(rng: &mut impl RngCore,
     let mut upcoming_features: VecDeque<&Feature> = VecDeque::from_iter(features);
     let mut active_features: VecDeque<&Feature> = VecDeque::new();
 
-    let generated_entities: Vec<CollideableEntity> = Vec::new();
+    let mut all_generated_entities: Vec<&CollideableEntity> = Vec::new();
+    let mut active_generated_entities: VecDeque<&CollideableEntity> = VecDeque::new();
     let world = VisibleWorld {
         half_extents: Vector3::new(9.0, 30.0, 9.0),
         travel_speed: 4.0,
@@ -32,15 +33,18 @@ fn generate(rng: &mut impl RngCore,
             break 'main_loop;
         }
         distance_travelled += STEP;
+        let time_travelled = distance_travelled / world.travel_speed;
         drain_upcoming_features(upcoming_features.borrow_mut(), active_features.borrow_mut(), distance_travelled);
         trim_active_features(active_features.borrow_mut());
+        trim_active_entities(active_generated_entities.borrow_mut(), &world, time_travelled);
 
         'features_loop: for feature in &active_features {
             if !rng.gen_bool((STEP / feature.spawns_per_second) as f64) {
                 continue;
             }
+            let mut can_spawn = true;
             'prefabs_loop: for prefab in feature.prefabs {
-                'obstacles_loop: for existing_entity in &generated_entities {
+                'obstacles_loop: for existing_entity in &active_generated_entities {
                     let time_of_impact = query::time_of_impact(
                         &Isometry3::new(prefab.position, nalgebra::zero()),
                         &prefab.velocity,
@@ -53,12 +57,20 @@ fn generate(rng: &mut impl RngCore,
                     );
                     match time_of_impact {
                         Some(_) => {
+                            can_spawn = false;
                             break 'prefabs_loop;
                         }
                         _ => {}
                     }
                 }
             }
+            if can_spawn {
+                for prefab in feature.prefabs {
+
+
+                }
+            }
+
         }
     }
 }
@@ -84,6 +96,18 @@ fn trim_active_features(
     active_features: &mut VecDeque<&Feature>,
 ) {
     active_features.retain(|feature| feature.spawn_count > 0);
+}
+
+fn trim_active_entities(
+    active_entities: &mut VecDeque<&CollideableEntity>,
+    world: &VisibleWorld,
+    time_travelled: f32,
+) {
+    active_entities.retain(|entity| {
+        let entity_travel_time = time_travelled - entity.spawn_time;
+        let current_entity_position = entity.spawn_position + entity.velocity * entity_travel_time;
+        AABB::from_half_extents(Point3::new(0.0, 0.0, 0.0), world.half_extents).contains_local_point(&Point::from(current_entity_position))
+    });
 }
 
 
