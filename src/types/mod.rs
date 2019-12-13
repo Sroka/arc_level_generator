@@ -1,5 +1,4 @@
 use nalgebra::Vector3;
-use super::types;
 
 pub struct CollideableEntity {
     pub spawn_position: Vector3<f32>,
@@ -9,7 +8,7 @@ pub struct CollideableEntity {
     pub prefab_id: i32,
 }
 
-#[derive(Clone)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Feature<'a> {
     pub translate_x: bool,
     pub translate_z: bool,
@@ -21,6 +20,7 @@ pub struct Feature<'a> {
 
 }
 
+#[derive(PartialEq, Debug)]
 pub struct Prefab {
     pub prefab_id: i32,
     pub position: Vector3<f32>,

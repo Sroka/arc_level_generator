@@ -1,4 +1,4 @@
-use nalgebra::{Vector3, Vector2};
+use nalgebra::{Vector3};
 
 pub struct PrefabDescription {
     prefab_id: i32,
