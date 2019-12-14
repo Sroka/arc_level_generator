@@ -6,7 +6,7 @@ use nalgebra::{Isometry3};
 
 pub fn can_spawn_feature(
     feature_prefabs: &[Prefab],
-    obstacles: &VecDeque<&CollideableEntity>,
+    obstacles: &VecDeque<CollideableEntity>,
     world: &VisibleWorld,
     time_travelled: f32,
 ) -> bool {

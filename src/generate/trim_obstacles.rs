@@ -4,7 +4,7 @@ use ncollide3d::bounding_volume::BoundingVolume;
 use nalgebra::{Isometry3};
 
 pub fn trim_obstacles(
-    obstacles: &mut VecDeque<&CollideableEntity>,
+    obstacles: &mut VecDeque<CollideableEntity>,
     world: &VisibleWorld,
     time_travelled: f32,
 ) {
@@ -36,7 +36,7 @@ mod tests {
             travel_speed: 4.0,
             spawn_barrier: 2.0,
         };
-        let ref obstacle0 = CollideableEntity {
+        let obstacle0 = CollideableEntity {
             spawn_position: Vector3::new(0., 0., 0.),
             spawn_time: 10.0,
             velocity: Vector3::new(0., -1., 0.),
@@ -44,29 +44,29 @@ mod tests {
             prefab_id: 0,
             priority: 0,
         };
-        let ref obstacle1 = CollideableEntity {
+        let obstacle1 = CollideableEntity {
             priority: 5,
             spawn_time: 30.0,
             ..obstacle0.clone()
         };
-        let mut obstacles = VecDeque::from_iter([obstacle0, obstacle1].iter().cloned());
+        let mut obstacles: VecDeque<CollideableEntity> = VecDeque::from_iter([obstacle0.clone(), obstacle1.clone()].iter().cloned());
         trim_obstacles(&mut obstacles, &world, 0.);
-        assert!(obstacles.iter().eq([obstacle0, obstacle1].iter()));
+        assert!(obstacles.iter().eq([obstacle0.clone(), obstacle1.clone()].iter()));
 
         trim_obstacles(&mut obstacles, &world, 15.);
-        assert!(obstacles.iter().eq([obstacle0, obstacle1].iter()));
+        assert!(obstacles.iter().eq([obstacle0.clone(), obstacle1.clone()].iter()));
 
         trim_obstacles(&mut obstacles, &world, 20.0);
-        assert!(obstacles.iter().eq([obstacle0, obstacle1].iter()));
+        assert!(obstacles.iter().eq([obstacle0.clone(), obstacle1.clone()].iter()));
 
         trim_obstacles(&mut obstacles, &world, 20.6);
-        assert!(obstacles.iter().eq([obstacle1].iter()));
+        assert!(obstacles.iter().eq([obstacle1.clone()].iter()));
 
         trim_obstacles(&mut obstacles, &world, 40.);
-        assert!(obstacles.iter().eq([obstacle1].iter()));
+        assert!(obstacles.iter().eq([obstacle1.clone()].iter()));
 
         trim_obstacles(&mut obstacles, &world, 40.6);
-        let expected: Vec<&CollideableEntity> = Vec::new();
+        let expected: Vec<CollideableEntity> = Vec::new();
         assert!(obstacles.iter().eq(expected.iter()));
     }
 }

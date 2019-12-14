@@ -2,8 +2,8 @@ use std::collections::VecDeque;
 use crate::generate::types::{Feature, CollideableEntity};
 
 pub fn spawn_feature(feature: &Feature,
-                     obstacles: &mut VecDeque<&CollideableEntity>,
-                     generated_entities: &mut Vec<&CollideableEntity>,
+                     obstacles: &mut VecDeque<CollideableEntity>,
+                     generated_entities: &mut Vec<CollideableEntity>,
                      time: f32,
 ) {
     for prefab in feature.prefabs {

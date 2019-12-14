@@ -3,7 +3,6 @@ use nalgebra::{Vector3, Point3};
 use std::collections::VecDeque;
 use rand::prelude::RngCore;
 use std::iter::FromIterator;
-use std::borrow::BorrowMut;
 use rand::Rng;
 
 mod types;
@@ -24,11 +23,11 @@ const STEP: f32 = 0.1;
 
 fn generate(rng: &mut impl RngCore,
             features: &[Feature]) {
-    let mut upcoming_features: VecDeque<&Feature> = VecDeque::from_iter(features);
-    let mut active_features: VecDeque<&Feature> = VecDeque::new();
+    let mut upcoming_features: VecDeque<Feature> = VecDeque::from_iter(features.iter().cloned());
+    let mut active_features: VecDeque<Feature> = VecDeque::new();
 
-    let mut generated_entities: Vec<&CollideableEntity> = Vec::new();
-    let mut obstacles: VecDeque<&CollideableEntity> = VecDeque::new();
+    let mut generated_entities: Vec<CollideableEntity> = Vec::new();
+    let mut obstacles: VecDeque<CollideableEntity> = VecDeque::new();
     let world = VisibleWorld {
         world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(9.0, 30.0, 9.0)),
         travel_speed: 4.0,

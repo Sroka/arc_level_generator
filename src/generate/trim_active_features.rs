@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 use super::types::Feature;
 
 pub fn trim_active_features(
-    active_features: &mut VecDeque<&Feature>,
+    active_features: &mut VecDeque<Feature>,
 ) {
     active_features.retain(|feature| feature.spawn_count > 0);
 }
@@ -47,9 +47,9 @@ mod tests {
             spawn_count: 100,
             ..feature0
         };
-        let mut features = VecDeque::from_iter([&feature0, &feature1, &feature2, &feature3].iter().cloned());
+        let mut features = VecDeque::from_iter([feature0.clone(), feature1.clone(), feature2.clone(), feature3.clone()].iter().cloned());
 
         trim_active_features(&mut features);
-        assert!(features.iter().eq([&feature0, &feature2, &feature3].iter()));
+        assert!(features.iter().eq([feature0.clone(), feature2.clone(), feature3.clone()].iter()));
     }
 }

@@ -1,8 +1,8 @@
 use std::collections::VecDeque;
 use super::types::{Feature};
 
-pub fn drain_upcoming_features<'a>(upcoming_features: &mut VecDeque<&'a Feature<'a>>,
-                                   active_features: &mut VecDeque<&'a Feature<'a>>,
+pub fn drain_upcoming_features<'a>(upcoming_features: &mut VecDeque<Feature<'a>>,
+                                   active_features: &mut VecDeque<Feature<'a>>,
                                    distance_travelled: f32,
 ) {
     if upcoming_features.is_empty() {
@@ -10,7 +10,7 @@ pub fn drain_upcoming_features<'a>(upcoming_features: &mut VecDeque<&'a Feature<
     }
     upcoming_features.retain(|feature| {
         if feature.trigger_position - feature.priority as f32 <= distance_travelled {
-            active_features.push_back(*feature);
+            active_features.push_back(feature.clone());
             false
         } else {
             true
@@ -62,8 +62,8 @@ mod tests {
             ..feature0
         };
 
-        let mut upcoming_features: VecDeque<&Feature> = VecDeque::from_iter([&feature0, &feature1, &feature2, &feature3].iter().cloned());
-        let mut active_features: VecDeque<&Feature> = VecDeque::new();
+        let mut upcoming_features: VecDeque<Feature> = VecDeque::from_iter([feature0.clone(), feature1.clone(), feature2.clone(), feature3.clone()].iter().cloned());
+        let mut active_features: VecDeque<Feature> = VecDeque::new();
         let mut distance_travelled = 0.0_f32;
 
 
@@ -73,7 +73,7 @@ mod tests {
             distance_travelled,
         );
 
-        let expected: Vec<&Feature> = Vec::new();
+        let expected: Vec<Feature> = Vec::new();
         assert!(active_features.iter().eq(expected.iter()));
 
         distance_travelled = 11.0;
@@ -84,7 +84,7 @@ mod tests {
             distance_travelled,
         );
 
-        let expected = [&feature0];
+        let expected = [feature0.clone()];
         assert!(active_features.iter().eq(expected.iter()));
 
         distance_travelled = 98.0;
@@ -95,7 +95,7 @@ mod tests {
             distance_travelled,
         );
 
-        let expected = [&feature0, &feature2];
+        let expected = [feature0.clone(), feature2.clone()];
         assert!(active_features.iter().eq(expected.iter()));
 
         distance_travelled = 102.0;
@@ -106,7 +106,7 @@ mod tests {
             distance_travelled,
         );
 
-        let expected = [&feature0, &feature2, &feature1];
+        let expected = [feature0.clone(), feature2.clone(), feature1.clone()];
         assert!(active_features.iter().eq(expected.iter()));
 
         distance_travelled = 107.0;
@@ -117,7 +117,7 @@ mod tests {
             distance_travelled,
         );
 
-        let expected = [&feature0, &feature2, &feature1, &feature3];
+        let expected = [feature0.clone(), feature2.clone(), feature1.clone(), feature3.clone()];
         assert!(active_features.iter().eq(expected.iter()));
     }
 }
