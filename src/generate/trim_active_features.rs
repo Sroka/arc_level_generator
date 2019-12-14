@@ -33,7 +33,7 @@ mod tests {
             spawn_count: 1,
             spawns_per_second: 1.0,
             trigger_position: 10.0,
-            priority: 0.0,
+            priority: 0,
         };
         let feature1 = Feature {
             spawn_count: 0,

@@ -11,12 +11,14 @@ mod drain_upcoming_features;
 mod trim_active_features;
 mod trim_obstacles;
 mod can_spawn_feature;
+mod spawn_feature;
 
 use self::types::{CollideableEntity, Feature, VisibleWorld};
 use self::drain_upcoming_features::drain_upcoming_features;
 use self::trim_active_features::trim_active_features;
 use self::trim_obstacles::trim_obstacles;
 use self::can_spawn_feature::can_spawn_feature;
+use self::spawn_feature::spawn_feature;
 
 const STEP: f32 = 0.1;
 
@@ -42,9 +44,9 @@ fn generate(rng: &mut impl RngCore,
         }
         distance_travelled += STEP;
         let time_travelled = distance_travelled / world.travel_speed;
-        drain_upcoming_features(upcoming_features.borrow_mut(), active_features.borrow_mut(), distance_travelled);
-        trim_active_features(active_features.borrow_mut());
-        trim_obstacles(obstacles.borrow_mut(), &world, time_travelled);
+        drain_upcoming_features(&mut upcoming_features, &mut active_features, distance_travelled);
+        trim_active_features(&mut active_features);
+        trim_obstacles(&mut obstacles, &world, time_travelled);
 
         'features_loop: for feature in &active_features {
             if !rng.gen_bool((STEP / feature.spawns_per_second) as f64) {
@@ -57,12 +59,16 @@ fn generate(rng: &mut impl RngCore,
                 time_travelled,
             );
             if can_spawn {
-                for prefab in feature.prefabs {}
+                spawn_feature(
+                    &feature,
+                    &mut obstacles,
+                    &mut generated_entities,
+                    time_travelled,
+                );
             }
         }
     }
 }
-
 
 
 impl Feature<'_> {

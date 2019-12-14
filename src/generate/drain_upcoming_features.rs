@@ -9,7 +9,7 @@ pub fn drain_upcoming_features<'a>(upcoming_features: &mut VecDeque<&'a Feature<
         return;
     }
     upcoming_features.retain(|feature| {
-        if feature.trigger_position - feature.priority <= distance_travelled {
+        if feature.trigger_position - feature.priority as f32 <= distance_travelled {
             active_features.push_back(*feature);
             false
         } else {
@@ -44,21 +44,21 @@ mod tests {
             spawn_count: 1,
             spawns_per_second: 1.0,
             trigger_position: 10.0,
-            priority: 0.0,
+            priority: 0,
         };
         let feature1 = Feature {
             trigger_position: 100.0,
-            priority: 0.0,
+            priority: 0,
             ..feature0
         };
         let feature2 = Feature {
             trigger_position: 110.0,
-            priority: 15.0,
+            priority: 15,
             ..feature0
         };
         let feature3 = Feature {
             trigger_position: 110.0,
-            priority: 5.0,
+            priority: 5,
             ..feature0
         };
 

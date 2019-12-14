@@ -19,7 +19,7 @@ pub struct Feature<'a> {
     pub spawns_per_second: f32,
     pub spawn_count: i32,
     pub trigger_position: f32,
-    pub priority: f32,
+    pub priority: i32,
 
 }
 

@@ -20,7 +20,7 @@ pub fn trim_obstacles(
 
 #[cfg(test)]
 mod tests {
-    use crate::generate::types::{CollideableEntity, Feature, Prefab, VisibleWorld};
+    use crate::generate::types::{CollideableEntity, VisibleWorld};
     use super::trim_obstacles;
 
     use std::collections::VecDeque;
