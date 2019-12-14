@@ -8,6 +8,7 @@ use std::iter::FromIterator;
 use std::borrow::BorrowMut;
 use rand::Rng;
 use ncollide3d::shape::Cuboid;
+use ncollide3d::bounding_volume::BoundingVolume;
 
 const STEP: f32 = 0.1;
 
@@ -19,7 +20,7 @@ fn generate(rng: &mut impl RngCore,
     let mut generated_entities: Vec<&CollideableEntity> = Vec::new();
     let mut obstacles: VecDeque<&CollideableEntity> = VecDeque::new();
     let world = VisibleWorld {
-        half_extents: Vector3::new(9.0, 30.0, 9.0),
+        world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(9.0, 30.0, 9.0)),
         travel_speed: 4.0,
         spawn_barrier: 2.0,
     };
@@ -78,14 +79,17 @@ fn trim_active_features(
 }
 
 fn trim_obstacles(
-    active_entities: &mut VecDeque<&CollideableEntity>,
+    obstacles: &mut VecDeque<&CollideableEntity>,
     world: &VisibleWorld,
     time_travelled: f32,
 ) {
-    active_entities.retain(|entity| {
-        let entity_travel_time = time_travelled - entity.spawn_time;
-        let current_entity_position = entity.spawn_position + entity.velocity * entity_travel_time;
-        AABB::from_half_extents(Point3::new(0.0, 0.0, 0.0), world.half_extents).contains_local_point(&Point::from(current_entity_position))
+    obstacles.retain(|entity| {
+        if time_travelled < entity.spawn_time {
+            return true;
+        };
+        let position = entity.position(time_travelled);
+        let current_entity_aabb = entity.bounding_box.transform_by(&Isometry3::new(position, nalgebra::zero()));
+        world.world_bounds.intersects(&current_entity_aabb)
     });
 }
 
@@ -100,10 +104,10 @@ fn can_spawn_feature(
             let time_of_impact = query::time_of_impact(
                 &Isometry3::new(prefab.position, nalgebra::zero()),
                 &prefab.velocity,
-                &Cuboid::new(prefab.bounding_box),
+                &Cuboid::new(prefab.bounding_box.half_extents()),
                 &Isometry3::new(existing_entity.spawn_position, nalgebra::zero()),
                 &existing_entity.velocity,
-                &Cuboid::new(existing_entity.bounding_box),
+                &Cuboid::new(existing_entity.bounding_box.half_extents()),
                 100.0,
                 0.0,
             );
@@ -121,22 +125,22 @@ fn can_spawn_feature(
 
 impl Feature<'_> {
     fn calculate_feature_spawn_bounds(&self) -> AABB<f32> {
-        let min_x_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.x - prefab1.bounding_box.x / 2.0).partial_cmp(&(prefab2.position.x - prefab2.bounding_box.x)).unwrap()).unwrap();
-        let min_y_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.y - prefab1.bounding_box.y / 2.0).partial_cmp(&(prefab2.position.x - prefab2.bounding_box.y)).unwrap()).unwrap();
-        let min_z_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.z - prefab1.bounding_box.z / 2.0).partial_cmp(&(prefab2.position.x - prefab2.bounding_box.z)).unwrap()).unwrap();
-        let max_x_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.x + prefab1.bounding_box.x / 2.0).partial_cmp(&(prefab2.position.x + prefab2.bounding_box.x)).unwrap()).unwrap();
-        let max_y_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.y + prefab1.bounding_box.y / 2.0).partial_cmp(&(prefab2.position.x + prefab2.bounding_box.y)).unwrap()).unwrap();
-        let max_z_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.z + prefab1.bounding_box.z / 2.0).partial_cmp(&(prefab2.position.x + prefab2.bounding_box.z)).unwrap()).unwrap();
+        let min_x_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.x - prefab1.bounding_box.half_extents().x).partial_cmp(&(prefab2.position.x - prefab2.bounding_box.half_extents().x)).unwrap()).unwrap();
+        let min_y_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.y - prefab1.bounding_box.half_extents().y).partial_cmp(&(prefab2.position.x - prefab2.bounding_box.half_extents().y)).unwrap()).unwrap();
+        let min_z_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.z - prefab1.bounding_box.half_extents().z).partial_cmp(&(prefab2.position.x - prefab2.bounding_box.half_extents().z)).unwrap()).unwrap();
+        let max_x_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.x + prefab1.bounding_box.half_extents().x).partial_cmp(&(prefab2.position.x + prefab2.bounding_box.half_extents().x)).unwrap()).unwrap();
+        let max_y_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.y + prefab1.bounding_box.half_extents().y).partial_cmp(&(prefab2.position.x + prefab2.bounding_box.half_extents().y)).unwrap()).unwrap();
+        let max_z_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.z + prefab1.bounding_box.half_extents().z).partial_cmp(&(prefab2.position.x + prefab2.bounding_box.half_extents().z)).unwrap()).unwrap();
         AABB::new(
             Point3::new(
-                min_x_prefab.position.x - min_x_prefab.bounding_box.x,
-                min_y_prefab.position.x - min_y_prefab.bounding_box.x,
-                min_z_prefab.position.z - min_z_prefab.bounding_box.z,
+                min_x_prefab.position.x - min_x_prefab.bounding_box.half_extents().x,
+                min_y_prefab.position.x - min_y_prefab.bounding_box.half_extents().y,
+                min_z_prefab.position.z - min_z_prefab.bounding_box.half_extents().z,
             ),
             Point3::new(
-                max_x_prefab.position.x + max_x_prefab.bounding_box.x,
-                max_y_prefab.position.x + max_y_prefab.bounding_box.x,
-                max_z_prefab.position.z + max_z_prefab.bounding_box.z,
+                max_x_prefab.position.x + max_x_prefab.bounding_box.half_extents().x,
+                max_y_prefab.position.x + max_y_prefab.bounding_box.half_extents().y,
+                max_z_prefab.position.z + max_z_prefab.bounding_box.half_extents().z,
             ),
         )
     }
@@ -144,19 +148,20 @@ impl Feature<'_> {
 
 #[cfg(test)]
 mod tests {
-    use crate::types::{Prefab, Feature};
-    use nalgebra::Vector3;
-    use crate::min_loop::{trim_active_features, drain_upcoming_features};
+    use crate::types::{Prefab, Feature, CollideableEntity, VisibleWorld};
+    use nalgebra::{Vector3, Point3};
+    use crate::min_loop::{trim_active_features, drain_upcoming_features, trim_obstacles};
     use std::collections::VecDeque;
     use std::iter::FromIterator;
     use std::borrow::BorrowMut;
+    use ncollide3d::bounding_volume::AABB;
 
     #[test]
     fn test_drain_upcoming_features() {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0.0, 0.0, 0.0),
-            bounding_box: Vector3::new(0.0, 0.0, 0.0),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             velocity: Vector3::new(1.0, 1.0, 1.0),
         };
         let feature0 = Feature {
@@ -198,7 +203,7 @@ mod tests {
         let expected: Vec<&Feature> = Vec::new();
         assert!(active_features.iter().eq(expected.iter()));
 
-       distance_travelled = 11.0;
+        distance_travelled = 11.0;
 
         drain_upcoming_features(
             &mut upcoming_features,
@@ -248,7 +253,7 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0.0, 0.0, 0.0),
-            bounding_box: Vector3::new(0.0, 0.0, 0.0),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             velocity: Vector3::new(1.0, 1.0, 1.0),
         };
         let feature0 = Feature {
@@ -276,5 +281,46 @@ mod tests {
 
         trim_active_features(&mut features);
         assert!(features.iter().eq([&feature0, &feature2, &feature3].iter()));
+    }
+
+    #[test]
+    fn test_trim_obstacles() {
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
+            travel_speed: 4.0,
+            spawn_barrier: 2.0,
+        };
+        let ref obstacle0 = CollideableEntity {
+            spawn_position: Vector3::new(0., 0., 0.),
+            spawn_time: 10.0,
+            velocity: Vector3::new(0., -1., 0.),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            prefab_id: 0,
+            priority: 0,
+        };
+        let ref obstacle1 = CollideableEntity {
+            priority: 5,
+            spawn_time: 30.0,
+            ..obstacle0.clone()
+        };
+        let mut obstacles = VecDeque::from_iter([obstacle0, obstacle1].iter().cloned());
+        trim_obstacles(&mut obstacles, &world, 0.);
+        assert!(obstacles.iter().eq([obstacle0, obstacle1].iter()));
+
+        trim_obstacles(&mut obstacles, &world, 15.);
+        assert!(obstacles.iter().eq([obstacle0, obstacle1].iter()));
+
+        trim_obstacles(&mut obstacles, &world, 20.0);
+        assert!(obstacles.iter().eq([obstacle0, obstacle1].iter()));
+
+        trim_obstacles(&mut obstacles, &world, 20.6);
+        assert!(obstacles.iter().eq([obstacle1].iter()));
+
+        trim_obstacles(&mut obstacles, &world, 40.);
+        assert!(obstacles.iter().eq([obstacle1].iter()));
+
+        trim_obstacles(&mut obstacles, &world, 40.6);
+        let expected: Vec<&CollideableEntity> = Vec::new();
+        assert!(obstacles.iter().eq(expected.iter()));
     }
 }
