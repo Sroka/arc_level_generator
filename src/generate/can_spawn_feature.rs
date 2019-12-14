@@ -32,3 +32,12 @@ pub fn can_spawn_feature(
     }
     return true;
 }
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_can_spawn_feature() {
+        assert!(false)
+    }
+}

@@ -15,7 +15,16 @@ pub fn spawn_feature(feature: &Feature,
             prefab_id: prefab.prefab_id,
             priority: feature.priority,
         };
-//        obstacles.push_back(&entity);
-//        generated_entities.push(&entity);
+        obstacles.push_back(entity.clone());
+        generated_entities.push(entity.clone());
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_spawn_feature() {
+        assert!(false)
     }
 }
