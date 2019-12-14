@@ -1,0 +1,123 @@
+use std::collections::VecDeque;
+use super::types::{Feature};
+
+pub fn drain_upcoming_features<'a>(upcoming_features: &mut VecDeque<&'a Feature<'a>>,
+                                   active_features: &mut VecDeque<&'a Feature<'a>>,
+                                   distance_travelled: f32,
+) {
+    if upcoming_features.is_empty() {
+        return;
+    }
+    upcoming_features.retain(|feature| {
+        if feature.trigger_position - feature.priority <= distance_travelled {
+            active_features.push_back(*feature);
+            false
+        } else {
+            true
+        }
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::generate::types::{Feature, Prefab};
+    use super::drain_upcoming_features;
+
+    use std::collections::VecDeque;
+    use std::iter::FromIterator;
+
+    use nalgebra::{Vector3, Point3};
+    use ncollide3d::bounding_volume::AABB;
+
+    #[test]
+    fn test_drain_upcoming_features() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0.0, 0.0, 0.0),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            velocity: Vector3::new(1.0, 1.0, 1.0),
+        };
+        let feature0 = Feature {
+            translate_x: false,
+            translate_z: false,
+            prefabs: &[prefab0],
+            spawn_count: 1,
+            spawns_per_second: 1.0,
+            trigger_position: 10.0,
+            priority: 0.0,
+        };
+        let feature1 = Feature {
+            trigger_position: 100.0,
+            priority: 0.0,
+            ..feature0
+        };
+        let feature2 = Feature {
+            trigger_position: 110.0,
+            priority: 15.0,
+            ..feature0
+        };
+        let feature3 = Feature {
+            trigger_position: 110.0,
+            priority: 5.0,
+            ..feature0
+        };
+
+        let mut upcoming_features: VecDeque<&Feature> = VecDeque::from_iter([&feature0, &feature1, &feature2, &feature3].iter().cloned());
+        let mut active_features: VecDeque<&Feature> = VecDeque::new();
+        let mut distance_travelled = 0.0_f32;
+
+
+        drain_upcoming_features(
+            &mut upcoming_features,
+            &mut active_features,
+            distance_travelled,
+        );
+
+        let expected: Vec<&Feature> = Vec::new();
+        assert!(active_features.iter().eq(expected.iter()));
+
+        distance_travelled = 11.0;
+
+        drain_upcoming_features(
+            &mut upcoming_features,
+            &mut active_features,
+            distance_travelled,
+        );
+
+        let expected = [&feature0];
+        assert!(active_features.iter().eq(expected.iter()));
+
+        distance_travelled = 98.0;
+
+        drain_upcoming_features(
+            &mut upcoming_features,
+            &mut active_features,
+            distance_travelled,
+        );
+
+        let expected = [&feature0, &feature2];
+        assert!(active_features.iter().eq(expected.iter()));
+
+        distance_travelled = 102.0;
+
+        drain_upcoming_features(
+            &mut upcoming_features,
+            &mut active_features,
+            distance_travelled,
+        );
+
+        let expected = [&feature0, &feature2, &feature1];
+        assert!(active_features.iter().eq(expected.iter()));
+
+        distance_travelled = 107.0;
+
+        drain_upcoming_features(
+            &mut upcoming_features,
+            &mut active_features,
+            distance_travelled,
+        );
+
+        let expected = [&feature0, &feature2, &feature1, &feature3];
+        assert!(active_features.iter().eq(expected.iter()));
+    }
+}
