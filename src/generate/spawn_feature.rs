@@ -1,10 +1,12 @@
 use std::collections::VecDeque;
 use crate::generate::types::{Feature, CollideableEntity};
+use nalgebra::Vector3;
 
 pub fn spawn_feature(feature: &Feature,
                      obstacles: &mut VecDeque<CollideableEntity>,
                      generated_entities: &mut Vec<CollideableEntity>,
                      time: f32,
+                     feature_shift: &Vector3<f32>,
 ) {
     for prefab in feature.prefabs {
         let entity = CollideableEntity {
@@ -22,7 +24,6 @@ pub fn spawn_feature(feature: &Feature,
 
 #[cfg(test)]
 mod tests {
-
     #[test]
     fn test_spawn_feature() {
         assert!(false)

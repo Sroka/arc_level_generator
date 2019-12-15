@@ -1,5 +1,5 @@
 use ncollide3d::bounding_volume::AABB;
-use nalgebra::{Vector3, Point3};
+use nalgebra::{Vector3, Point3, Vector2};
 use std::collections::VecDeque;
 use rand::prelude::RngCore;
 use std::iter::FromIterator;
@@ -9,6 +9,7 @@ mod types;
 mod drain_upcoming_features;
 mod trim_active_features;
 mod trim_obstacles;
+mod calculate_feature_shift;
 mod can_spawn_feature;
 mod spawn_feature;
 
@@ -16,6 +17,7 @@ use self::types::{CollideableEntity, Feature, VisibleWorld};
 use self::drain_upcoming_features::drain_upcoming_features;
 use self::trim_active_features::trim_active_features;
 use self::trim_obstacles::trim_obstacles;
+use self::calculate_feature_shift::calculate_feature_shift;
 use self::can_spawn_feature::can_spawn_feature;
 use self::spawn_feature::spawn_feature;
 
@@ -51,11 +53,13 @@ fn generate(rng: &mut impl RngCore,
             if !rng.gen_bool((STEP / feature.spawns_per_second) as f64) {
                 continue;
             }
+            let feature_shift = calculate_feature_shift(rng, &world, feature);
             let can_spawn = can_spawn_feature(
-                feature.prefabs,
+                &feature,
                 &obstacles,
                 &world,
                 time_travelled,
+                &feature_shift,
             );
             if can_spawn {
                 spawn_feature(
@@ -63,32 +67,9 @@ fn generate(rng: &mut impl RngCore,
                     &mut obstacles,
                     &mut generated_entities,
                     time_travelled,
+                    &feature_shift,
                 );
             }
         }
-    }
-}
-
-
-impl Feature<'_> {
-    fn calculate_feature_spawn_bounds(&self) -> AABB<f32> {
-        let min_x_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.x - prefab1.bounding_box.half_extents().x).partial_cmp(&(prefab2.position.x - prefab2.bounding_box.half_extents().x)).unwrap()).unwrap();
-        let min_y_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.y - prefab1.bounding_box.half_extents().y).partial_cmp(&(prefab2.position.x - prefab2.bounding_box.half_extents().y)).unwrap()).unwrap();
-        let min_z_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.z - prefab1.bounding_box.half_extents().z).partial_cmp(&(prefab2.position.x - prefab2.bounding_box.half_extents().z)).unwrap()).unwrap();
-        let max_x_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.x + prefab1.bounding_box.half_extents().x).partial_cmp(&(prefab2.position.x + prefab2.bounding_box.half_extents().x)).unwrap()).unwrap();
-        let max_y_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.y + prefab1.bounding_box.half_extents().y).partial_cmp(&(prefab2.position.x + prefab2.bounding_box.half_extents().y)).unwrap()).unwrap();
-        let max_z_prefab = self.prefabs.iter().min_by(|prefab1, prefab2| (prefab1.position.z + prefab1.bounding_box.half_extents().z).partial_cmp(&(prefab2.position.x + prefab2.bounding_box.half_extents().z)).unwrap()).unwrap();
-        AABB::new(
-            Point3::new(
-                min_x_prefab.position.x - min_x_prefab.bounding_box.half_extents().x,
-                min_y_prefab.position.x - min_y_prefab.bounding_box.half_extents().y,
-                min_z_prefab.position.z - min_z_prefab.bounding_box.half_extents().z,
-            ),
-            Point3::new(
-                max_x_prefab.position.x + max_x_prefab.bounding_box.half_extents().x,
-                max_y_prefab.position.x + max_y_prefab.bounding_box.half_extents().y,
-                max_z_prefab.position.z + max_z_prefab.bounding_box.half_extents().z,
-            ),
-        )
     }
 }

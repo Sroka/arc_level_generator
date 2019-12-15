@@ -2,15 +2,17 @@ use super::types::{CollideableEntity, Prefab, VisibleWorld};
 use std::collections::VecDeque;
 use ncollide3d::shape::Cuboid;
 use ncollide3d::query;
-use nalgebra::{Isometry3};
+use nalgebra::{Isometry3, Vector3};
+use crate::generate::types::Feature;
 
 pub fn can_spawn_feature(
-    feature_prefabs: &[Prefab],
+    feature: &Feature,
     obstacles: &VecDeque<CollideableEntity>,
     world: &VisibleWorld,
     time_travelled: f32,
+    feature_shift: &Vector3<f32>,
 ) -> bool {
-    'prefabs_loop: for prefab in feature_prefabs {
+    'prefabs_loop: for prefab in feature.prefabs {
         'obstacles_loop: for existing_entity in obstacles {
             let time_of_impact = query::time_of_impact(
                 &Isometry3::new(prefab.position, nalgebra::zero()),
@@ -35,7 +37,6 @@ pub fn can_spawn_feature(
 
 #[cfg(test)]
 mod tests {
-
     #[test]
     fn test_can_spawn_feature() {
         assert!(false)
