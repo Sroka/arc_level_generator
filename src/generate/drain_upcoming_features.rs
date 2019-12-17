@@ -45,6 +45,7 @@ mod tests {
             spawns_per_second: 1.0,
             trigger_position: 10.0,
             priority: 0,
+            missed_spawns: 0,
         };
         let feature1 = Feature {
             trigger_position: 100.0,

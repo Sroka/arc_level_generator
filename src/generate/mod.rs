@@ -13,7 +13,7 @@ mod calculate_feature_shift;
 mod can_spawn_feature;
 mod spawn_feature;
 
-use self::types::{CollideableEntity, Feature, VisibleWorld};
+pub use self::types::{VisibleWorld, Feature, Prefab, CollideableEntity};
 use self::drain_upcoming_features::drain_upcoming_features;
 use self::trim_active_features::trim_active_features;
 use self::trim_obstacles::trim_obstacles;
@@ -23,18 +23,16 @@ use self::spawn_feature::spawn_feature;
 
 const STEP: f32 = 0.1;
 
-fn generate(rng: &mut impl RngCore,
-            features: &[Feature]) {
+pub fn generate(
+    world: &VisibleWorld,
+    features: &[Feature],
+    rng: &mut impl RngCore,
+) -> Vec<CollideableEntity> {
     let mut upcoming_features: VecDeque<Feature> = VecDeque::from_iter(features.iter().cloned());
     let mut active_features: VecDeque<Feature> = VecDeque::new();
 
     let mut generated_entities: Vec<CollideableEntity> = Vec::new();
     let mut obstacles: VecDeque<CollideableEntity> = VecDeque::new();
-    let world = VisibleWorld {
-        world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(9.0, 30.0, 9.0)),
-        travel_speed: 4.0,
-        spawn_barrier: 2.0,
-    };
 
     let mut distance_travelled = 0.0_f32;
 
@@ -49,8 +47,8 @@ fn generate(rng: &mut impl RngCore,
         trim_active_features(&mut active_features);
         trim_obstacles(&mut obstacles, &world, time_travelled);
 
-        'features_loop: for feature in &active_features {
-            if !rng.gen_bool((STEP / feature.spawns_per_second) as f64) {
+        'features_loop: for feature in &mut active_features {
+            if !rng.gen_bool(((STEP * (1 + feature.missed_spawns) as f32 / feature.spawns_per_second) as f64).min(1.0)) {
                 continue;
             }
             let feature_shift = calculate_feature_shift(rng, &world, feature);
@@ -67,9 +65,15 @@ fn generate(rng: &mut impl RngCore,
                     &mut obstacles,
                     &mut generated_entities,
                     time_travelled,
+                    &world,
                     &feature_shift,
                 );
+                feature.spawn_count = feature.spawn_count - 1;
+                feature.missed_spawns = 0;
+            } else {
+                feature.missed_spawns = feature.missed_spawns + 1;
             }
         }
     }
+    generated_entities
 }

@@ -38,9 +38,6 @@ pub fn can_spawn_feature(
                         &Ray::new(Point3::origin(), -prefab.velocity),
                         false,
                     ).unwrap();
-            println!("Prefab spawn position: {:?}", prefab_spawn_position);
-            println!("Obstacle spawn position: {:?}", obstacle_spawn_position);
-            println!("Prefab toi: {}", prefab_world_bounds_toi);
 
             // TODO In reality this is a fix for a bug in query::time_of_impact
             if prefab.bounding_box.transform_by(&Isometry3::new(prefab_spawn_position, nalgebra::zero()))
@@ -97,6 +94,7 @@ mod tests {
                 spawns_per_second: 1.,
                 trigger_position: 10.,
                 priority: 0,
+                missed_spawns: 0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 8., 5.),
@@ -137,6 +135,7 @@ mod tests {
                 spawns_per_second: 1.,
                 trigger_position: 10.,
                 priority: 0,
+                missed_spawns: 0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., -2.25, 0.),
@@ -177,6 +176,7 @@ mod tests {
                 spawns_per_second: 1.,
                 trigger_position: 10.,
                 priority: 0,
+                missed_spawns: 0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., -2.5, 0.),
@@ -217,6 +217,7 @@ mod tests {
                 spawns_per_second: 1.,
                 trigger_position: 10.,
                 priority: 0,
+                missed_spawns: 0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 8.0, 0.),
@@ -261,6 +262,7 @@ mod tests {
                 spawns_per_second: 1.,
                 trigger_position: 10.,
                 priority: 5,
+                missed_spawns: 0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 8., 5.),

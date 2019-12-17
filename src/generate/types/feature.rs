@@ -11,6 +11,7 @@ pub struct Feature<'a> {
     pub priority: i32,
     pub translate_x: bool,
     pub translate_z: bool,
+    pub missed_spawns: i32,
 }
 
 impl<'a> Feature<'a> {
@@ -31,6 +32,7 @@ impl<'a> Feature<'a> {
             priority,
             translate_x,
             translate_z,
+            missed_spawns: 0,
         }
     }
 }
