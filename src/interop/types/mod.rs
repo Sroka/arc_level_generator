@@ -10,12 +10,14 @@ pub struct PrefabDescription {
 
 #[derive(Debug, Clone)]
 pub struct FeatureDescription {
-    pub translate_x: bool,
-    pub translate_z: bool,
     pub prefabs_ids: *const i32,
     pub prefabs_ids_count: i32,
+    pub spawns_per_second: f32,
     pub spawn_count: i32,
-    pub spawn_start_distance: f32,
+    pub trigger_position: f32,
+    pub priority: i32,
+    pub translate_x: bool,
+    pub translate_z: bool,
 }
 
 #[derive(Debug, Clone)]

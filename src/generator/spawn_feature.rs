@@ -9,7 +9,7 @@ pub fn spawn_feature(feature: &Feature,
                      world: &VisibleWorld,
                      feature_shift: &Vector3<f32>,
 ) {
-    for prefab in feature.prefabs {
+    for prefab in &feature.prefabs {
         let entity = CollideableEntity {
             spawn_position: prefab.position + feature_shift + Vector3::new(0., world.spawn_barrier_y_coord, 0.),
             spawn_time: time + feature.priority as f32,

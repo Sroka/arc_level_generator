@@ -1,8 +1,8 @@
 use std::collections::VecDeque;
 use super::types::{Feature};
 
-pub fn drain_upcoming_features<'a>(upcoming_features: &mut VecDeque<Feature<'a>>,
-                                   active_features: &mut VecDeque<Feature<'a>>,
+pub fn drain_upcoming_features(upcoming_features: &mut VecDeque<Feature>,
+                                   active_features: &mut VecDeque<Feature>,
                                    distance_travelled: f32,
 ) {
     if upcoming_features.is_empty() {

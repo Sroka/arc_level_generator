@@ -19,8 +19,10 @@ mod tests {
             translate_z: false,
             prefabs_ids: prefab_ids.as_ptr(),
             prefabs_ids_count: prefab_ids.len() as i32,
-            spawn_count: 2,
-            spawn_start_distance: 10.0,
+            spawns_per_second: 1.0,
+            spawn_count: 1,
+            trigger_position: 10.0,
+            priority: 0
         }];
         let world = VisibleWorldDescription {
             position: Vector3::new(0., 0., 0.),
@@ -29,13 +31,14 @@ mod tests {
             spawn_barrier_y_coord: 8.0,
         };
         unsafe {
-            arc_level_generator::generate_entities(
+            let generated_entities = arc_level_generator::generate_entities(
                 features.as_ptr(),
                 features.len() as i32,
                 prefabs.as_ptr(),
                 prefabs.len() as i32,
                 world,
             );
+
         }
     }
 }

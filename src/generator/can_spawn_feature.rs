@@ -14,7 +14,7 @@ pub fn can_spawn_feature(
     time_travelled: f32,
     feature_shift: &Vector3<f32>,
 ) -> bool {
-    'prefabs_loop: for prefab in feature.prefabs {
+    'prefabs_loop: for prefab in &feature.prefabs {
         'obstacles_loop: for obstacle in obstacles {
             let prefab_spawn_position = Vector3::new(0., world.spawn_barrier_y_coord, 0.)
                 + prefab.position
