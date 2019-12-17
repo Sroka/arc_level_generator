@@ -1,5 +1,5 @@
 use std::collections::VecDeque;
-use crate::generate::types::{Feature, CollideableEntity, VisibleWorld};
+use crate::generator::types::{Feature, CollideableEntity, VisibleWorld};
 use nalgebra::Vector3;
 
 pub fn spawn_feature(feature: &Feature,
@@ -11,7 +11,7 @@ pub fn spawn_feature(feature: &Feature,
 ) {
     for prefab in feature.prefabs {
         let entity = CollideableEntity {
-            spawn_position: prefab.position + feature_shift + Vector3::new(0., world.spawn_barrier, 0.),
+            spawn_position: prefab.position + feature_shift + Vector3::new(0., world.spawn_barrier_y_coord, 0.),
             spawn_time: time + feature.priority as f32,
             velocity: prefab.velocity,
             bounding_box: prefab.bounding_box.clone(),

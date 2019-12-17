@@ -1,5 +1,5 @@
 use rand::{RngCore, Rng};
-use crate::generate::types::{VisibleWorld, Feature, calculate_prefabs_spawn_bounds};
+use crate::generator::types::{VisibleWorld, Feature, calculate_prefabs_spawn_bounds};
 use nalgebra::Vector3;
 
 pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, feature: &Feature) -> Vector3<f32> {

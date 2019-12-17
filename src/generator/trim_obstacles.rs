@@ -20,7 +20,7 @@ pub fn trim_obstacles(
 
 #[cfg(test)]
 mod tests {
-    use crate::generate::types::{CollideableEntity, VisibleWorld};
+    use crate::generator::types::{CollideableEntity, VisibleWorld};
     use super::trim_obstacles;
 
     use std::collections::VecDeque;
@@ -34,7 +34,7 @@ mod tests {
         let world = VisibleWorld {
             world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
             travel_speed: 4.0,
-            spawn_barrier: 2.0,
+            spawn_barrier_y_coord: 2.0,
         };
         let obstacle0 = CollideableEntity {
             spawn_position: Vector3::new(0., 0., 0.),

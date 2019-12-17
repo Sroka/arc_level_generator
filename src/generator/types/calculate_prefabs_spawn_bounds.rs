@@ -1,4 +1,4 @@
-use crate::generate::types::Prefab;
+use crate::generator::types::Prefab;
 use ncollide3d::bounding_volume::{AABB, BoundingVolume};
 use nalgebra::{Point3, Vector3, Isometry3};
 

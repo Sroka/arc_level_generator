@@ -20,7 +20,7 @@ pub fn drain_upcoming_features<'a>(upcoming_features: &mut VecDeque<Feature<'a>>
 
 #[cfg(test)]
 mod tests {
-    use crate::generate::types::{Feature, Prefab};
+    use crate::generator::types::{Feature, Prefab};
     use super::drain_upcoming_features;
 
     use std::collections::VecDeque;

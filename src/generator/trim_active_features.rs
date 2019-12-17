@@ -9,7 +9,7 @@ pub fn trim_active_features(
 
 #[cfg(test)]
 mod tests {
-    use crate::generate::types::{Feature, Prefab};
+    use crate::generator::types::{Feature, Prefab};
     use super::trim_active_features;
 
     use std::collections::VecDeque;

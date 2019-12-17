@@ -1,25 +1,13 @@
-use ncollide3d::bounding_volume::AABB;
-use nalgebra::{Vector3, Point3, Vector2};
 use std::collections::VecDeque;
-use rand::prelude::RngCore;
+use crate::{Feature, CollideableEntity, VisibleWorld};
 use std::iter::FromIterator;
-use rand::Rng;
-
-mod types;
-mod drain_upcoming_features;
-mod trim_active_features;
-mod trim_obstacles;
-mod calculate_feature_shift;
-mod can_spawn_feature;
-mod spawn_feature;
-
-pub use self::types::{VisibleWorld, Feature, Prefab, CollideableEntity};
-use self::drain_upcoming_features::drain_upcoming_features;
-use self::trim_active_features::trim_active_features;
-use self::trim_obstacles::trim_obstacles;
-use self::calculate_feature_shift::calculate_feature_shift;
-use self::can_spawn_feature::can_spawn_feature;
-use self::spawn_feature::spawn_feature;
+use rand::{RngCore, Rng};
+use crate::generator::drain_upcoming_features::drain_upcoming_features;
+use crate::generator::trim_active_features::trim_active_features;
+use crate::generator::trim_obstacles::trim_obstacles;
+use crate::generator::calculate_feature_shift::calculate_feature_shift;
+use crate::generator::can_spawn_feature::can_spawn_feature;
+use crate::generator::spawn_feature::spawn_feature;
 
 const STEP: f32 = 0.1;
 

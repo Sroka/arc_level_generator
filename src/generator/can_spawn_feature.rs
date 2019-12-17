@@ -4,7 +4,7 @@ use ncollide3d::shape::Cuboid;
 use ncollide3d::query;
 use ncollide3d::query::{RayCast, Ray};
 use nalgebra::{Isometry3, Vector3, Point3};
-use crate::generate::types::Feature;
+use crate::generator::types::Feature;
 use ncollide3d::bounding_volume::BoundingVolume;
 
 pub fn can_spawn_feature(
@@ -16,7 +16,7 @@ pub fn can_spawn_feature(
 ) -> bool {
     'prefabs_loop: for prefab in feature.prefabs {
         'obstacles_loop: for obstacle in obstacles {
-            let prefab_spawn_position = Vector3::new(0., world.spawn_barrier, 0.)
+            let prefab_spawn_position = Vector3::new(0., world.spawn_barrier_y_coord, 0.)
                 + prefab.position
                 + prefab.velocity * (-feature.priority as f32)
                 + feature_shift;
@@ -68,10 +68,10 @@ pub fn can_spawn_feature(
 
 #[cfg(test)]
 mod tests {
-    use crate::generate::types::{Prefab, Feature, VisibleWorld, CollideableEntity};
+    use crate::generator::types::{Prefab, Feature, VisibleWorld, CollideableEntity};
     use ncollide3d::bounding_volume::AABB;
     use nalgebra::{Isometry3, Vector3, Point3};
-    use crate::generate::can_spawn_feature::can_spawn_feature;
+    use crate::generator::can_spawn_feature::can_spawn_feature;
     use std::collections::VecDeque;
     use std::iter::FromIterator;
 
@@ -107,7 +107,7 @@ mod tests {
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
                 travel_speed: 4.0,
-                spawn_barrier: 8.0,
+                spawn_barrier_y_coord: 8.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,
@@ -148,7 +148,7 @@ mod tests {
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
                 travel_speed: 4.0,
-                spawn_barrier: 8.0,
+                spawn_barrier_y_coord: 8.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,
@@ -189,7 +189,7 @@ mod tests {
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
                 travel_speed: 4.0,
-                spawn_barrier: 8.0,
+                spawn_barrier_y_coord: 8.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,
@@ -230,7 +230,7 @@ mod tests {
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
                 travel_speed: 4.0,
-                spawn_barrier: 8.0,
+                spawn_barrier_y_coord: 8.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,
@@ -275,7 +275,7 @@ mod tests {
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
                 travel_speed: 4.0,
-                spawn_barrier: 8.0,
+                spawn_barrier_y_coord: 8.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,

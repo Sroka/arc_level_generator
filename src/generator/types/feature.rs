@@ -1,6 +1,6 @@
 use ncollide3d::bounding_volume::AABB;
 use nalgebra::{Vector3, Point3};
-use crate::generate::types::prefab::Prefab;
+use crate::generator::types::prefab::Prefab;
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Feature<'a> {
