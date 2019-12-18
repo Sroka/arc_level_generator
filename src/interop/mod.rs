@@ -1,5 +1,7 @@
 mod types;
-mod generate_entities;
+mod bind_generate;
+mod deallocate_rust_array;
 
-pub use self::types::{VisibleWorldDescription, FeatureDescription, PrefabDescription};
-pub use self::generate_entities::generate_entities;
+pub use self::types::{VisibleWorldDescription, FeatureDescription, PrefabDescription, EntitiesArrayDescription};
+pub use self::bind_generate::bind_generate;
+pub use self::deallocate_rust_array::deallocate_rust_array;

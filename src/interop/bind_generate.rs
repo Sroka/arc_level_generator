@@ -2,11 +2,14 @@ use nalgebra::{Vector3, Point3};
 use crate::interop::types::{VisibleWorldDescription, FeatureDescription, PrefabDescription, EntitiesArrayDescription, EntityDescription};
 use std::slice::from_raw_parts;
 use crate::{Feature, Prefab, VisibleWorld};
+use crate::generate;
 use ncollide3d::bounding_volume::AABB;
 use std::iter::FromIterator;
+use rand::thread_rng;
+use std::mem;
 
 #[no_mangle]
-pub unsafe extern fn generate_entities(
+pub unsafe extern fn bind_generate(
     features_ptr: *const FeatureDescription,
     features_count: i32,
     prefabs_ptr: *const PrefabDescription,
@@ -59,9 +62,26 @@ pub unsafe extern fn generate_entities(
         spawn_barrier_y_coord: world_description.spawn_barrier_y_coord,
     };
 
-    let array = [EntityDescription {}];
+
+    let generated_entities = generate(
+        &world,
+        features.as_slice(),
+        &mut thread_rng(),
+    );
+
+    let mut entities_descriptions: Vec<EntityDescription> = generated_entities.iter().map(|entity| EntityDescription {
+        spawn_position: entity.spawn_position,
+        spawn_time: entity.spawn_time,
+        velocity: entity.velocity,
+        prefab_id: entity.prefab_id,
+    }).collect();
+    entities_descriptions.shrink_to_fit();
+    assert_eq!(entities_descriptions.capacity(), entities_descriptions.len());
+    let pointer = entities_descriptions.as_mut_ptr();
+    let length = entities_descriptions.len() as i32;
+    mem::forget(entities_descriptions);
     EntitiesArrayDescription {
-        pointer: array.as_ptr(),
-        length: array.len() as i32,
+        pointer,
+        length,
     }
 }

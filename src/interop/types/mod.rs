@@ -28,10 +28,15 @@ pub struct VisibleWorldDescription {
     pub spawn_barrier_y_coord: f32,
 }
 
-pub struct EntityDescription {}
-
+#[derive(Debug, Clone)]
+pub struct EntityDescription {
+    pub spawn_position: Vector3<f32>,
+    pub spawn_time: f32,
+    pub velocity: Vector3<f32>,
+    pub prefab_id: i32,
+}
 
 pub struct EntitiesArrayDescription {
-    pub pointer: *const EntityDescription,
+    pub pointer: *mut EntityDescription,
     pub length: i32,
 }
