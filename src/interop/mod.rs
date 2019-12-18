@@ -1,7 +1,7 @@
 mod types;
 mod bind_generate;
-mod deallocate_rust_array;
+mod bind_deallocate_vec;
 
 pub use self::types::{VisibleWorldDescription, FeatureDescription, PrefabDescription, EntitiesArrayDescription};
 pub use self::bind_generate::bind_generate;
-pub use self::deallocate_rust_array::deallocate_rust_array;
+pub use self::bind_deallocate_vec::bind_deallocate_vec;

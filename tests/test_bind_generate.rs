@@ -91,7 +91,7 @@ mod tests {
             for entity in entities {
                 println!("Entity description: {:?}", entity)
             }
-            arc_level_generator::deallocate_rust_array(generated_entities_description)
+            arc_level_generator::bind_deallocate_vec(generated_entities_description)
         }
     }
 }
