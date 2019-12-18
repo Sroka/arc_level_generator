@@ -29,7 +29,7 @@ mod tests {
         let feature0 = Feature {
             translate_x: false,
             translate_z: false,
-            prefabs: &[prefab0],
+            prefabs: vec![prefab0.clone()],
             spawn_count: 1,
             spawns_per_second: 1.0,
             trigger_position: 10.0,
@@ -38,15 +38,15 @@ mod tests {
         };
         let feature1 = Feature {
             spawn_count: 0,
-            ..feature0
+            ..feature0.clone()
         };
         let feature2 = Feature {
             spawn_count: 10,
-            ..feature0
+            ..feature0.clone()
         };
         let feature3 = Feature {
             spawn_count: 100,
-            ..feature0
+            ..feature0.clone()
         };
         let mut features = VecDeque::from_iter([feature0.clone(), feature1.clone(), feature2.clone(), feature3.clone()].iter().cloned());
 

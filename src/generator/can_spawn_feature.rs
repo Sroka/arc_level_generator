@@ -89,7 +89,7 @@ mod tests {
             let feature = Feature {
                 translate_x: false,
                 translate_z: false,
-                prefabs: &[prefab],
+                prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
                 trigger_position: 10.,
@@ -130,7 +130,7 @@ mod tests {
             let feature = Feature {
                 translate_x: false,
                 translate_z: false,
-                prefabs: &[prefab],
+                prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
                 trigger_position: 10.,
@@ -171,7 +171,7 @@ mod tests {
             let feature = Feature {
                 translate_x: false,
                 translate_z: false,
-                prefabs: &[prefab],
+                prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
                 trigger_position: 10.,
@@ -212,7 +212,7 @@ mod tests {
             let feature = Feature {
                 translate_x: false,
                 translate_z: false,
-                prefabs: &[prefab],
+                prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
                 trigger_position: 10.,
@@ -257,7 +257,7 @@ mod tests {
             let feature = Feature {
                 translate_x: false,
                 translate_z: false,
-                prefabs: &[prefab],
+                prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
                 trigger_position: 10.,

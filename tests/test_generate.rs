@@ -17,7 +17,7 @@ mod tests {
         let feature0 = Feature {
             translate_x: true,
             translate_z: true,
-            prefabs: &[prefab0],
+            prefabs: vec![prefab0],
             spawn_count: 1000,
             spawns_per_second: 1.0,
             trigger_position: 10.0,
