@@ -12,32 +12,23 @@ use std::mem;
 pub unsafe extern fn bind_generate(
     features_ptr: *const FeatureDescription,
     features_count: i32,
-    prefabs_ptr: *const PrefabDescription,
-    prefabs_count: i32,
     world_description: VisibleWorldDescription,
 ) -> EntitiesArrayDescription {
-    let prefabs: Vec<Prefab> = from_raw_parts(prefabs_ptr, prefabs_count as usize)
-        .iter()
-        .map(|prefab_description| Prefab {
-            prefab_id: prefab_description.prefab_id,
-            position: prefab_description.position,
-            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), prefab_description.half_extents),
-            velocity: prefab_description.velocity,
-        })
-        .collect();
     let features: Vec<Feature> = from_raw_parts(features_ptr, features_count as usize)
         .iter()
         .map(|feature_description| {
-            let prefab_ids = from_raw_parts(feature_description.prefabs_ids, feature_description.prefabs_ids_count as usize);
-            let feature_prefabs: Vec<Prefab> = prefab_ids.iter()
-                .map(|prefab_id| {
-                    let option = prefabs.iter().find(|prefab| prefab.prefab_id == *prefab_id);
-                    match option {
-                        None => panic!("No prefab havings a prefab id"),
-                        Some(existing_prefab) => existing_prefab.clone(),
+            let feature_prefabs: Vec<Prefab> = from_raw_parts(feature_description.prefabs, feature_description.prefabs_count as usize)
+                .iter()
+                .map(|prefab_description| {
+                    Prefab {
+                        prefab_id: prefab_description.prefab_id,
+                        position: prefab_description.position,
+                        bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), prefab_description.half_extents),
+                        velocity: prefab_description.velocity,
                     }
                 })
                 .collect();
+
             Feature {
                 prefabs: feature_prefabs,
                 spawns_per_second: feature_description.spawns_per_second,
