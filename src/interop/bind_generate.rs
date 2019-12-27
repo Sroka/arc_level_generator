@@ -1,10 +1,9 @@
-use nalgebra::{Vector3, Point3};
-use crate::interop::types::{VisibleWorldDescription, FeatureDescription, PrefabDescription, EntitiesArrayDescription, EntityDescription};
+use nalgebra::{Point3};
+use crate::interop::types::{VisibleWorldDescription, FeatureDescription, EntitiesArrayDescription, EntityDescription};
 use std::slice::from_raw_parts;
 use crate::{Feature, Prefab, VisibleWorld};
 use crate::generate;
 use ncollide3d::bounding_volume::AABB;
-use std::iter::FromIterator;
 use rand::thread_rng;
 use std::mem;
 

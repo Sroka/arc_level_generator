@@ -6,6 +6,10 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+name = "arc_level_generator"
+crate-type = ["dylib", "rlib"]
+
 [dependencies]
 ncollide3d = "0.21.0"
 nalgebra   = "0.19"

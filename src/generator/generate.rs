@@ -36,7 +36,7 @@ pub fn generate(
         trim_obstacles(&mut obstacles, &world, time_travelled);
 
         'features_loop: for feature in &mut active_features {
-            if !rng.gen_bool(((STEP * (1 + feature.missed_spawns) as f32 / feature.spawns_per_second) as f64).min(1.0)) {
+            if !rng.gen_bool(((STEP * (1 + feature.missed_spawns) as f32 * feature.spawns_per_second) as f64).min(1.0)) {
                 continue;
             }
             let feature_shift = calculate_feature_shift(rng, &world, feature);

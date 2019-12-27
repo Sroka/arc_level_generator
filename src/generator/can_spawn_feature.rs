@@ -1,4 +1,4 @@
-use super::types::{CollideableEntity, Prefab, VisibleWorld};
+use super::types::{CollideableEntity, VisibleWorld};
 use std::collections::VecDeque;
 use ncollide3d::shape::Cuboid;
 use ncollide3d::query;
@@ -70,7 +70,7 @@ pub fn can_spawn_feature(
 mod tests {
     use crate::generator::types::{Prefab, Feature, VisibleWorld, CollideableEntity};
     use ncollide3d::bounding_volume::AABB;
-    use nalgebra::{Isometry3, Vector3, Point3};
+    use nalgebra::{Vector3, Point3};
     use crate::generator::can_spawn_feature::can_spawn_feature;
     use std::collections::VecDeque;
     use std::iter::FromIterator;

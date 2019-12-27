@@ -1,5 +1,3 @@
-use ncollide3d::bounding_volume::AABB;
-
 mod collideable_entity;
 mod feature;
 mod prefab;
