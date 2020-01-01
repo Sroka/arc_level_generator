@@ -14,6 +14,10 @@ pub fn trim_obstacles(
         };
         let position = entity.position(time_travelled);
         let current_entity_aabb = entity.bounding_box.transform_by(&Isometry3::new(position, nalgebra::zero()));
+        // FIXME Eh, just a hack for prefabs being spawned outside world
+        if position.y > world.world_bounds.maxs().y {
+            return true
+        }
         world.world_bounds.intersects(&current_entity_aabb)
     });
 }

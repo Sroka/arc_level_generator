@@ -131,7 +131,64 @@ mod tests {
             position: Vector3::new(0., 0., 0.),
             half_extents: Vector3::new(9., 30., 9.),
             travel_speed: 4.0,
-            spawn_barrier_y_coord: 15.0,
+            spawn_barrier_y_coord: 30.0,
+        };
+        unsafe {
+            let generated_entities_description = arc_level_generator::bind_generate(
+                features.as_ptr(),
+                features.len() as i32,
+                world,
+            );
+            let entities = from_raw_parts(generated_entities_description.pointer, generated_entities_description.length as usize);
+
+            for entity in entities {
+                println!("Entity description: {:?}", entity)
+            }
+            arc_level_generator::bind_deallocate_vec(generated_entities_description)
+        }
+    }
+
+    #[test]
+    fn test_bind_generate_large() {
+        let description = PrefabDescription {
+            prefab_id: 1,
+            position: Vector3::new(0., 0., 0.),
+            velocity: Vector3::new(0., -1., 0.),
+            half_extents: Vector3::new(4.0, 4.0, 4.0),
+        };
+        let description1 = PrefabDescription {
+            prefab_id: 2,
+            position: Vector3::new(0., 0., 0.),
+            velocity: Vector3::new(0., -1., 0.),
+            half_extents: Vector3::new(4.0, 4.0, 4.0),
+        };
+        let features = [
+            FeatureDescription {
+                translate_x: false,
+                translate_z: false,
+                prefabs: [description].as_ptr(),
+                prefabs_count: 1,
+                spawns_per_second: 0.1,
+                spawn_count: 1,
+                trigger_position: 10.0,
+                priority: 0,
+            },
+            FeatureDescription {
+                translate_x: false,
+                translate_z: false,
+                prefabs: [description1].as_ptr(),
+                prefabs_count: 1,
+                spawns_per_second: 0.1,
+                spawn_count: 1,
+                trigger_position: 10.0,
+                priority: 0,
+            },
+        ];
+        let world = VisibleWorldDescription {
+            position: Vector3::new(0., 0., 0.),
+            half_extents: Vector3::new(9., 30., 9.),
+            travel_speed: 4.0,
+            spawn_barrier_y_coord: 30.0,
         };
         unsafe {
             let generated_entities_description = arc_level_generator::bind_generate(

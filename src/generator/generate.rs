@@ -23,8 +23,10 @@ pub fn generate(
     let mut obstacles: VecDeque<CollideableEntity> = VecDeque::new();
 
     let mut distance_travelled = 0.0_f32;
+    dbg!(features);
 
     'main_loop: loop {
+        dbg!("MAIN");
         if active_features.is_empty() && upcoming_features.is_empty() {
             // That's it. We generated everything
             break 'main_loop;
@@ -36,6 +38,7 @@ pub fn generate(
         trim_obstacles(&mut obstacles, &world, time_travelled);
 
         'features_loop: for feature in &mut active_features {
+            dbg!("FEATURES");
             if !rng.gen_bool(((STEP * (1 + feature.missed_spawns) as f32 * feature.spawns_per_second) as f64).min(1.0)) {
                 continue;
             }
@@ -63,5 +66,6 @@ pub fn generate(
             }
         }
     }
+    dbg!(&generated_entities);
     generated_entities
 }

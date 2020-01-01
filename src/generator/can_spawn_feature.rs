@@ -14,8 +14,11 @@ pub fn can_spawn_feature(
     time_travelled: f32,
     feature_shift: &Vector3<f32>,
 ) -> bool {
+    dbg!("CAN SPAWN FEATURE");
     'prefabs_loop: for prefab in &feature.prefabs {
+        dbg!("CAN SPAWN FEATURE - PREFAB");
         'obstacles_loop: for obstacle in obstacles {
+            dbg!("CAN SPAWN FEATURE - OBSTACLE");
             let prefab_spawn_position = Vector3::new(0., world.spawn_barrier_y_coord, 0.)
                 + prefab.position
                 + prefab.velocity * (-feature.priority as f32)
@@ -39,9 +42,15 @@ pub fn can_spawn_feature(
                         false,
                     ).unwrap();
 
+            dbg!("CAN SPAWN CHECK");
+            dbg!(&prefab.prefab_id);
+            dbg!(&obstacle.prefab_id);
+            dbg!(&prefab_spawn_position);
+            dbg!(&obstacle_spawn_position);
             // TODO In reality this is a fix for a bug in query::time_of_impact
             if prefab.bounding_box.transform_by(&Isometry3::new(prefab_spawn_position, nalgebra::zero()))
                 .intersects(&obstacle.bounding_box.transform_by(&Isometry3::new(obstacle_spawn_position, nalgebra::zero()))) {
+                dbg!("CANNOT INTERSECTS");
                 return false;
             }
 
@@ -55,6 +64,7 @@ pub fn can_spawn_feature(
                 prefab_world_bounds_toi,
                 0.0,
             );
+            dbg!(&time_of_impact);
             match time_of_impact {
                 Some(_) => {
                     return false;
