@@ -74,7 +74,6 @@ mod tests {
             position: Vector3::new(0., 0., 0.),
             half_extents: Vector3::new(10., 10., 10.),
             travel_speed: 4.0,
-            spawn_barrier_y_coord: 8.0,
         };
         unsafe {
             let generated_entities_description = arc_level_generator::bind_generate(
@@ -131,7 +130,6 @@ mod tests {
             position: Vector3::new(0., 0., 0.),
             half_extents: Vector3::new(9., 30., 9.),
             travel_speed: 4.0,
-            spawn_barrier_y_coord: 30.0,
         };
         unsafe {
             let generated_entities_description = arc_level_generator::bind_generate(
@@ -188,7 +186,6 @@ mod tests {
             position: Vector3::new(0., 0., 0.),
             half_extents: Vector3::new(9., 30., 9.),
             travel_speed: 4.0,
-            spawn_barrier_y_coord: 30.0,
         };
         unsafe {
             let generated_entities_description = arc_level_generator::bind_generate(

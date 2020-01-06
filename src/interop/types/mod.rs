@@ -28,7 +28,6 @@ pub struct VisibleWorldDescription {
     pub position: Vector3<f32>,
     pub half_extents: Vector3<f32>,
     pub travel_speed: f32,
-    pub spawn_barrier_y_coord: f32,
 }
 
 #[derive(Debug, Clone)]

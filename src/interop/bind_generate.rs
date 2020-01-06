@@ -49,7 +49,6 @@ pub unsafe extern fn bind_generate(
             world_description.position.z,
         ), world_description.half_extents),
         travel_speed: world_description.travel_speed,
-        spawn_barrier_y_coord: world_description.spawn_barrier_y_coord,
     };
 
 

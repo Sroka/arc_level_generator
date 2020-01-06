@@ -26,7 +26,6 @@ pub fn generate(
     dbg!(features);
 
     'main_loop: loop {
-        dbg!("MAIN");
         if active_features.is_empty() && upcoming_features.is_empty() {
             // That's it. We generated everything
             break 'main_loop;
@@ -38,7 +37,6 @@ pub fn generate(
         trim_obstacles(&mut obstacles, &world, time_travelled);
 
         'features_loop: for feature in &mut active_features {
-            dbg!("FEATURES");
             if !rng.gen_bool(((STEP * (1 + feature.missed_spawns) as f32 * feature.spawns_per_second) as f64).min(1.0)) {
                 continue;
             }
