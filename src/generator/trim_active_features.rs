@@ -1,6 +1,10 @@
 use std::collections::VecDeque;
 use super::types::Feature;
 
+/// Removes features that can no longer spawn any entities
+///
+/// * `active_fatures` - features that are currently spawning
+///
 pub fn trim_active_features(
     active_features: &mut VecDeque<Feature>,
 ) {

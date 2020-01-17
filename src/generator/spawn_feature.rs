@@ -2,6 +2,18 @@ use std::collections::VecDeque;
 use crate::generator::types::{Feature, CollideableEntity, VisibleWorld};
 use nalgebra::Vector3;
 
+/// Spawns entities belonging to a feature at a given time of travel in a given world
+/// * `feature` - feature to spawn
+/// * `obstacles` - a list of entities that all s entities spawned from a feature will be added to.
+///                 They will now have to be check against collisions until they get trimmed from
+///                 the list after leaving the visible world
+/// * `generated_entities` -  a list of all spawned entities. Entities spawned from this feature
+///                           will be added to it
+/// * `time` - current time travel
+/// * `world` - visible world
+/// * `feature_shift` - a randomized positional shift of this feature. All feature entities will
+///                     be spawned shifted by this value
+///
 pub fn spawn_feature(feature: &Feature,
                      obstacles: &mut VecDeque<CollideableEntity>,
                      generated_entities: &mut Vec<CollideableEntity>,

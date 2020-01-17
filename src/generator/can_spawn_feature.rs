@@ -7,6 +7,9 @@ use nalgebra::{Isometry3, Vector3, Point3};
 use crate::generator::types::Feature;
 use ncollide3d::bounding_volume::BoundingVolume;
 
+/// Checks if a feature can be safely spawn so that it won't collide with any existing entities in
+/// a visible world
+///
 pub fn can_spawn_feature(
     feature: &Feature,
     obstacles: &VecDeque<CollideableEntity>,

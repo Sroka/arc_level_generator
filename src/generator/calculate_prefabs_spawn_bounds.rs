@@ -2,6 +2,9 @@ use crate::generator::types::Prefab;
 use ncollide3d::bounding_volume::{AABB, BoundingVolume};
 use nalgebra::{Point3, Vector3, Isometry3};
 
+/// Calculated total bounding volume that encloses the given array of prefabs
+/// * `prefabs` - prefabs for which the bounding volume will be calculated
+///
 pub fn calculate_prefabs_spawn_bounds(prefabs: &[Prefab]) -> AABB<f32> {
     if prefabs.is_empty() {
         AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0., 0., 0.))

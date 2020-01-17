@@ -1,6 +1,7 @@
 use nalgebra::Vector3;
 use ncollide3d::bounding_volume::AABB;
 
+// Represents a spawned entity
 #[derive(Clone, PartialEq, Debug)]
 pub struct CollideableEntity {
     pub spawn_position: Vector3<f32>,

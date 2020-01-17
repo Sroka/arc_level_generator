@@ -3,6 +3,11 @@ use super::types::{CollideableEntity, VisibleWorld};
 use ncollide3d::bounding_volume::BoundingVolume;
 use nalgebra::{Isometry3};
 
+/// Removes obstacles after they leave bounded volume of a visible world
+/// * `obstacles` - entity list to trim
+/// * `world` - visible world
+/// * `time_travelled` - current time passed in a generated world
+///
 pub fn trim_obstacles(
     obstacles: &mut VecDeque<CollideableEntity>,
     world: &VisibleWorld,

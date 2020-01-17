@@ -6,7 +6,9 @@ use crate::generate;
 use ncollide3d::bounding_volume::AABB;
 use rand::thread_rng;
 use std::mem;
-
+/// Unsafe wrapper around #generate() function. It is a callers responsibility to call
+/// #bind_deallocate_vec ona returned array. Otherwise this array will never be deallocated and
+/// will leak memory
 #[no_mangle]
 pub unsafe extern fn bind_generate(
     features_ptr: *const FeatureDescription,

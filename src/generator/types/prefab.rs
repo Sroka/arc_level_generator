@@ -1,6 +1,6 @@
 use nalgebra::Vector3;
 use ncollide3d::bounding_volume::AABB;
-
+/// Represents single smallest piece of a generated level
 #[derive(Clone, PartialEq, Debug)]
 pub struct Prefab {
     pub prefab_id: i32,

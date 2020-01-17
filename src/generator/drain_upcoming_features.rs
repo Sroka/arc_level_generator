@@ -1,9 +1,15 @@
 use std::collections::VecDeque;
-use super::types::{Feature};
+use super::types::Feature;
 
+/// Activated not yet active features that should start spawning at a given travelled distance
+/// and adds them to active entities queue
+///
+/// * `upcoming_features` - features that didn't yet start to spawn
+/// * `active_features` - features that are actively spawning
+/// * `distance_travelled` - distance travelled in a given world
 pub fn drain_upcoming_features(upcoming_features: &mut VecDeque<Feature>,
-                                   active_features: &mut VecDeque<Feature>,
-                                   distance_travelled: f32,
+                               active_features: &mut VecDeque<Feature>,
+                               distance_travelled: f32,
 ) {
     if upcoming_features.is_empty() {
         return;

@@ -1,7 +1,16 @@
 use rand::{RngCore, Rng};
-use crate::generator::types::{VisibleWorld, Feature, calculate_prefabs_spawn_bounds};
+use crate::generator::types::{VisibleWorld, Feature};
 use nalgebra::Vector3;
+use crate::generator::calculate_prefabs_spawn_bounds::calculate_prefabs_spawn_bounds;
 
+/// Randomizes a shift with which all the entities belonging to this feature will be spawned. This
+/// function makes sure that after applying the shift no entity will be spawned outside visible
+/// world bounds
+///
+/// * `rng` - random number generator
+/// * `world` - visible world
+/// * `feature` - feature that the possible shift is calculated for
+///
 pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, feature: &Feature) -> Vector3<f32> {
     let mut shift = Vector3::new(0., 0., 0.);
     if feature.translate_x || feature.translate_z {

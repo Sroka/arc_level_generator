@@ -11,6 +11,13 @@ use crate::generator::spawn_feature::spawn_feature;
 
 const STEP: f32 = 0.1;
 
+/// Randomly generates non-intersecting entities
+///
+/// * `world` - a bounded volume in which entities paths are non-intersecting. Outside of it there
+///             is no guarantee that entities won't intersect
+/// * `features` - a list of possible level features that can be spawned. It is guaranteed that
+///             all of them will eventually be spawned before algorithm stops
+/// * `rng` - random number generator used during generation
 pub fn generate(
     world: &VisibleWorld,
     features: &[Feature],
