@@ -41,7 +41,9 @@ mod tests {
         let features = [
             FeatureDescription {
                 translate_x: true,
+                translate_x_out_of_bounds: false,
                 translate_z: true,
+                translate_z_out_of_bounds: false,
                 prefabs: [description, description1, description2].as_ptr(),
                 prefabs_count: 3,
                 spawns_per_second: 1.0,
@@ -51,7 +53,9 @@ mod tests {
             },
             FeatureDescription {
                 translate_x: true,
+                translate_x_out_of_bounds: false,
                 translate_z: true,
+                translate_z_out_of_bounds: false,
                 prefabs: [description3].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 1.0,
@@ -61,7 +65,9 @@ mod tests {
             },
             FeatureDescription {
                 translate_x: true,
+                translate_x_out_of_bounds: false,
                 translate_z: true,
+                translate_z_out_of_bounds: false,
                 prefabs: [description4].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 1.0,
@@ -107,7 +113,9 @@ mod tests {
         let features = [
             FeatureDescription {
                 translate_x: false,
+                translate_x_out_of_bounds: false,
                 translate_z: false,
+                translate_z_out_of_bounds: false,
                 prefabs: [description].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
@@ -117,7 +125,9 @@ mod tests {
             },
             FeatureDescription {
                 translate_x: false,
+                translate_x_out_of_bounds: false,
                 translate_z: false,
+                translate_z_out_of_bounds: false,
                 prefabs: [description1].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
@@ -163,7 +173,9 @@ mod tests {
         let features = [
             FeatureDescription {
                 translate_x: false,
+                translate_x_out_of_bounds: false,
                 translate_z: false,
+                translate_z_out_of_bounds: false,
                 prefabs: [description].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
@@ -173,7 +185,9 @@ mod tests {
             },
             FeatureDescription {
                 translate_x: false,
+                translate_x_out_of_bounds: false,
                 translate_z: false,
+                translate_z_out_of_bounds: false,
                 prefabs: [description1].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 0.1,

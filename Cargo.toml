@@ -8,7 +8,7 @@ edition = "2018"
 
 [lib]
 name = "arc_level_generator"
-crate-type = ["dylib", "rlib"]
+crate-type = ["staticlib", "dylib", "rlib"]
 
 [dependencies]
 ncollide3d = "0.21.0"

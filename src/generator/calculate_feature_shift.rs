@@ -1,7 +1,8 @@
 use rand::{RngCore, Rng};
 use crate::generator::types::{VisibleWorld, Feature};
-use nalgebra::Vector3;
+use nalgebra::{Vector3};
 use crate::generator::calculate_prefabs_spawn_bounds::calculate_prefabs_spawn_bounds;
+use std::cmp::{max, min};
 
 /// Randomizes a shift with which all the entities belonging to this feature will be spawned. This
 /// function makes sure that after applying the shift no entity will be spawned outside visible
@@ -16,10 +17,16 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
     if feature.translate_x || feature.translate_z {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
         if feature.translate_x {
-            shift.x = rng.gen_range(world.world_bounds.mins().x + feature_spawn_bounds.half_extents().x, world.world_bounds.maxs().x - feature_spawn_bounds.half_extents().x);
+            shift.x = rng.gen_range(
+                (world.world_bounds.mins().x + feature_spawn_bounds.half_extents().x).min(-std::f32::EPSILON),
+                (world.world_bounds.maxs().x - feature_spawn_bounds.half_extents().x).max(std::f32::EPSILON),
+            );
         }
         if feature.translate_z {
-            shift.z = rng.gen_range(world.world_bounds.mins().z + feature_spawn_bounds.half_extents().z, world.world_bounds.maxs().z - feature_spawn_bounds.half_extents().z);
+            shift.z = rng.gen_range(
+                (world.world_bounds.mins().z + feature_spawn_bounds.half_extents().z).min(-std::f32::EPSILON),
+                (world.world_bounds.maxs().z - feature_spawn_bounds.half_extents().z).max(std::f32::EPSILON),
+            );
         }
     }
     shift
