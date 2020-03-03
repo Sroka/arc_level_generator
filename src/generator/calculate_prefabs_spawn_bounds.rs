@@ -1,6 +1,6 @@
 use crate::generator::types::Prefab;
-use ncollide3d::bounding_volume::{AABB, BoundingVolume};
-use nalgebra::{Point3, Vector3, Isometry3};
+use ncollide3d::bounding_volume::{AABB, BoundingVolume, local_point_cloud_aabb};
+use nalgebra::{Point3, Vector3, Isometry3, Point};
 
 /// Calculated total bounding volume that encloses the given array of prefabs
 /// * `prefabs` - prefabs for which the bounding volume will be calculated
@@ -16,6 +16,17 @@ pub fn calculate_prefabs_spawn_bounds(prefabs: &[Prefab]) -> AABB<f32> {
                 head.bounding_box.transform_by(&Isometry3::new(head.position, nalgebra::zero())),
                 |aabb, prefab| aabb.merged(&prefab.bounding_box.transform_by(&Isometry3::new(prefab.position, nalgebra::zero()))),
             )
+    }
+}
+
+pub fn calculate_prefabs_centers_bounds(prefabs: &[Prefab]) -> AABB<f32> {
+    if prefabs.is_empty() {
+        AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0., 0., 0.))
+    } else {
+        let pts: Vec<Point3<f32>> = prefabs.iter()
+            .map(|prefab| Point::from(prefab.position))
+            .collect();
+        local_point_cloud_aabb(&pts)
     }
 }
 

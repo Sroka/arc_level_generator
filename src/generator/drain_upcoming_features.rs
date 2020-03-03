@@ -45,7 +45,9 @@ mod tests {
         };
         let feature0 = Feature {
             translate_x: false,
+            translate_x_out_of_bounds: false,
             translate_z: false,
+            translate_z_out_of_bounds: false,
             prefabs: vec![prefab0],
             spawn_count: 1,
             spawns_per_second: 1.0,

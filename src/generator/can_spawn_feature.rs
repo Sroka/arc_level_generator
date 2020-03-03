@@ -98,7 +98,9 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
+                translate_x_out_of_bounds: false,
                 translate_z: false,
+                translate_z_out_of_bounds: false,
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
@@ -138,7 +140,9 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
+                translate_x_out_of_bounds: false,
                 translate_z: false,
+                translate_z_out_of_bounds: false,
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
@@ -178,7 +182,9 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
+                translate_x_out_of_bounds: false,
                 translate_z: false,
+                translate_z_out_of_bounds: false,
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
@@ -218,7 +224,9 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
+                translate_x_out_of_bounds: false,
                 translate_z: false,
+                translate_z_out_of_bounds: false,
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
@@ -262,7 +270,9 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
+                translate_x_out_of_bounds: false,
                 translate_z: false,
+                translate_z_out_of_bounds: false,
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,

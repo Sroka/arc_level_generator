@@ -11,6 +11,8 @@ pub struct Feature {
     pub trigger_position: f32,
     pub priority: i32,
     pub translate_x: bool,
+    pub translate_x_out_of_bounds: bool,
     pub translate_z: bool,
+    pub translate_z_out_of_bounds: bool,
     pub missed_spawns: i32,
 }

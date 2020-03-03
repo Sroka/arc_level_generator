@@ -16,7 +16,9 @@ mod tests {
         };
         let feature0 = Feature {
             translate_x: true,
+            translate_x_out_of_bounds: false,
             translate_z: true,
+            translate_z_out_of_bounds: false,
             prefabs: vec![prefab0],
             spawn_count: 1000,
             spawns_per_second: 1.0,
@@ -55,7 +57,9 @@ mod tests {
         };
         let feature0 = Feature {
             translate_x: true,
+            translate_x_out_of_bounds: false,
             translate_z: true,
+            translate_z_out_of_bounds: false,
             prefabs: vec![prefab0],
             spawn_count: 1,
             spawns_per_second: 1.0,
@@ -65,7 +69,9 @@ mod tests {
         };
         let feature1 = Feature {
             translate_x: true,
+            translate_x_out_of_bounds: false,
             translate_z: true,
+            translate_z_out_of_bounds: false,
             prefabs: vec![prefab1],
             spawn_count: 1,
             spawns_per_second: 1.0,
@@ -98,7 +104,9 @@ mod tests {
         };
         let feature0 = Feature {
             translate_x: true,
+            translate_x_out_of_bounds: false,
             translate_z: true,
+            translate_z_out_of_bounds: false,
             prefabs: vec![prefab0],
             spawn_count: 10,
             spawns_per_second: 1.0,

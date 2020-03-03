@@ -37,7 +37,9 @@ pub unsafe extern fn bind_generate(
                 trigger_position: feature_description.trigger_position,
                 priority: feature_description.priority,
                 translate_x: feature_description.translate_x,
+                translate_x_out_of_bounds: feature_description.translate_x_out_of_bounds,
                 translate_z: feature_description.translate_z,
+                translate_z_out_of_bounds: feature_description.translate_z_out_of_bounds,
                 missed_spawns: 0,
             }
         })
