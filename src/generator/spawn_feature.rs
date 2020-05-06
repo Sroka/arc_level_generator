@@ -22,8 +22,9 @@ pub fn spawn_feature(feature: &Feature,
                      feature_shift: &Vector3<f32>,
 ) {
     for prefab in &feature.prefabs {
+        let time_to_travel_to_origin_plane_from_worlds_start = world.world_bounds.maxs().y / -prefab.velocity.y;
         let entity = CollideableEntity {
-            spawn_position: prefab.position + feature_shift + Vector3::new(0., world.world_bounds.maxs().y, 0.),
+            spawn_position: prefab.position + feature_shift - prefab.velocity * time_to_travel_to_origin_plane_from_worlds_start,
             spawn_time: time + feature.priority as f32,
             velocity: prefab.velocity,
             bounding_box: prefab.bounding_box.clone(),

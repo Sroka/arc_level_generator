@@ -19,9 +19,11 @@ pub fn can_spawn_feature(
 ) -> bool {
     'prefabs_loop: for prefab in &feature.prefabs {
         'obstacles_loop: for obstacle in obstacles {
-            let prefab_spawn_position = Vector3::new(0., world.world_bounds.maxs().y, 0.)
-                + prefab.position
-                + prefab.velocity * (-feature.priority as f32)
+            let time_to_travel_to_origin_plane_from_worlds_start = world.world_bounds.maxs().y / -prefab.velocity.y;
+            let prefab_spawn_position = //Vector3::new(0., world.world_bounds.maxs().y, 0.)
+                prefab.position
+                - prefab.velocity * time_to_travel_to_origin_plane_from_worlds_start
+                - prefab.velocity * (feature.priority as f32)
                 + feature_shift;
             let obstacle_spawn_position = obstacle.spawn_position
                 + obstacle.velocity * (time_travelled - obstacle.spawn_time);
