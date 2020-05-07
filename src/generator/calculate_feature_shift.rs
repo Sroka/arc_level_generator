@@ -14,32 +14,32 @@ use std::cmp::{max, min};
 ///
 pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, feature: &Feature) -> Vector3<f32> {
     let mut shift = Vector3::new(0., 0., 0.);
-    if feature.translate_x_out_of_bounds || feature.translate_z_out_of_bounds {
+    if feature.translate_x_using_bounds || feature.translate_z_using_bounds {
         let feature_prefab_centers_bounds = calculate_prefabs_centers_bounds(feature.prefabs.as_slice());
-        if feature.translate_x_out_of_bounds {
+        if feature.translate_x_using_bounds {
             shift.x = rng.gen_range(
-                (world.world_bounds.mins().x + feature_prefab_centers_bounds.half_extents().x).min(-std::f32::EPSILON),
-                (world.world_bounds.maxs().x - feature_prefab_centers_bounds.half_extents().x).max(std::f32::EPSILON),
+                (world.world_bounds.mins().x - feature.translate_x_bounds.x).min(-std::f32::EPSILON),
+                (world.world_bounds.maxs().x - feature.translate_x_bounds.y).max(std::f32::EPSILON),
             )
 
         }
-        if feature.translate_z_out_of_bounds {
+        if feature.translate_z_using_bounds {
             shift.z = rng.gen_range(
-                (world.world_bounds.mins().z + feature_prefab_centers_bounds.half_extents().z).min(-std::f32::EPSILON),
-                (world.world_bounds.maxs().z - feature_prefab_centers_bounds.half_extents().z).max(std::f32::EPSILON),
+                (world.world_bounds.mins().z - feature.translate_z_bounds.x).min(-std::f32::EPSILON),
+                (world.world_bounds.maxs().z - feature.translate_z_bounds.y).max(std::f32::EPSILON),
             );
         }
     }
-    if (feature.translate_x && !feature.translate_x_out_of_bounds)
-        || (feature.translate_z && !feature.translate_z_out_of_bounds) {
+    if (feature.translate_x && !feature.translate_x_using_bounds)
+        || (feature.translate_z && !feature.translate_z_using_bounds) {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
-        if feature.translate_x {
+        if feature.translate_x && !feature.translate_x_using_bounds{
             shift.x = rng.gen_range(
                 (world.world_bounds.mins().x + feature_spawn_bounds.half_extents().x).min(-std::f32::EPSILON),
                 (world.world_bounds.maxs().x - feature_spawn_bounds.half_extents().x).max(std::f32::EPSILON),
             );
         }
-        if feature.translate_z {
+        if feature.translate_z && !feature.translate_z_using_bounds{
             shift.z = rng.gen_range(
                 (world.world_bounds.mins().z + feature_spawn_bounds.half_extents().z).min(-std::f32::EPSILON),
                 (world.world_bounds.maxs().z - feature_spawn_bounds.half_extents().z).max(std::f32::EPSILON),

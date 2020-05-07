@@ -1,4 +1,4 @@
-use nalgebra::Vector3;
+use nalgebra::{Vector3, Vector2};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 #[repr(C)]
@@ -19,9 +19,11 @@ pub struct FeatureDescription {
     pub trigger_position: f32,
     pub priority: i32,
     pub translate_x: bool,
-    pub translate_x_out_of_bounds: bool,
+    pub translate_x_using_bounds: bool,
+    pub translate_x_bounds: Vector2<f32>,
     pub translate_z: bool,
-    pub translate_z_out_of_bounds: bool,
+    pub translate_z_using_bounds: bool,
+    pub translate_z_bounds: Vector2<f32>,
 }
 
 #[derive(Debug, Clone)]

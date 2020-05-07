@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use ncollide3d::bounding_volume::AABB;
-    use nalgebra::{Vector3, Point3};
+    use nalgebra::{Vector3, Point3, Vector2};
     use self::arc_level_generator::{VisibleWorld, Prefab, Feature};
 
     extern crate arc_level_generator;
@@ -16,9 +16,11 @@ mod tests {
         };
         let feature0 = Feature {
             translate_x: true,
-            translate_x_out_of_bounds: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
             translate_z: true,
-            translate_z_out_of_bounds: false,
+            translate_z_using_bounds: false,
+            translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 1000,
             spawns_per_second: 1.0,
@@ -57,9 +59,11 @@ mod tests {
         };
         let feature0 = Feature {
             translate_x: true,
-            translate_x_out_of_bounds: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
             translate_z: true,
-            translate_z_out_of_bounds: false,
+            translate_z_using_bounds: false,
+            translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 1,
             spawns_per_second: 1.0,
@@ -69,9 +73,11 @@ mod tests {
         };
         let feature1 = Feature {
             translate_x: true,
-            translate_x_out_of_bounds: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
             translate_z: true,
-            translate_z_out_of_bounds: false,
+            translate_z_using_bounds: false,
+            translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab1],
             spawn_count: 1,
             spawns_per_second: 1.0,
@@ -104,9 +110,11 @@ mod tests {
         };
         let feature0 = Feature {
             translate_x: true,
-            translate_x_out_of_bounds: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
             translate_z: true,
-            translate_z_out_of_bounds: false,
+            translate_z_using_bounds: false,
+            translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
             spawns_per_second: 1.0,
