@@ -14,3 +14,4 @@ crate-type = ["staticlib", "dylib", "rlib"]
 ncollide3d = "0.21.0"
 nalgebra   = "0.19"
 rand = "0.7"
+itertools = "0.9"

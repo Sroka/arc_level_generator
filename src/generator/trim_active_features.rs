@@ -19,7 +19,7 @@ mod tests {
     use std::collections::VecDeque;
     use std::iter::FromIterator;
 
-    use nalgebra::{Vector3, Point3};
+    use nalgebra::{Vector3, Point3, Vector2};
     use ncollide3d::bounding_volume::AABB;
 
     #[test]
@@ -32,9 +32,11 @@ mod tests {
         };
         let feature0 = Feature {
             translate_x: false,
-            translate_x_out_of_bounds: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
             translate_z: false,
-            translate_z_out_of_bounds: false,
+            translate_z_using_bounds: false,
+            translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0.clone()],
             spawn_count: 1,
             spawns_per_second: 1.0,

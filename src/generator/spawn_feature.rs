@@ -1,6 +1,8 @@
 use std::collections::VecDeque;
 use crate::generator::types::{Feature, CollideableEntity, VisibleWorld};
 use nalgebra::Vector3;
+use std::cmp::Ordering::Equal;
+use itertools::Itertools;
 
 /// Spawns entities belonging to a feature at a given time of travel in a given world
 /// * `feature` - feature to spawn
@@ -21,8 +23,15 @@ pub fn spawn_feature(feature: &Feature,
                      world: &VisibleWorld,
                      feature_shift: &Vector3<f32>,
 ) {
+    let min_y_velocity_in_a_feature = feature.prefabs
+        .iter()
+        .map(|prefab| prefab.velocity.y)
+        .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal)})
+        .last()
+        .clone()
+        .unwrap();
+    let time_to_travel_to_origin_plane_from_worlds_start = world.world_bounds.maxs().y / -min_y_velocity_in_a_feature;
     for prefab in &feature.prefabs {
-        let time_to_travel_to_origin_plane_from_worlds_start = world.world_bounds.maxs().y / -prefab.velocity.y;
         let entity = CollideableEntity {
             spawn_position: prefab.position + feature_shift - prefab.velocity * time_to_travel_to_origin_plane_from_worlds_start,
             spawn_time: time + feature.priority as f32,

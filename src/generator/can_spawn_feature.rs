@@ -6,6 +6,9 @@ use ncollide3d::query::{RayCast, Ray};
 use nalgebra::{Isometry3, Vector3, Point3};
 use crate::generator::types::Feature;
 use ncollide3d::bounding_volume::BoundingVolume;
+use std::cmp::Ordering::Equal;
+use itertools::Itertools;
+use std::iter;
 
 /// Checks if a feature can be safely spawn so that it won't collide with any existing entities in
 /// a visible world
@@ -17,11 +20,18 @@ pub fn can_spawn_feature(
     time_travelled: f32,
     feature_shift: &Vector3<f32>,
 ) -> bool {
+
+    let min_y_velocity_in_a_feature = feature.prefabs
+        .iter()
+        .map(|prefab| prefab.velocity.y)
+        .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal)})
+        .last()
+        .unwrap();
+    let time_to_travel_to_origin_plane_from_worlds_start = world.world_bounds.maxs().y / -min_y_velocity_in_a_feature;
+    dbg!(min_y_velocity_in_a_feature);
     'prefabs_loop: for prefab in &feature.prefabs {
         'obstacles_loop: for obstacle in obstacles {
-            let time_to_travel_to_origin_plane_from_worlds_start = world.world_bounds.maxs().y / -prefab.velocity.y;
-            let prefab_spawn_position = //Vector3::new(0., world.world_bounds.maxs().y, 0.)
-                prefab.position
+            let prefab_spawn_position = prefab.position
                 - prefab.velocity * time_to_travel_to_origin_plane_from_worlds_start
                 - prefab.velocity * (feature.priority as f32)
                 + feature_shift;
@@ -82,7 +92,7 @@ pub fn can_spawn_feature(
 mod tests {
     use crate::generator::types::{Prefab, Feature, VisibleWorld, CollideableEntity};
     use ncollide3d::bounding_volume::AABB;
-    use nalgebra::{Vector3, Point3};
+    use nalgebra::{Vector3, Point3, Vector2};
     use crate::generator::can_spawn_feature::can_spawn_feature;
     use std::collections::VecDeque;
     use std::iter::FromIterator;
@@ -100,9 +110,11 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(0., 0.),
                 translate_z: false,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
@@ -142,9 +154,11 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(0., 0.),
                 translate_z: false,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
@@ -184,9 +198,11 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(0., 0.),
                 translate_z: false,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
@@ -226,9 +242,11 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(0., 0.),
                 translate_z: false,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
@@ -272,9 +290,11 @@ mod tests {
             };
             let feature = Feature {
                 translate_x: false,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(0., 0.),
                 translate_z: false,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
