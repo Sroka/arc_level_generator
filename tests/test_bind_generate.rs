@@ -3,7 +3,7 @@ mod tests {
     extern crate arc_level_generator;
 
     use self::arc_level_generator::{PrefabDescription, FeatureDescription, VisibleWorldDescription};
-    use nalgebra::Vector3;
+    use nalgebra::{Vector3, Vector2};
     use std::slice::from_raw_parts;
 
     #[test]
@@ -41,9 +41,11 @@ mod tests {
         let features = [
             FeatureDescription {
                 translate_x: true,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(1., 1.),
                 translate_z: true,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(1., 1.),
                 prefabs: [description, description1, description2].as_ptr(),
                 prefabs_count: 3,
                 spawns_per_second: 1.0,
@@ -53,9 +55,11 @@ mod tests {
             },
             FeatureDescription {
                 translate_x: true,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(1., 1.),
                 translate_z: true,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(1., 1.),
                 prefabs: [description3].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 1.0,
@@ -65,9 +69,11 @@ mod tests {
             },
             FeatureDescription {
                 translate_x: true,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(1., 1.),
                 translate_z: true,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(1., 1.),
                 prefabs: [description4].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 1.0,
@@ -113,9 +119,11 @@ mod tests {
         let features = [
             FeatureDescription {
                 translate_x: false,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(1., 1.),
                 translate_z: false,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(1., 1.),
                 prefabs: [description].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
@@ -125,9 +133,11 @@ mod tests {
             },
             FeatureDescription {
                 translate_x: false,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(1., 1.),
                 translate_z: false,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(1., 1.),
                 prefabs: [description1].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
@@ -173,9 +183,11 @@ mod tests {
         let features = [
             FeatureDescription {
                 translate_x: false,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(1., 1.),
                 translate_z: false,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(1., 1.),
                 prefabs: [description].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
@@ -185,9 +197,11 @@ mod tests {
             },
             FeatureDescription {
                 translate_x: false,
-                translate_x_out_of_bounds: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(1., 1.),
                 translate_z: false,
-                translate_z_out_of_bounds: false,
+                translate_z_using_bounds: false,
+                translate_z_bounds: Vector2::new(1., 1.),
                 prefabs: [description1].as_ptr(),
                 prefabs_count: 1,
                 spawns_per_second: 0.1,

@@ -15,36 +15,98 @@ use std::cmp::{max, min};
 pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, feature: &Feature) -> Vector3<f32> {
     let mut shift = Vector3::new(0., 0., 0.);
     if feature.translate_x_using_bounds || feature.translate_z_using_bounds {
-        let feature_prefab_centers_bounds = calculate_prefabs_centers_bounds(feature.prefabs.as_slice());
+        let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
         if feature.translate_x_using_bounds {
+            let min_x = (feature.translate_x_bounds.x - feature_spawn_bounds.mins().x).min(-std::f32::EPSILON);
+            let max_x = (feature.translate_x_bounds.y - feature_spawn_bounds.maxs().x).max(std::f32::EPSILON);
             shift.x = rng.gen_range(
-                (world.world_bounds.mins().x - feature.translate_x_bounds.x).min(-std::f32::EPSILON),
-                (world.world_bounds.maxs().x - feature.translate_x_bounds.y).max(std::f32::EPSILON),
-            )
-
+                min_x,
+                max_x,
+            );
         }
         if feature.translate_z_using_bounds {
+            let min_z = (feature.translate_z_bounds.x - feature_spawn_bounds.mins().z).min(-std::f32::EPSILON);
+            let max_z = (feature.translate_z_bounds.y - feature_spawn_bounds.maxs().z).max(std::f32::EPSILON);
             shift.z = rng.gen_range(
-                (world.world_bounds.mins().z - feature.translate_z_bounds.x).min(-std::f32::EPSILON),
-                (world.world_bounds.maxs().z - feature.translate_z_bounds.y).max(std::f32::EPSILON),
+                min_z,
+                max_z,
             );
         }
     }
     if (feature.translate_x && !feature.translate_x_using_bounds)
         || (feature.translate_z && !feature.translate_z_using_bounds) {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
-        if feature.translate_x && !feature.translate_x_using_bounds{
+        if feature.translate_x && !feature.translate_x_using_bounds {
+            let min_x = (world.world_bounds.mins().x - feature_spawn_bounds.mins().x).min(-std::f32::EPSILON);
+            let max_x = (world.world_bounds.maxs().x - feature_spawn_bounds.maxs().x).max(std::f32::EPSILON);
             shift.x = rng.gen_range(
-                (world.world_bounds.mins().x + feature_spawn_bounds.half_extents().x).min(-std::f32::EPSILON),
-                (world.world_bounds.maxs().x - feature_spawn_bounds.half_extents().x).max(std::f32::EPSILON),
+                min_x,
+                max_x,
             );
         }
-        if feature.translate_z && !feature.translate_z_using_bounds{
+        if feature.translate_z && !feature.translate_z_using_bounds {
+            let min_z = (world.world_bounds.mins().z - feature_spawn_bounds.mins().z).min(-std::f32::EPSILON);
+            let max_z = (world.world_bounds.maxs().z - feature_spawn_bounds.maxs().z).max(std::f32::EPSILON);
             shift.z = rng.gen_range(
-                (world.world_bounds.mins().z + feature_spawn_bounds.half_extents().z).min(-std::f32::EPSILON),
-                (world.world_bounds.maxs().z - feature_spawn_bounds.half_extents().z).max(std::f32::EPSILON),
+                min_z,
+                max_z,
             );
         }
     }
     shift
+}
+
+#[cfg(test)]
+mod tests {
+    use nalgebra::{Vector3, Point3, Vector2};
+    use crate::{Prefab, Feature, VisibleWorld};
+    use ncollide3d::bounding_volume::AABB;
+    use crate::generator::calculate_feature_shift::calculate_feature_shift;
+    use rand::thread_rng;
+    use rand::rngs::mock::StepRng;
+
+
+    struct RngTest(Vec<u64>);
+
+    #[test]
+    fn test_feature_using_bounds() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(19.5, 0., 0.),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            velocity: Vector3::new(0., -1., 0.),
+        };
+        let prefab1 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(10.5, 0., 0.),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            velocity: Vector3::new(0., -1., 0.),
+        };
+        let feature = Feature {
+            translate_x: true,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(-15., 15.),
+            translate_z: false,
+            translate_z_using_bounds: false,
+            translate_z_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab0, prefab1],
+            spawn_count: 1,
+            spawns_per_second: 1.,
+            trigger_position: 10.,
+            priority: 0,
+            missed_spawns: 0,
+        };
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(30., 30., 30.)),
+            travel_speed: 4.0,
+        };
+        // let mut step_rng = StepRng::new(1000, 100);
+        let feature_shift = calculate_feature_shift(
+            &mut thread_rng(),
+            &world,
+            &feature,
+        );
+        dbg!(feature_shift);
+        // TODO Actually test instead of just printing
+    }
 }
