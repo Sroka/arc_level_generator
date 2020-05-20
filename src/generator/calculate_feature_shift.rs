@@ -17,16 +17,28 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
     if feature.translate_x_using_bounds || feature.translate_z_using_bounds {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
         if feature.translate_x_using_bounds {
-            let min_x = (feature.translate_x_bounds.x - feature_spawn_bounds.mins().x).min(-std::f32::EPSILON);
-            let max_x = (feature.translate_x_bounds.y - feature_spawn_bounds.maxs().x).max(std::f32::EPSILON);
+            let mut min_x = (feature.translate_x_bounds.x.min(feature.translate_x_bounds.y) + feature_spawn_bounds.half_extents().x);
+            let mut max_x = (feature.translate_x_bounds.x.max(feature.translate_x_bounds.y) - feature_spawn_bounds.half_extents().x);
+            if min_x >= max_x {
+                let half_way = (min_x + max_x) / 2.;
+                min_x = half_way - 0.001;
+                max_x = half_way + 0.001;
+            }
+            dbg!(min_x);
+            dbg!(max_x);
             shift.x = rng.gen_range(
                 min_x,
                 max_x,
             );
         }
         if feature.translate_z_using_bounds {
-            let min_z = (feature.translate_z_bounds.x - feature_spawn_bounds.mins().z).min(-std::f32::EPSILON);
-            let max_z = (feature.translate_z_bounds.y - feature_spawn_bounds.maxs().z).max(std::f32::EPSILON);
+            let mut min_z = (feature.translate_z_bounds.x.min(feature.translate_z_bounds.y) + feature_spawn_bounds.half_extents().z);
+            let mut max_z = (feature.translate_z_bounds.x.max(feature.translate_z_bounds.y) - feature_spawn_bounds.half_extents().z);
+            if min_z >= max_z {
+                let half_way = (min_z + max_z) / 2.;
+                min_z = half_way - 0.001;
+                max_z = half_way + 0.001;
+            }
             shift.z = rng.gen_range(
                 min_z,
                 max_z,
@@ -37,16 +49,26 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
         || (feature.translate_z && !feature.translate_z_using_bounds) {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
         if feature.translate_x && !feature.translate_x_using_bounds {
-            let min_x = (world.world_bounds.mins().x - feature_spawn_bounds.mins().x).min(-std::f32::EPSILON);
-            let max_x = (world.world_bounds.maxs().x - feature_spawn_bounds.maxs().x).max(std::f32::EPSILON);
+            let mut min_x = (world.world_bounds.mins().x + feature_spawn_bounds.half_extents().x);
+            let mut max_x = (world.world_bounds.maxs().x - feature_spawn_bounds.half_extents().x);
+            if min_x >= max_x {
+                let half_way = (min_x + max_x) / 2.;
+                min_x = half_way - 0.001;
+                max_x = half_way + 0.001;
+            }
             shift.x = rng.gen_range(
                 min_x,
                 max_x,
             );
         }
         if feature.translate_z && !feature.translate_z_using_bounds {
-            let min_z = (world.world_bounds.mins().z - feature_spawn_bounds.mins().z).min(-std::f32::EPSILON);
-            let max_z = (world.world_bounds.maxs().z - feature_spawn_bounds.maxs().z).max(std::f32::EPSILON);
+            let mut min_z = (world.world_bounds.mins().z + feature_spawn_bounds.half_extents().z);
+            let mut max_z = (world.world_bounds.maxs().z - feature_spawn_bounds.half_extents().z);
+            if min_z >= max_z {
+                let half_way = (min_z + max_z) / 2.;
+                min_z = half_way - 0.001;
+                max_z = half_way + 0.001;
+            }
             shift.z = rng.gen_range(
                 min_z,
                 max_z,
@@ -73,23 +95,17 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(19.5, 0., 0.),
-            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-            velocity: Vector3::new(0., -1., 0.),
-        };
-        let prefab1 = Prefab {
-            prefab_id: 0,
-            position: Vector3::new(10.5, 0., 0.),
-            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(48., 0.5, 0.5)),
             velocity: Vector3::new(0., -1., 0.),
         };
         let feature = Feature {
             translate_x: true,
-            translate_x_using_bounds: false,
-            translate_x_bounds: Vector2::new(-15., 15.),
-            translate_z: false,
+            translate_x_using_bounds: true,
+            translate_x_bounds: Vector2::new(10., 50.),
+            translate_z: true,
             translate_z_using_bounds: false,
             translate_z_bounds: Vector2::new(0., 0.),
-            prefabs: vec![prefab0, prefab1],
+            prefabs: vec![prefab0],
             spawn_count: 1,
             spawns_per_second: 1.,
             trigger_position: 10.,
