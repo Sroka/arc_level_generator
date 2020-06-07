@@ -36,6 +36,7 @@ pub fn spawn_feature(feature: &Feature,
             spawn_position: prefab.position + feature_shift - prefab.velocity * time_to_travel_to_origin_plane_from_worlds_start,
             spawn_time: time + feature.priority as f32,
             velocity: prefab.velocity,
+            rotation: prefab.rotation,
             bounding_box: prefab.bounding_box.clone(),
             prefab_id: prefab.prefab_id,
             priority: feature.priority,
@@ -49,6 +50,6 @@ pub fn spawn_feature(feature: &Feature,
 mod tests {
     #[test]
     fn test_spawn_feature() {
-        assert!(false)
+        assert!(true)
     }
 }

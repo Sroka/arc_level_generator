@@ -19,7 +19,7 @@ mod tests {
     use std::collections::VecDeque;
     use std::iter::FromIterator;
 
-    use nalgebra::{Vector3, Point3, Vector2};
+    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion};
     use ncollide3d::bounding_volume::AABB;
 
     #[test]
@@ -27,6 +27,7 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0.0, 0.0, 0.0),
+            rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             velocity: Vector3::new(1.0, 1.0, 1.0),
         };

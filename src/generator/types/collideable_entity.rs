@@ -1,4 +1,4 @@
-use nalgebra::Vector3;
+use nalgebra::{Vector3, UnitQuaternion};
 use ncollide3d::bounding_volume::AABB;
 
 // Represents a spawned entity
@@ -7,6 +7,7 @@ pub struct CollideableEntity {
     pub spawn_position: Vector3<f32>,
     pub spawn_time: f32,
     pub velocity: Vector3<f32>,
+    pub rotation: UnitQuaternion<f32>,
     pub bounding_box: AABB<f32>,
     pub prefab_id: i32,
     pub priority: i32,

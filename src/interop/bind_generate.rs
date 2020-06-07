@@ -1,4 +1,4 @@
-use nalgebra::{Point3};
+use nalgebra::{Point3, UnitQuaternion};
 use crate::interop::types::{VisibleWorldDescription, FeatureDescription, EntitiesArrayDescription, EntityDescription};
 use std::slice::from_raw_parts;
 use crate::{Feature, Prefab, VisibleWorld};
@@ -6,6 +6,7 @@ use crate::generate;
 use ncollide3d::bounding_volume::AABB;
 use rand::thread_rng;
 use std::mem;
+
 /// Unsafe wrapper around #generate() function. It is a callers responsibility to call
 /// #bind_deallocate_vec ona returned array. Otherwise this array will never be deallocated and
 /// will leak memory
@@ -24,6 +25,7 @@ pub unsafe extern fn bind_generate(
                     Prefab {
                         prefab_id: prefab_description.prefab_id,
                         position: prefab_description.position,
+                        rotation: UnitQuaternion::from_euler_angles(prefab_description.euler_angles.x, prefab_description.euler_angles.y, prefab_description.euler_angles.z),
                         bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), prefab_description.half_extents),
                         velocity: prefab_description.velocity,
                     }

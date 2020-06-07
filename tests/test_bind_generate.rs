@@ -11,30 +11,35 @@ mod tests {
         let description = PrefabDescription {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
+            euler_angles: nalgebra::zero(),
             velocity: Vector3::new(0., -1., 0.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description1 = PrefabDescription {
             prefab_id: 2,
             position: Vector3::new(1., 0., 0.),
+            euler_angles: nalgebra::zero(),
             velocity: Vector3::new(0., -1., 0.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description2 = PrefabDescription {
             prefab_id: 3,
             position: Vector3::new(-1., 0., 0.),
+            euler_angles: nalgebra::zero(),
             velocity: Vector3::new(0., -1., 0.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description3 = PrefabDescription {
             prefab_id: 4,
             position: Vector3::new(2., 0., 2.),
+            euler_angles: nalgebra::zero(),
             velocity: Vector3::new(-1., -1., -1.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description4 = PrefabDescription {
             prefab_id: 5,
             position: Vector3::new(-2., 0., 2.),
+            euler_angles: nalgebra::zero(),
             velocity: Vector3::new(2., -1., 0.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -107,12 +112,14 @@ mod tests {
         let description = PrefabDescription {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
+            euler_angles: nalgebra::zero(),
             velocity: Vector3::new(0., -4., 0.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description1 = PrefabDescription {
             prefab_id: 2,
             position: Vector3::new(0., 0., 0.),
+            euler_angles: nalgebra::zero(),
             velocity: Vector3::new(0., -6., 0.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -171,12 +178,14 @@ mod tests {
         let description = PrefabDescription {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
+            euler_angles: nalgebra::zero(),
             velocity: Vector3::new(0., -1., 0.),
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };
         let description1 = PrefabDescription {
             prefab_id: 2,
             position: Vector3::new(0., 0., 0.),
+            euler_angles: nalgebra::zero(),
             velocity: Vector3::new(0., -1., 0.),
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };

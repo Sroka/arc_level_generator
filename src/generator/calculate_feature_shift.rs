@@ -80,7 +80,7 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
 
 #[cfg(test)]
 mod tests {
-    use nalgebra::{Vector3, Point3, Vector2};
+    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion};
     use crate::{Prefab, Feature, VisibleWorld};
     use ncollide3d::bounding_volume::AABB;
     use crate::generator::calculate_feature_shift::calculate_feature_shift;
@@ -95,6 +95,7 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(19.5, 0., 0.),
+            rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(48., 0.5, 0.5)),
             velocity: Vector3::new(0., -1., 0.),
         };

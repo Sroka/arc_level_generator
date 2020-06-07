@@ -5,6 +5,7 @@ use nalgebra::{Vector3, Vector2};
 pub struct PrefabDescription {
     pub prefab_id: i32,
     pub position: Vector3<f32>,
+    pub euler_angles: Vector3<f32>,
     pub velocity: Vector3<f32>,
     pub half_extents: Vector3<f32>,
 }

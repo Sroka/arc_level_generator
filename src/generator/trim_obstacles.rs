@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 use super::types::{CollideableEntity, VisibleWorld};
 use ncollide3d::bounding_volume::BoundingVolume;
-use nalgebra::{Isometry3};
+use nalgebra::{Isometry3, Translation3, UnitQuaternion};
 
 /// Removes obstacles after they leave bounded volume of a visible world
 /// * `obstacles` - entity list to trim
@@ -18,10 +18,15 @@ pub fn trim_obstacles(
             return true;
         };
         let position = entity.position(time_travelled);
-        let current_entity_aabb = entity.bounding_box.transform_by(&Isometry3::new(position, nalgebra::zero()));
+        let current_entity_aabb = entity.bounding_box
+            .transform_by(&Isometry3::from_parts(
+                Translation3::from(position),
+                entity.rotation,
+            )
+            );
         // FIXME Eh, just a hack for prefabs being spawned outside world
-        if position.y > world.world_bounds.mins().y {
-            return true
+        if current_entity_aabb.maxs().y > world.world_bounds.mins().y {
+            return true;
         }
         false
         // world.world_bounds.intersects(&current_entity_aabb)
@@ -36,7 +41,7 @@ mod tests {
     use std::collections::VecDeque;
     use std::iter::FromIterator;
 
-    use nalgebra::{Vector3, Point3};
+    use nalgebra::{Vector3, Point3, UnitQuaternion};
     use ncollide3d::bounding_volume::AABB;
 
     #[test]
@@ -49,6 +54,7 @@ mod tests {
             spawn_position: Vector3::new(0., 0., 0.),
             spawn_time: 10.0,
             velocity: Vector3::new(0., -1., 0.),
+            rotation: UnitQuaternion::from_euler_angles(0., 0., std::f32::consts::FRAC_PI_4),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             prefab_id: 0,
             priority: 0,
@@ -56,6 +62,7 @@ mod tests {
         let obstacle1 = CollideableEntity {
             priority: 5,
             spawn_time: 30.0,
+            rotation: UnitQuaternion::from_euler_angles(0., 0., std::f32::consts::FRAC_PI_2),
             ..obstacle0.clone()
         };
         let mut obstacles: VecDeque<CollideableEntity> = VecDeque::from_iter([obstacle0.clone(), obstacle1.clone()].iter().cloned());
@@ -68,13 +75,16 @@ mod tests {
         trim_obstacles(&mut obstacles, &world, 20.0);
         assert!(obstacles.iter().eq([obstacle0.clone(), obstacle1.clone()].iter()));
 
-        trim_obstacles(&mut obstacles, &world, 20.6);
+        trim_obstacles(&mut obstacles, &world, 20.706);
+        assert!(obstacles.iter().eq([obstacle0.clone(), obstacle1.clone()].iter()));
+
+        trim_obstacles(&mut obstacles, &world, 20.7072);
         assert!(obstacles.iter().eq([obstacle1.clone()].iter()));
 
-        trim_obstacles(&mut obstacles, &world, 40.);
+        trim_obstacles(&mut obstacles, &world, 40.49);
         assert!(obstacles.iter().eq([obstacle1.clone()].iter()));
 
-        trim_obstacles(&mut obstacles, &world, 40.6);
+        trim_obstacles(&mut obstacles, &world, 40.501);
         let expected: Vec<CollideableEntity> = Vec::new();
         assert!(obstacles.iter().eq(expected.iter()));
     }

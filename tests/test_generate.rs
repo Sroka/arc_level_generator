@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use ncollide3d::bounding_volume::AABB;
-    use nalgebra::{Vector3, Point3, Vector2};
+    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion};
     use self::arc_level_generator::{VisibleWorld, Prefab, Feature};
 
     extern crate arc_level_generator;
@@ -11,6 +11,7 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             velocity: Vector3::new(0., -1., 0.),
         };
@@ -22,7 +23,7 @@ mod tests {
             translate_z_using_bounds: false,
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
-            spawn_count: 1000,
+            spawn_count: 10,
             spawns_per_second: 1.0,
             trigger_position: 10.0,
             priority: 0,
@@ -48,12 +49,14 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(4.0, 4.0, 4.0)),
             velocity: Vector3::new(0., -1., 0.),
         };
         let prefab1 = Prefab {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(4.0, 4.0, 4.0)),
             velocity: Vector3::new(0., -1., 0.),
         };
@@ -105,6 +108,7 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(5.0, 5.0, 5.0)),
             velocity: Vector3::new(0., -1., 0.),
         };
@@ -134,6 +138,44 @@ mod tests {
         );
         for (index, entity) in generated_entities.iter().enumerate() {
             println!("Generated entitity {}: {:?}", index, entity)
+        }
+    }
+
+    #[test]
+    fn test_generate_rotated() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::from_euler_angles( 0., 0., std::f32::consts::FRAC_PI_2),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
+            velocity: Vector3::new(0., -1., 0.),
+        };
+        let feature0 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_z: false,
+            translate_z_using_bounds: false,
+            translate_z_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab0],
+            spawn_count: 10,
+            spawns_per_second: 1.0,
+            trigger_position: 0.0,
+            priority: 0,
+            missed_spawns: 0,
+        };
+
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 50., 10.)),
+            travel_speed: 4.0,
+        };
+        let generated_entities = arc_level_generator::generate(
+            &world,
+            &[feature0],
+            &mut rand::thread_rng(),
+        );
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entity {}: {:?}", index, entity)
         }
     }
 }

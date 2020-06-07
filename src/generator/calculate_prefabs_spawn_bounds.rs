@@ -33,13 +33,14 @@ pub fn calculate_prefabs_centers_bounds(prefabs: &[Prefab]) -> AABB<f32> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nalgebra::Vector3;
+    use nalgebra::{Vector3, UnitQuaternion};
 
     #[test]
     fn test_calculate_prefabs_spawn_bounds() {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(-10., 0., -10.),
+            rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(1., 1., 1.)),
             velocity: Vector3::new(1., 1., 1.),
         };
