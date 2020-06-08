@@ -36,7 +36,7 @@ pub unsafe extern fn bind_generate(
                 prefabs: feature_prefabs,
                 spawns_per_second: feature_description.spawns_per_second,
                 spawn_count: feature_description.spawn_count,
-                trigger_position: feature_description.trigger_position,
+                trigger_time: feature_description.trigger_time,
                 priority: feature_description.priority,
                 translate_x: feature_description.translate_x,
                 translate_x_using_bounds: feature_description.translate_x_using_bounds,

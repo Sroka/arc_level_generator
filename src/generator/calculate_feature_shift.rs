@@ -24,8 +24,6 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
                 min_x = half_way - 0.001;
                 max_x = half_way + 0.001;
             }
-            dbg!(min_x);
-            dbg!(max_x);
             shift.x = rng.gen_range(
                 min_x,
                 max_x,
@@ -109,7 +107,7 @@ mod tests {
             prefabs: vec![prefab0],
             spawn_count: 1,
             spawns_per_second: 1.,
-            trigger_position: 10.,
+            trigger_time: 10.,
             priority: 0,
             missed_spawns: 0,
         };

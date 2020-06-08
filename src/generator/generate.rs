@@ -9,7 +9,7 @@ use crate::generator::calculate_feature_shift::calculate_feature_shift;
 use crate::generator::can_spawn_feature::can_spawn_feature;
 use crate::generator::spawn_feature::spawn_feature;
 
-const STEP: f32 = 0.1;
+const STEP: f32 = 0.025;
 
 /// Randomly generates non-intersecting entities
 ///
@@ -29,7 +29,7 @@ pub fn generate(
     let mut generated_entities: Vec<CollideableEntity> = Vec::new();
     let mut obstacles: VecDeque<CollideableEntity> = VecDeque::new();
 
-    let mut distance_travelled = 0.0_f32;
+    let mut time_travelled = 0.0_f32;
     dbg!(features);
 
     'main_loop: loop {
@@ -37,9 +37,8 @@ pub fn generate(
             // That's it. We generated everything
             break 'main_loop;
         }
-        distance_travelled += STEP;
-        let time_travelled = distance_travelled / world.travel_speed;
-        drain_upcoming_features(&mut upcoming_features, &mut active_features, distance_travelled);
+        time_travelled += STEP;
+        drain_upcoming_features(&mut upcoming_features, &mut active_features, time_travelled);
         trim_active_features(&mut active_features);
         trim_obstacles(&mut obstacles, &world, time_travelled);
 

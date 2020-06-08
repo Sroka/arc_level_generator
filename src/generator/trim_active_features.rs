@@ -41,7 +41,7 @@ mod tests {
             prefabs: vec![prefab0.clone()],
             spawn_count: 1,
             spawns_per_second: 1.0,
-            trigger_position: 10.0,
+            trigger_time: 10.0,
             priority: 0,
             missed_spawns: 0,
         };

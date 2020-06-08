@@ -9,13 +9,13 @@ use super::types::Feature;
 /// * `distance_travelled` - distance travelled in a given world
 pub fn drain_upcoming_features(upcoming_features: &mut VecDeque<Feature>,
                                active_features: &mut VecDeque<Feature>,
-                               distance_travelled: f32,
+                               time_travelled: f32,
 ) {
     if upcoming_features.is_empty() {
         return;
     }
     upcoming_features.retain(|feature| {
-        if feature.trigger_position - feature.priority as f32 <= distance_travelled {
+        if feature.trigger_time <= time_travelled {
             active_features.push_back(feature.clone());
             false
         } else {
@@ -54,23 +54,20 @@ mod tests {
             prefabs: vec![prefab0],
             spawn_count: 1,
             spawns_per_second: 1.0,
-            trigger_position: 10.0,
+            trigger_time: 10.0,
             priority: 0,
             missed_spawns: 0,
         };
         let feature1 = Feature {
-            trigger_position: 100.0,
-            priority: 0,
+            trigger_time: 100.0,
             ..feature0.clone()
         };
         let feature2 = Feature {
-            trigger_position: 110.0,
-            priority: 15,
+            trigger_time: 110.0,
             ..feature0.clone()
         };
         let feature3 = Feature {
-            trigger_position: 110.0,
-            priority: 5,
+            trigger_time: 105.0,
             ..feature0.clone()
         };
 
@@ -107,10 +104,10 @@ mod tests {
             distance_travelled,
         );
 
-        let expected = [feature0.clone(), feature2.clone()];
+        let expected = [feature0.clone()];
         assert!(active_features.iter().eq(expected.iter()));
 
-        distance_travelled = 102.0;
+        distance_travelled = 105.0;
 
         drain_upcoming_features(
             &mut upcoming_features,
@@ -118,10 +115,10 @@ mod tests {
             distance_travelled,
         );
 
-        let expected = [feature0.clone(), feature2.clone(), feature1.clone()];
+        let expected = [feature0.clone(),feature1.clone(), feature3.clone()];
         assert!(active_features.iter().eq(expected.iter()));
 
-        distance_travelled = 107.0;
+        distance_travelled = 117.0;
 
         drain_upcoming_features(
             &mut upcoming_features,
@@ -129,7 +126,7 @@ mod tests {
             distance_travelled,
         );
 
-        let expected = [feature0.clone(), feature2.clone(), feature1.clone(), feature3.clone()];
+        let expected = [feature0.clone(),feature1.clone(), feature3.clone(), feature2.clone()];
         assert!(active_features.iter().eq(expected.iter()));
     }
 }

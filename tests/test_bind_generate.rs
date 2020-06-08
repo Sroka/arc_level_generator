@@ -55,7 +55,7 @@ mod tests {
                 prefabs_count: 3,
                 spawns_per_second: 1.0,
                 spawn_count: 10,
-                trigger_position: 10.0,
+                trigger_time: 10.0,
                 priority: 0,
             },
             FeatureDescription {
@@ -69,7 +69,7 @@ mod tests {
                 prefabs_count: 1,
                 spawns_per_second: 1.0,
                 spawn_count: 10,
-                trigger_position: 20.0,
+                trigger_time: 20.0,
                 priority: 0,
             },
             FeatureDescription {
@@ -83,7 +83,7 @@ mod tests {
                 prefabs_count: 1,
                 spawns_per_second: 1.0,
                 spawn_count: 10,
-                trigger_position: 30.0,
+                trigger_time: 30.0,
                 priority: 0,
             },
         ];
@@ -135,7 +135,7 @@ mod tests {
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
                 spawn_count: 30,
-                trigger_position: 10.0,
+                trigger_time: 10.0,
                 priority: 0,
             },
             FeatureDescription {
@@ -149,7 +149,7 @@ mod tests {
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
                 spawn_count: 30,
-                trigger_position: 10.0,
+                trigger_time: 10.0,
                 priority: 0,
             },
         ];
@@ -201,7 +201,7 @@ mod tests {
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
                 spawn_count: 1,
-                trigger_position: 10.0,
+                trigger_time: 10.0,
                 priority: 0,
             },
             FeatureDescription {
@@ -215,7 +215,7 @@ mod tests {
                 prefabs_count: 1,
                 spawns_per_second: 0.1,
                 spawn_count: 1,
-                trigger_position: 10.0,
+                trigger_time: 10.0,
                 priority: 0,
             },
         ];

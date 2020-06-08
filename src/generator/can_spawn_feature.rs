@@ -118,7 +118,7 @@ mod tests {
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
-                trigger_position: 10.,
+                trigger_time: 10.,
                 priority: 0,
                 missed_spawns: 0,
             };
@@ -164,7 +164,7 @@ mod tests {
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
-                trigger_position: 10.,
+                trigger_time: 10.,
                 priority: 0,
                 missed_spawns: 0,
             };
@@ -210,7 +210,7 @@ mod tests {
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
-                trigger_position: 10.,
+                trigger_time: 10.,
                 priority: 0,
                 missed_spawns: 0,
             };
@@ -256,7 +256,7 @@ mod tests {
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
-                trigger_position: 10.,
+                trigger_time: 10.,
                 priority: 0,
                 missed_spawns: 0,
             };
@@ -302,7 +302,7 @@ mod tests {
                 prefabs: vec![prefab0],
                 spawn_count: 10,
                 spawns_per_second: 1.0,
-                trigger_position: 0.0,
+                trigger_time: 0.0,
                 priority: 0,
                 missed_spawns: 0,
             };
@@ -349,7 +349,7 @@ mod tests {
                 prefabs: vec![prefab0],
                 spawn_count: 10,
                 spawns_per_second: 1.0,
-                trigger_position: 0.0,
+                trigger_time: 0.0,
                 priority: 0,
                 missed_spawns: 0,
             };
@@ -396,7 +396,7 @@ mod tests {
                 prefabs: vec![prefab0],
                 spawn_count: 10,
                 spawns_per_second: 1.0,
-                trigger_position: 0.0,
+                trigger_time: 0.0,
                 priority: 0,
                 missed_spawns: 0,
             };
@@ -448,7 +448,7 @@ mod tests {
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawns_per_second: 1.,
-                trigger_position: 10.,
+                trigger_time: 10.,
                 priority: 5,
                 missed_spawns: 0,
             };
