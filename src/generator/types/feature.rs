@@ -6,8 +6,9 @@ use nalgebra::Vector2;
 /// spawned so that they won't collide with any of other already spawned entities
 #[derive(Clone, PartialEq, Debug)]
 pub struct Feature {
-    pub  prefabs: Vec<Prefab>,
-    pub spawns_per_second: f32,
+    pub prefabs: Vec<Prefab>,
+    pub spawn_period: f32,
+    pub is_spawn_period_strict: bool,
     pub spawn_count: i32,
     pub trigger_time: f32,
     pub priority: i32,
@@ -18,4 +19,5 @@ pub struct Feature {
     pub translate_z_using_bounds: bool,
     pub translate_z_bounds: Vector2<f32>,
     pub missed_spawns: i32,
+    pub last_spawn_attempt: f32,
 }

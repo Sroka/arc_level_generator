@@ -34,7 +34,8 @@ pub unsafe extern fn bind_generate(
 
             Feature {
                 prefabs: feature_prefabs,
-                spawns_per_second: feature_description.spawns_per_second,
+                spawn_period: feature_description.spawn_period,
+                is_spawn_period_strict: feature_description.is_spawn_period_strict,
                 spawn_count: feature_description.spawn_count,
                 trigger_time: feature_description.trigger_time,
                 priority: feature_description.priority,
@@ -45,6 +46,7 @@ pub unsafe extern fn bind_generate(
                 translate_z_using_bounds: feature_description.translate_z_using_bounds,
                 translate_z_bounds: feature_description.translate_z_bounds.clone(),
                 missed_spawns: 0,
+                last_spawn_attempt: 0.0
             }
         })
         .collect();

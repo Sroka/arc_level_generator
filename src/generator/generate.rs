@@ -43,15 +43,22 @@ pub fn generate(
         trim_obstacles(&mut obstacles, &world, time_travelled);
 
         'features_loop: for feature in &mut active_features {
-            if !rng.gen_bool(((STEP * (1 + feature.missed_spawns) as f32 * feature.spawns_per_second) as f64).min(1.0)) {
+            let should_try_spawning = if feature.is_spawn_period_strict {
+                time_travelled > feature.last_spawn_attempt + feature.spawn_period
+            } else {
+                let chance_to_spawn = ((STEP * (1 + feature.missed_spawns) as f32 / feature.spawn_period) as f64).min(1.0);
+                rng.gen_bool(chance_to_spawn)
+            };
+            if !should_try_spawning {
                 continue;
             }
+            let spawn_time = if feature.is_spawn_period_strict { feature.last_spawn_attempt + feature.spawn_period } else { time_travelled };
             let feature_shift = calculate_feature_shift(rng, &world, feature);
             let can_spawn = can_spawn_feature(
                 &feature,
                 &obstacles,
                 &world,
-                time_travelled,
+                spawn_time,
                 &feature_shift,
             );
             if can_spawn {
@@ -59,14 +66,16 @@ pub fn generate(
                     &feature,
                     &mut obstacles,
                     &mut generated_entities,
-                    time_travelled,
+                    spawn_time,
                     &world,
                     &feature_shift,
                 );
-                feature.spawn_count = feature.spawn_count - 1;
+                feature.spawn_count -= 1;
                 feature.missed_spawns = 0;
+                feature.last_spawn_attempt = spawn_time;
             } else {
-                feature.missed_spawns = feature.missed_spawns + 1;
+                feature.missed_spawns += 1;
+                feature.last_spawn_attempt = spawn_time;
             }
         }
     }

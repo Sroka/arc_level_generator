@@ -24,10 +24,12 @@ mod tests {
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
-            spawns_per_second: 1.0,
+            spawn_period: 1.0,
+            is_spawn_period_strict: false,
             trigger_time: 10.0,
             priority: 0,
             missed_spawns: 0,
+            last_spawn_attempt: 0.0
         };
 
         let world = VisibleWorld {
@@ -69,10 +71,12 @@ mod tests {
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 1,
-            spawns_per_second: 1.0,
+            spawn_period: 1.0,
             trigger_time: 0.0,
             priority: 0,
             missed_spawns: 0,
+            is_spawn_period_strict: false,
+            last_spawn_attempt: 0.0
         };
         let feature1 = Feature {
             translate_x: true,
@@ -83,10 +87,12 @@ mod tests {
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab1],
             spawn_count: 1,
-            spawns_per_second: 1.0,
+            spawn_period: 1.0,
             trigger_time: 0.0,
             priority: 0,
             missed_spawns: 0,
+            is_spawn_period_strict: false,
+            last_spawn_attempt: 0.0
         };
 
         let world = VisibleWorld {
@@ -121,10 +127,12 @@ mod tests {
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
-            spawns_per_second: 1.0,
+            spawn_period: 1.0,
             trigger_time: 10.0,
             priority: 0,
             missed_spawns: 0,
+            is_spawn_period_strict: false,
+            last_spawn_attempt: 0.0
         };
 
         let world = VisibleWorld {
@@ -159,10 +167,52 @@ mod tests {
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
-            spawns_per_second: 1.0,
+            spawn_period: 1.0,
             trigger_time: 0.0,
             priority: 0,
             missed_spawns: 0,
+            is_spawn_period_strict: false,
+            last_spawn_attempt: 0.0
+        };
+
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 50., 10.)),
+            travel_speed: 4.0,
+        };
+        let generated_entities = arc_level_generator::generate(
+            &world,
+            &[feature0],
+            &mut rand::thread_rng(),
+        );
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entity {}: {:?}", index, entity)
+        }
+    }
+
+    #[test]
+    fn test_generate_strict_period() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::from_euler_angles( 0., 0., std::f32::consts::FRAC_PI_2),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
+            velocity: Vector3::new(0., -1., 0.),
+        };
+        let feature0 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_z: false,
+            translate_z_using_bounds: false,
+            translate_z_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab0],
+            spawn_count: 10,
+            spawn_period: 5.0,
+            trigger_time: 0.0,
+            priority: 0,
+            missed_spawns: 0,
+            is_spawn_period_strict: true,
+            last_spawn_attempt: 0.0
         };
 
         let world = VisibleWorld {

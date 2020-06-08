@@ -15,7 +15,8 @@ pub struct PrefabDescription {
 pub struct FeatureDescription {
     pub prefabs: *const PrefabDescription,
     pub prefabs_count: i32,
-    pub spawns_per_second: f32,
+    pub spawn_period: f32,
+    pub is_spawn_period_strict: bool,
     pub spawn_count: i32,
     pub trigger_time: f32,
     pub priority: i32,

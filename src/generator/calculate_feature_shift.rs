@@ -106,10 +106,12 @@ mod tests {
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 1,
-            spawns_per_second: 1.,
+            spawn_period: 1.,
             trigger_time: 10.,
             priority: 0,
             missed_spawns: 0,
+            is_spawn_period_strict: false,
+            last_spawn_attempt: 0.0
         };
         let world = VisibleWorld {
             world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(30., 30., 30.)),

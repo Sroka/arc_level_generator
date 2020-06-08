@@ -40,10 +40,12 @@ mod tests {
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0.clone()],
             spawn_count: 1,
-            spawns_per_second: 1.0,
+            spawn_period: 1.0,
             trigger_time: 10.0,
             priority: 0,
             missed_spawns: 0,
+            is_spawn_period_strict: false,
+            last_spawn_attempt: 0.0
         };
         let feature1 = Feature {
             spawn_count: 0,
