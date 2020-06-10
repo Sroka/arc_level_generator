@@ -10,6 +10,7 @@ use crate::generator::calculate_feature_shift::calculate_feature_shift;
 use crate::generator::can_spawn_feature::can_spawn_feature;
 use crate::generator::spawn_feature::spawn_feature;
 use itertools::Itertools;
+use nalgebra::Vector3;
 
 const STEP: f32 = 0.025;
 
@@ -32,7 +33,6 @@ pub fn generate(
     let mut obstacles: VecDeque<CollideableEntity> = VecDeque::new();
 
     let mut time_travelled = 0.0_f32;
-    dbg!(features);
 
     'main_loop: loop {
         if active_features.is_empty() && upcoming_features.is_empty() {
@@ -82,6 +82,5 @@ pub fn generate(
             }
         }
     }
-    dbg!(&generated_entities);
     generated_entities
 }

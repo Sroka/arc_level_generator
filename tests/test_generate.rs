@@ -122,13 +122,13 @@ mod tests {
             translate_x: true,
             translate_x_using_bounds: false,
             translate_x_bounds: Vector2::new(0., 0.),
-            translate_z: true,
+            translate_z: false,
             translate_z_using_bounds: false,
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
-            spawn_period: 1.0,
-            trigger_time: 10.0,
+            spawn_period: 0.1,
+            trigger_time: 0.0,
             priority: 0,
             missed_spawns: 0,
             is_spawn_period_strict: false,
@@ -136,7 +136,7 @@ mod tests {
         };
 
         let world = VisibleWorld {
-            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(3., 3., 3.)),
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(6., 30., 6.)),
             travel_speed: 4.0,
         };
         let generated_entities = arc_level_generator::generate(
@@ -145,7 +145,7 @@ mod tests {
             &mut rand::thread_rng(),
         );
         for (index, entity) in generated_entities.iter().enumerate() {
-            println!("Generated entitity {}: {:?}", index, entity)
+            println!("Generated entitity {}: {:?}", index, entity.spawn_time)
         }
     }
 
@@ -167,7 +167,7 @@ mod tests {
             translate_z_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
-            spawn_period: 1.0,
+            spawn_period: 0.1,
             trigger_time: 0.0,
             priority: 0,
             missed_spawns: 0,

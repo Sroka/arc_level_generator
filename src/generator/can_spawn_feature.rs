@@ -9,6 +9,7 @@ use ncollide3d::bounding_volume::BoundingVolume;
 use std::cmp::Ordering::Equal;
 use itertools::Itertools;
 use std::iter;
+use float_cmp::{ApproxEq, F32Margin};
 
 /// Checks if a feature can be safely spawn so that it won't collide with any existing entities in
 /// a visible world
@@ -55,13 +56,13 @@ pub fn can_spawn_feature(
 
             let obstacle_spawn_position_isometry = Isometry3::from_parts(Translation3::from(obstacle_spawn_position), obstacle.rotation);
             // TODO In reality this is a fix for a bug in query::time_of_impact
-            let distance_at_spawn_point = query::distance_support_map_support_map(
+            let distance_at_spawn_point: f32 = query::distance_support_map_support_map(
                 &prefab_spawn_position_isometry,
                 &Cuboid::new(prefab.bounding_box.half_extents()),
                 &obstacle_spawn_position_isometry,
                 &Cuboid::new(obstacle.bounding_box.half_extents()),
             );
-            if distance_at_spawn_point == 0. {
+            if distance_at_spawn_point.approx_eq(0., F32Margin { epsilon: 0.01, ulps: 2 }) {
                 return false;
             }
 
@@ -122,7 +123,7 @@ mod tests {
                 priority: 0,
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
-                last_spawn_attempt: 0.0
+                last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 10., 5.),
@@ -170,7 +171,7 @@ mod tests {
                 priority: 0,
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
-                last_spawn_attempt: 0.0
+                last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., -1.25, 0.),
@@ -218,7 +219,7 @@ mod tests {
                 priority: 0,
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
-                last_spawn_attempt: 0.0
+                last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., -2.5, 0.),
@@ -266,7 +267,7 @@ mod tests {
                 priority: 0,
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
-                last_spawn_attempt: 0.0
+                last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 10.0, 0.),
@@ -314,7 +315,7 @@ mod tests {
                 priority: 0,
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
-                last_spawn_attempt: 0.0
+                last_spawn_attempt: 0.0,
             };
 
             let world = VisibleWorld {
@@ -363,7 +364,7 @@ mod tests {
                 priority: 0,
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
-                last_spawn_attempt: 0.0
+                last_spawn_attempt: 0.0,
             };
 
             let world = VisibleWorld {
@@ -412,7 +413,7 @@ mod tests {
                 priority: 0,
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
-                last_spawn_attempt: 0.0
+                last_spawn_attempt: 0.0,
             };
 
             let world = VisibleWorld {
@@ -466,7 +467,7 @@ mod tests {
                 priority: 5,
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
-                last_spawn_attempt: 0.0
+                last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 8., 5.),
