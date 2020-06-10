@@ -6,7 +6,7 @@ use super::types::Feature;
 /// * `active_fatures` - features that are currently spawning
 ///
 pub fn trim_active_features(
-    active_features: &mut VecDeque<Feature>,
+    active_features: &mut Vec<Feature>,
 ) {
     active_features.retain(|feature| feature.spawn_count > 0);
 }
@@ -59,7 +59,7 @@ mod tests {
             spawn_count: 100,
             ..feature0.clone()
         };
-        let mut features = VecDeque::from_iter([feature0.clone(), feature1.clone(), feature2.clone(), feature3.clone()].iter().cloned());
+        let mut features = vec![feature0.clone(), feature1.clone(), feature2.clone(), feature3.clone()];
 
         trim_active_features(&mut features);
         assert!(features.iter().eq([feature0.clone(), feature2.clone(), feature3.clone()].iter()));

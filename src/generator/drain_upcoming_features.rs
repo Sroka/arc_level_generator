@@ -7,8 +7,8 @@ use super::types::Feature;
 /// * `upcoming_features` - features that didn't yet start to spawn
 /// * `active_features` - features that are actively spawning
 /// * `distance_travelled` - distance travelled in a given world
-pub fn drain_upcoming_features(upcoming_features: &mut VecDeque<Feature>,
-                               active_features: &mut VecDeque<Feature>,
+pub fn drain_upcoming_features(upcoming_features: &mut Vec<Feature>,
+                               active_features: &mut Vec<Feature>,
                                time_travelled: f32,
 ) {
     if upcoming_features.is_empty() {
@@ -16,7 +16,7 @@ pub fn drain_upcoming_features(upcoming_features: &mut VecDeque<Feature>,
     }
     upcoming_features.retain(|feature| {
         if feature.trigger_time <= time_travelled {
-            active_features.push_back(feature.clone());
+            active_features.push(feature.clone());
             false
         } else {
             true
@@ -73,8 +73,8 @@ mod tests {
             ..feature0.clone()
         };
 
-        let mut upcoming_features: VecDeque<Feature> = VecDeque::from_iter([feature0.clone(), feature1.clone(), feature2.clone(), feature3.clone()].iter().cloned());
-        let mut active_features: VecDeque<Feature> = VecDeque::new();
+        let mut upcoming_features: Vec<Feature> = vec![feature0.clone(), feature1.clone(), feature2.clone(), feature3.clone()];
+        let mut active_features: Vec<Feature> = Vec::new();
         let mut distance_travelled = 0.0_f32;
 
 

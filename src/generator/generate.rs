@@ -2,12 +2,14 @@ use std::collections::VecDeque;
 use crate::{Feature, CollideableEntity, VisibleWorld};
 use std::iter::FromIterator;
 use rand::{RngCore, Rng};
+use rand::seq::SliceRandom;
 use crate::generator::drain_upcoming_features::drain_upcoming_features;
 use crate::generator::trim_active_features::trim_active_features;
 use crate::generator::trim_obstacles::trim_obstacles;
 use crate::generator::calculate_feature_shift::calculate_feature_shift;
 use crate::generator::can_spawn_feature::can_spawn_feature;
 use crate::generator::spawn_feature::spawn_feature;
+use itertools::Itertools;
 
 const STEP: f32 = 0.025;
 
@@ -23,8 +25,8 @@ pub fn generate(
     features: &[Feature],
     rng: &mut impl RngCore,
 ) -> Vec<CollideableEntity> {
-    let mut upcoming_features: VecDeque<Feature> = VecDeque::from_iter(features.iter().cloned());
-    let mut active_features: VecDeque<Feature> = VecDeque::new();
+    let mut upcoming_features: Vec<Feature> = Vec::from(features);
+    let mut active_features: Vec<Feature> = Vec::new();
 
     let mut generated_entities: Vec<CollideableEntity> = Vec::new();
     let mut obstacles: VecDeque<CollideableEntity> = VecDeque::new();
@@ -41,6 +43,7 @@ pub fn generate(
         drain_upcoming_features(&mut upcoming_features, &mut active_features, time_travelled);
         trim_active_features(&mut active_features);
         trim_obstacles(&mut obstacles, &world, time_travelled);
+        active_features.shuffle(rng);
 
         'features_loop: for feature in &mut active_features {
             let should_try_spawning = if feature.is_spawn_period_strict {
