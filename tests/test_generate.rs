@@ -19,9 +19,9 @@ mod tests {
             translate_x: true,
             translate_x_using_bounds: false,
             translate_x_bounds: Vector2::new(0., 0.),
-            translate_z: true,
-            translate_z_using_bounds: false,
-            translate_z_bounds: Vector2::new(0., 0.),
+            translate_y: true,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
             spawn_period: 1.0,
@@ -66,9 +66,9 @@ mod tests {
             translate_x: true,
             translate_x_using_bounds: false,
             translate_x_bounds: Vector2::new(0., 0.),
-            translate_z: true,
-            translate_z_using_bounds: false,
-            translate_z_bounds: Vector2::new(0., 0.),
+            translate_y: true,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 1,
             spawn_period: 1.0,
@@ -82,9 +82,9 @@ mod tests {
             translate_x: true,
             translate_x_using_bounds: false,
             translate_x_bounds: Vector2::new(0., 0.),
-            translate_z: true,
-            translate_z_using_bounds: false,
-            translate_z_bounds: Vector2::new(0., 0.),
+            translate_y: true,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab1],
             spawn_count: 1,
             spawn_period: 1.0,
@@ -122,9 +122,9 @@ mod tests {
             translate_x: true,
             translate_x_using_bounds: false,
             translate_x_bounds: Vector2::new(0., 0.),
-            translate_z: false,
-            translate_z_using_bounds: false,
-            translate_z_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
             spawn_period: 0.1,
@@ -154,17 +154,17 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0., 0., 0.),
-            rotation: UnitQuaternion::from_euler_angles( 0., 0., std::f32::consts::FRAC_PI_2),
+            rotation: UnitQuaternion::from_euler_angles( 0., std::f32::consts::FRAC_PI_2, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
-            velocity: Vector3::new(0., -1., 0.),
+            velocity: Vector3::new(0., 0., -1.),
         };
         let feature0 = Feature {
             translate_x: false,
             translate_x_using_bounds: false,
             translate_x_bounds: Vector2::new(0., 0.),
-            translate_z: false,
-            translate_z_using_bounds: false,
-            translate_z_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
             spawn_period: 0.1,
@@ -176,7 +176,7 @@ mod tests {
         };
 
         let world = VisibleWorld {
-            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 50., 10.)),
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 50.)),
             travel_speed: 4.0,
         };
         let generated_entities = arc_level_generator::generate(
@@ -194,17 +194,17 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0., 0., 0.),
-            rotation: UnitQuaternion::from_euler_angles( 0., 0., std::f32::consts::FRAC_PI_2),
+            rotation: UnitQuaternion::from_euler_angles( 0., std::f32::consts::FRAC_PI_2, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
-            velocity: Vector3::new(0., -1., 0.),
+            velocity: Vector3::new(0., 0., -1.),
         };
         let feature0 = Feature {
             translate_x: false,
             translate_x_using_bounds: false,
             translate_x_bounds: Vector2::new(0., 0.),
-            translate_z: false,
-            translate_z_using_bounds: false,
-            translate_z_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 10,
             spawn_period: 5.0,
@@ -216,7 +216,7 @@ mod tests {
         };
 
         let world = VisibleWorld {
-            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 50., 10.)),
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 50.)),
             travel_speed: 4.0,
         };
         let generated_entities = arc_level_generator::generate(

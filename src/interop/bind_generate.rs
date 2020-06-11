@@ -42,9 +42,9 @@ pub unsafe extern fn bind_generate(
                 translate_x: feature_description.translate_x,
                 translate_x_using_bounds: feature_description.translate_x_using_bounds,
                 translate_x_bounds: feature_description.translate_x_bounds.clone(),
-                translate_z: feature_description.translate_z,
-                translate_z_using_bounds: feature_description.translate_z_using_bounds,
-                translate_z_bounds: feature_description.translate_z_bounds.clone(),
+                translate_y: feature_description.translate_y,
+                translate_y_using_bounds: feature_description.translate_y_using_bounds,
+                translate_y_bounds: feature_description.translate_y_bounds.clone(),
                 missed_spawns: 0,
                 last_spawn_attempt: 0.0
             }

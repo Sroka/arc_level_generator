@@ -21,13 +21,13 @@ pub fn can_spawn_feature(
     time_travelled: f32,
     feature_shift: &Vector3<f32>,
 ) -> bool {
-    let min_y_velocity_in_a_feature = feature.prefabs
+    let min_z_velocity_in_a_feature = feature.prefabs
         .iter()
-        .map(|prefab| prefab.velocity.y)
+        .map(|prefab| prefab.velocity.z)
         .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal) })
         .last()
         .unwrap();
-    let time_to_travel_to_origin_plane_from_worlds_start = world.world_bounds.maxs().y / -min_y_velocity_in_a_feature;
+    let time_to_travel_to_origin_plane_from_worlds_start = world.world_bounds.maxs().z / -min_z_velocity_in_a_feature;
     'prefabs_loop: for prefab in &feature.prefabs {
         'obstacles_loop: for obstacle in obstacles {
             let prefab_spawn_position = prefab.position
@@ -107,15 +107,15 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -1., 0.),
+                velocity: Vector3::new(0., 0., -1.),
             };
             let feature = Feature {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(0., 0.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawn_period: 1.,
@@ -126,7 +126,7 @@ mod tests {
                 last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
-                spawn_position: Vector3::new(0., 10., 5.),
+                spawn_position: Vector3::new(0., 5., 10.),
                 prefab_id: 0,
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
                 rotation: UnitQuaternion::identity(),
@@ -155,15 +155,15 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -1., 0.),
+                velocity: Vector3::new(0., 0., -1.),
             };
             let feature = Feature {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(0., 0.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawn_period: 1.,
@@ -174,11 +174,11 @@ mod tests {
                 last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
-                spawn_position: Vector3::new(0., -1.25, 0.),
+                spawn_position: Vector3::new(0., 0., -1.25),
                 prefab_id: 0,
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -0.5, -0.),
+                velocity: Vector3::new(0., -0., -0.5),
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -203,15 +203,15 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -1., 0.),
+                velocity: Vector3::new(0., 0., -1.),
             };
             let feature = Feature {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(0., 0.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawn_period: 1.,
@@ -222,11 +222,11 @@ mod tests {
                 last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
-                spawn_position: Vector3::new(0., -2.5, 0.),
+                spawn_position: Vector3::new(0., 0., -2.5),
                 prefab_id: 0,
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -0.5, -0.),
+                velocity: Vector3::new(0., -0., -0.5),
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -251,15 +251,15 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -1., 0.),
+                velocity: Vector3::new(0., 0., -1.),
             };
             let feature = Feature {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(0., 0.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawn_period: 1.,
@@ -270,11 +270,11 @@ mod tests {
                 last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
-                spawn_position: Vector3::new(0., 10.0, 0.),
+                spawn_position: Vector3::new(0., 0., 10.0),
                 prefab_id: 0,
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -1.0, -0.),
+                velocity: Vector3::new(0., -0., -1.0),
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -298,16 +298,16 @@ mod tests {
                 prefab_id: 0,
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
-                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 4.)),
-                velocity: Vector3::new(0., -1., 0.),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
+                velocity: Vector3::new(0., 0., -1.),
             };
             let feature0 = Feature {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(0., 0.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab0],
                 spawn_count: 10,
                 spawn_period: 1.0,
@@ -323,11 +323,11 @@ mod tests {
                 travel_speed: 4.0,
             };
             let obstacle = CollideableEntity {
-                spawn_position: Vector3::new(0., 2.1, 0.),
+                spawn_position: Vector3::new(0., 0., 2.1),
                 prefab_id: 0,
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
-                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 4.)),
-                velocity: Vector3::new(0., -1.0, -0.),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
+                velocity: Vector3::new(0., -0., -1.0),
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -347,16 +347,16 @@ mod tests {
                 prefab_id: 0,
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
-                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 4.)),
-                velocity: Vector3::new(0., -1., 0.),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
+                velocity: Vector3::new(0., 0., -1.),
             };
             let feature0 = Feature {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(0., 0.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab0],
                 spawn_count: 10,
                 spawn_period: 1.0,
@@ -372,11 +372,11 @@ mod tests {
                 travel_speed: 4.0,
             };
             let obstacle = CollideableEntity {
-                spawn_position: Vector3::new(0., 1.9, 0.),
+                spawn_position: Vector3::new(0., 0., 1.9),
                 prefab_id: 0,
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
-                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 4.)),
-                velocity: Vector3::new(0., -1.0, -0.),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
+                velocity: Vector3::new(0., -0., -1.0),
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -396,16 +396,16 @@ mod tests {
                 prefab_id: 0,
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
-                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 4.)),
-                velocity: Vector3::new(0., -2., 0.),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
+                velocity: Vector3::new(0., 0., -2.),
             };
             let feature0 = Feature {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(0., 0.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab0],
                 spawn_count: 10,
                 spawn_period: 1.0,
@@ -421,11 +421,11 @@ mod tests {
                 travel_speed: 4.0,
             };
             let obstacle = CollideableEntity {
-                spawn_position: Vector3::new(0., -5., 0.),
+                spawn_position: Vector3::new(0., 0., -5.),
                 prefab_id: 0,
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
-                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 4.)),
-                velocity: Vector3::new(0., -1.0, -0.),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
+                velocity: Vector3::new(0., -0., -1.0),
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -451,15 +451,15 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -1., 0.),
+                velocity: Vector3::new(0., 0., -1.),
             };
             let feature = Feature {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(0., 0.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
                 prefabs: vec![prefab],
                 spawn_count: 1,
                 spawn_period: 1.,
@@ -470,7 +470,7 @@ mod tests {
                 last_spawn_attempt: 0.0,
             };
             let obstacle = CollideableEntity {
-                spawn_position: Vector3::new(0., 8., 5.),
+                spawn_position: Vector3::new(0., 5., 8.),
                 prefab_id: 0,
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),

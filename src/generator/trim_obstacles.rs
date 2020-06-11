@@ -25,7 +25,7 @@ pub fn trim_obstacles(
             )
             );
         // FIXME Eh, just a hack for prefabs being spawned outside world
-        if current_entity_aabb.maxs().y > world.world_bounds.mins().y {
+        if current_entity_aabb.maxs().z > world.world_bounds.mins().z {
             return true;
         }
         false
@@ -53,8 +53,8 @@ mod tests {
         let obstacle0 = CollideableEntity {
             spawn_position: Vector3::new(0., 0., 0.),
             spawn_time: 10.0,
-            velocity: Vector3::new(0., -1., 0.),
-            rotation: UnitQuaternion::from_euler_angles(0., 0., std::f32::consts::FRAC_PI_4),
+            velocity: Vector3::new(0., 0., -1.),
+            rotation: UnitQuaternion::from_euler_angles(0., std::f32::consts::FRAC_PI_4, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             prefab_id: 0,
             priority: 0,
@@ -62,7 +62,7 @@ mod tests {
         let obstacle1 = CollideableEntity {
             priority: 5,
             spawn_time: 30.0,
-            rotation: UnitQuaternion::from_euler_angles(0., 0., std::f32::consts::FRAC_PI_2),
+            rotation: UnitQuaternion::from_euler_angles(0., std::f32::consts::FRAC_PI_2, 0.),
             ..obstacle0.clone()
         };
         let mut obstacles: VecDeque<CollideableEntity> = VecDeque::from_iter([obstacle0.clone(), obstacle1.clone()].iter().cloned());

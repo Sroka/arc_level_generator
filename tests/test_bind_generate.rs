@@ -12,21 +12,21 @@ mod tests {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., -1., 0.),
+            velocity: Vector3::new(0., 0., -1.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description1 = PrefabDescription {
             prefab_id: 2,
             position: Vector3::new(1., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., -1., 0.),
+            velocity: Vector3::new(0., 0., -1.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description2 = PrefabDescription {
             prefab_id: 3,
             position: Vector3::new(-1., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., -1., 0.),
+            velocity: Vector3::new(0., 0., -1.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description3 = PrefabDescription {
@@ -40,7 +40,7 @@ mod tests {
             prefab_id: 5,
             position: Vector3::new(-2., 0., 2.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(2., -1., 0.),
+            velocity: Vector3::new(2., 0., -1.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let features = [
@@ -48,9 +48,9 @@ mod tests {
                 translate_x: true,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(1., 1.),
-                translate_z: true,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(1., 1.),
+                translate_y: true,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(1., 1.),
                 prefabs: [description, description1, description2].as_ptr(),
                 prefabs_count: 3,
                 spawn_period: 1.0,
@@ -63,9 +63,9 @@ mod tests {
                 translate_x: true,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(1., 1.),
-                translate_z: true,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(1., 1.),
+                translate_y: true,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(1., 1.),
                 prefabs: [description3].as_ptr(),
                 prefabs_count: 1,
                 spawn_period: 1.0,
@@ -78,9 +78,9 @@ mod tests {
                 translate_x: true,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(1., 1.),
-                translate_z: true,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(1., 1.),
+                translate_y: true,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(1., 1.),
                 prefabs: [description4].as_ptr(),
                 prefabs_count: 1,
                 spawn_period: 1.0,
@@ -116,14 +116,14 @@ mod tests {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., -4., 0.),
+            velocity: Vector3::new(0., 0., -4.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description1 = PrefabDescription {
             prefab_id: 2,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., -6., 0.),
+            velocity: Vector3::new(0., 0., -6.),
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let features = [
@@ -131,9 +131,9 @@ mod tests {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(1., 1.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(1., 1.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(1., 1.),
                 prefabs: [description].as_ptr(),
                 prefabs_count: 1,
                 spawn_period: 0.1,
@@ -146,9 +146,9 @@ mod tests {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(1., 1.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(1., 1.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(1., 1.),
                 prefabs: [description1].as_ptr(),
                 prefabs_count: 1,
                 spawn_period: 0.1,
@@ -160,7 +160,7 @@ mod tests {
         ];
         let world = VisibleWorldDescription {
             position: Vector3::new(0., 0., 0.),
-            half_extents: Vector3::new(9., 30., 9.),
+            half_extents: Vector3::new(9., 9., 30.),
             travel_speed: 4.0,
         };
         unsafe {
@@ -184,14 +184,14 @@ mod tests {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., -1., 0.),
+            velocity: Vector3::new(0., 0., -1.),
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };
         let description1 = PrefabDescription {
             prefab_id: 2,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., -1., 0.),
+            velocity: Vector3::new(0., 0., -1.),
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };
         let features = [
@@ -199,9 +199,9 @@ mod tests {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(1., 1.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(1., 1.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(1., 1.),
                 prefabs: [description].as_ptr(),
                 prefabs_count: 1,
                 spawn_period: 0.1,
@@ -214,9 +214,9 @@ mod tests {
                 translate_x: false,
                 translate_x_using_bounds: false,
                 translate_x_bounds: Vector2::new(1., 1.),
-                translate_z: false,
-                translate_z_using_bounds: false,
-                translate_z_bounds: Vector2::new(1., 1.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(1., 1.),
                 prefabs: [description1].as_ptr(),
                 prefabs_count: 1,
                 spawn_period: 0.1,
@@ -228,7 +228,7 @@ mod tests {
         ];
         let world = VisibleWorldDescription {
             position: Vector3::new(0., 0., 0.),
-            half_extents: Vector3::new(9., 30., 9.),
+            half_extents: Vector3::new(9., 9., 30.),
             travel_speed: 4.0,
         };
         unsafe {

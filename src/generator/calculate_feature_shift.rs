@@ -14,7 +14,7 @@ use std::cmp::{max, min};
 ///
 pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, feature: &Feature) -> Vector3<f32> {
     let mut shift = Vector3::new(0., 0., 0.);
-    if feature.translate_x_using_bounds || feature.translate_z_using_bounds {
+    if feature.translate_x_using_bounds || feature.translate_y_using_bounds {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
         if feature.translate_x_using_bounds {
             let mut min_x = (feature.translate_x_bounds.x.min(feature.translate_x_bounds.y) + feature_spawn_bounds.half_extents().x);
@@ -29,22 +29,22 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
                 max_x,
             );
         }
-        if feature.translate_z_using_bounds {
-            let mut min_z = (feature.translate_z_bounds.x.min(feature.translate_z_bounds.y) + feature_spawn_bounds.half_extents().z);
-            let mut max_z = (feature.translate_z_bounds.x.max(feature.translate_z_bounds.y) - feature_spawn_bounds.half_extents().z);
-            if min_z >= max_z {
-                let half_way = (min_z + max_z) / 2.;
-                min_z = half_way - 0.001;
-                max_z = half_way + 0.001;
+        if feature.translate_y_using_bounds {
+            let mut min_y = (feature.translate_y_bounds.x.min(feature.translate_y_bounds.y) + feature_spawn_bounds.half_extents().y);
+            let mut max_y = (feature.translate_y_bounds.x.max(feature.translate_y_bounds.y) - feature_spawn_bounds.half_extents().y);
+            if min_y >= max_y {
+                let half_way = (min_y + max_y) / 2.;
+                min_y = half_way - 0.001;
+                max_y = half_way + 0.001;
             }
-            shift.z = rng.gen_range(
-                min_z,
-                max_z,
+            shift.y = rng.gen_range(
+                min_y,
+                max_y,
             );
         }
     }
     if (feature.translate_x && !feature.translate_x_using_bounds)
-        || (feature.translate_z && !feature.translate_z_using_bounds) {
+        || (feature.translate_y && !feature.translate_y_using_bounds) {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
         if feature.translate_x && !feature.translate_x_using_bounds {
             let mut min_x = (world.world_bounds.mins().x + feature_spawn_bounds.half_extents().x);
@@ -59,17 +59,17 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
                 max_x,
             );
         }
-        if feature.translate_z && !feature.translate_z_using_bounds {
-            let mut min_z = (world.world_bounds.mins().z + feature_spawn_bounds.half_extents().z);
-            let mut max_z = (world.world_bounds.maxs().z - feature_spawn_bounds.half_extents().z);
-            if min_z >= max_z {
-                let half_way = (min_z + max_z) / 2.;
-                min_z = half_way - 0.001;
-                max_z = half_way + 0.001;
+        if feature.translate_y && !feature.translate_y_using_bounds {
+            let mut min_y = (world.world_bounds.mins().z + feature_spawn_bounds.half_extents().y);
+            let mut max_y = (world.world_bounds.maxs().z - feature_spawn_bounds.half_extents().y);
+            if min_y >= max_y {
+                let half_way = (min_y + max_y) / 2.;
+                min_y = half_way - 0.001;
+                max_y = half_way + 0.001;
             }
-            shift.z = rng.gen_range(
-                min_z,
-                max_z,
+            shift.y = rng.gen_range(
+                min_y,
+                max_y,
             );
         }
     }
@@ -101,9 +101,9 @@ mod tests {
             translate_x: true,
             translate_x_using_bounds: true,
             translate_x_bounds: Vector2::new(10., 50.),
-            translate_z: true,
-            translate_z_using_bounds: false,
-            translate_z_bounds: Vector2::new(0., 0.),
+            translate_y: true,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
             prefabs: vec![prefab0],
             spawn_count: 1,
             spawn_period: 1.,
