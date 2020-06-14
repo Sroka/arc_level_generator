@@ -228,4 +228,44 @@ mod tests {
             println!("Generated entity {}: {:?}", index, entity)
         }
     }
+
+    #[test]
+    fn test_generate_large_rotated() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0., -9.38, 0.),
+            rotation: UnitQuaternion::from_euler_angles( -std::f32::consts::FRAC_PI_2, 0., std::f32::consts::PI),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
+            velocity: Vector3::new(0., 0., -1.),
+        };
+        let feature0 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab0],
+            spawn_count: 10,
+            spawn_period: 5.0,
+            trigger_time: 0.0,
+            priority: 0,
+            missed_spawns: 0,
+            is_spawn_period_strict: true,
+            last_spawn_attempt: 0.0
+        };
+
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 50.)),
+            travel_speed: 4.0,
+        };
+        let generated_entities = arc_level_generator::generate(
+            &world,
+            &[feature0],
+            &mut rand::thread_rng(),
+        );
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entity {}: {:?}", index, entity)
+        }
+    }
 }
