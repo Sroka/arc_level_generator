@@ -61,6 +61,7 @@ pub unsafe extern fn bind_generate(
         travel_speed: world_description.travel_speed,
     };
 
+    dbg!(&features);
 
     let generated_entities = generate(
         &world,
@@ -75,6 +76,7 @@ pub unsafe extern fn bind_generate(
         prefab_id: entity.prefab_id,
     }).collect();
     entities_descriptions.shrink_to_fit();
+    dbg!(&entities_descriptions);
     assert_eq!(entities_descriptions.capacity(), entities_descriptions.len());
     let pointer = entities_descriptions.as_mut_ptr();
     let length = entities_descriptions.len() as i32;
