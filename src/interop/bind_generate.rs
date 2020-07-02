@@ -45,8 +45,9 @@ pub unsafe extern fn bind_generate(
                 translate_y: feature_description.translate_y,
                 translate_y_using_bounds: feature_description.translate_y_using_bounds,
                 translate_y_bounds: feature_description.translate_y_bounds.clone(),
+                translate_z: feature_description.translate_z,
                 missed_spawns: 0,
-                last_spawn_attempt: 0.0
+                last_spawn_attempt: 0.0,
             }
         })
         .collect();

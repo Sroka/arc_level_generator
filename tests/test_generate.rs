@@ -29,7 +29,8 @@ mod tests {
             trigger_time: 10.0,
             priority: 0,
             missed_spawns: 0,
-            last_spawn_attempt: 0.0
+            last_spawn_attempt: 0.0,
+            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -76,7 +77,8 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             is_spawn_period_strict: false,
-            last_spawn_attempt: 0.0
+            last_spawn_attempt: 0.0,
+            translate_z: 0.0
         };
         let feature1 = Feature {
             translate_x: true,
@@ -92,7 +94,8 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             is_spawn_period_strict: false,
-            last_spawn_attempt: 0.0
+            last_spawn_attempt: 0.0,
+            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -132,7 +135,8 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             is_spawn_period_strict: false,
-            last_spawn_attempt: 0.0
+            last_spawn_attempt: 0.0,
+            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -172,7 +176,8 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             is_spawn_period_strict: false,
-            last_spawn_attempt: 0.0
+            last_spawn_attempt: 0.0,
+            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -212,7 +217,8 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             is_spawn_period_strict: true,
-            last_spawn_attempt: 0.0
+            last_spawn_attempt: 0.0,
+            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -252,7 +258,8 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             is_spawn_period_strict: true,
-            last_spawn_attempt: 0.0
+            last_spawn_attempt: 0.0,
+            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -292,7 +299,8 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             is_spawn_period_strict: true,
-            last_spawn_attempt: 0.0
+            last_spawn_attempt: 0.0,
+            translate_z: 0.0
         };
 
         let world = VisibleWorld {

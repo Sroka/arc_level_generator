@@ -13,7 +13,7 @@ use std::cmp::{max, min};
 /// * `feature` - feature that the possible shift is calculated for
 ///
 pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, feature: &Feature) -> Vector3<f32> {
-    let mut shift = Vector3::new(0., 0., 0.);
+    let mut shift = Vector3::new(0., 0., feature.translate_z);
     if feature.translate_x_using_bounds || feature.translate_y_using_bounds {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
         if feature.translate_x_using_bounds {
@@ -112,6 +112,7 @@ mod tests {
             missed_spawns: 0,
             is_spawn_period_strict: false,
             last_spawn_attempt: 0.0,
+            translate_z: 0.0
         };
         let world = VisibleWorld {
             world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(30., 30., 30.)),

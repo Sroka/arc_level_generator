@@ -27,13 +27,13 @@ pub fn can_spawn_feature(
         .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal) })
         .last()
         .unwrap();
-    let time_to_travel_to_origin_plane_from_worlds_start = world.world_bounds.maxs().z / -min_z_velocity_in_a_feature;
+    let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs().z + feature_shift.z) / -min_z_velocity_in_a_feature;
     'prefabs_loop: for prefab in &feature.prefabs {
         'obstacles_loop: for obstacle in obstacles {
             let prefab_spawn_position = prefab.position
                 - prefab.velocity * time_to_travel_to_origin_plane_from_worlds_start
                 - prefab.velocity * (feature.priority as f32)
-                + feature_shift;
+                + Vector3::new(feature_shift.x, feature_shift.y, 0.);
             let obstacle_spawn_position = obstacle.spawn_position
                 + obstacle.velocity * (time_travelled - obstacle.spawn_time);
 
@@ -124,6 +124,7 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
+                translate_z: 0.0
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 5., 10.),
@@ -172,6 +173,7 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
+                translate_z: 0.0
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 0., -1.25),
@@ -220,6 +222,7 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
+                translate_z: 0.0
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 0., -2.5),
@@ -268,6 +271,7 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
+                translate_z: 0.0
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 0., 10.0),
@@ -316,6 +320,7 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
+                translate_z: 0.0
             };
 
             let world = VisibleWorld {
@@ -365,6 +370,7 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
+                translate_z: 0.0
             };
 
             let world = VisibleWorld {
@@ -414,6 +420,7 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
+                translate_z: 0.0
             };
 
             let world = VisibleWorld {
@@ -468,6 +475,7 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
+                translate_z: 0.0
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 5., 8.),

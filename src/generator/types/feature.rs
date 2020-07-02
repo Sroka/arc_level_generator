@@ -18,6 +18,7 @@ pub struct Feature {
     pub translate_y: bool,
     pub translate_y_using_bounds: bool,
     pub translate_y_bounds: Vector2<f32>,
+    pub translate_z: f32,
     pub missed_spawns: i32,
     pub last_spawn_attempt: f32,
 }

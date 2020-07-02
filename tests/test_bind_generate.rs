@@ -58,6 +58,7 @@ mod tests {
                 spawn_count: 10,
                 trigger_time: 10.0,
                 priority: 0,
+                translate_z: 0.0
             },
             FeatureDescription {
                 translate_x: true,
@@ -73,6 +74,7 @@ mod tests {
                 spawn_count: 10,
                 trigger_time: 20.0,
                 priority: 0,
+                translate_z: 0.0
             },
             FeatureDescription {
                 translate_x: true,
@@ -88,6 +90,7 @@ mod tests {
                 spawn_count: 10,
                 trigger_time: 30.0,
                 priority: 0,
+                translate_z: 0.0
             },
         ];
         let world = VisibleWorldDescription {
@@ -141,6 +144,7 @@ mod tests {
                 spawn_count: 30,
                 trigger_time: 10.0,
                 priority: 0,
+                translate_z: 0.0
             },
             FeatureDescription {
                 translate_x: false,
@@ -156,6 +160,7 @@ mod tests {
                 spawn_count: 30,
                 trigger_time: 10.0,
                 priority: 0,
+                translate_z: 0.0
             },
         ];
         let world = VisibleWorldDescription {
@@ -209,6 +214,7 @@ mod tests {
                 spawn_count: 1,
                 trigger_time: 10.0,
                 priority: 0,
+                translate_z: 30.0
             },
             FeatureDescription {
                 translate_x: false,
@@ -224,6 +230,7 @@ mod tests {
                 spawn_count: 1,
                 trigger_time: 10.0,
                 priority: 0,
+                translate_z: 30.0
             },
         ];
         let world = VisibleWorldDescription {
