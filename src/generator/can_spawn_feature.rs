@@ -137,7 +137,6 @@ mod tests {
             };
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
-                travel_speed: 4.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,
@@ -186,7 +185,6 @@ mod tests {
             };
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
-                travel_speed: 4.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,
@@ -235,7 +233,6 @@ mod tests {
             };
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
-                travel_speed: 4.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,
@@ -284,7 +281,6 @@ mod tests {
             };
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
-                travel_speed: 4.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,
@@ -325,7 +321,6 @@ mod tests {
 
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
-                travel_speed: 4.0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 0., 2.1),
@@ -375,7 +370,6 @@ mod tests {
 
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
-                travel_speed: 4.0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 0., 1.9),
@@ -425,7 +419,6 @@ mod tests {
 
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
-                travel_speed: 4.0,
             };
             let obstacle = CollideableEntity {
                 spawn_position: Vector3::new(0., 0., -5.),
@@ -488,7 +481,6 @@ mod tests {
             };
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
-                travel_speed: 4.0,
             };
             let can_spawn = can_spawn_feature(
                 &feature,

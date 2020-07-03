@@ -59,9 +59,9 @@ pub unsafe extern fn bind_generate(
             world_description.position.y,
             world_description.position.z,
         ), world_description.half_extents),
-        travel_speed: world_description.travel_speed,
     };
 
+    dbg!(&world);
     dbg!(&features);
 
     let generated_entities = generate(

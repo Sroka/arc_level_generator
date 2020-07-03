@@ -116,7 +116,6 @@ mod tests {
         };
         let world = VisibleWorld {
             world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(30., 30., 30.)),
-            travel_speed: 4.0,
         };
         // let mut step_rng = StepRng::new(1000, 100);
         let feature_shift = calculate_feature_shift(

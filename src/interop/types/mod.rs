@@ -34,7 +34,6 @@ pub struct FeatureDescription {
 pub struct VisibleWorldDescription {
     pub position: Vector3<f32>,
     pub half_extents: Vector3<f32>,
-    pub travel_speed: f32,
 }
 
 #[derive(Debug, Clone)]

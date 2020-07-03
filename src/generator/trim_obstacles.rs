@@ -48,7 +48,6 @@ mod tests {
     fn test_trim_obstacles() {
         let world = VisibleWorld {
             world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
-            travel_speed: 4.0,
         };
         let obstacle0 = CollideableEntity {
             spawn_position: Vector3::new(0., 0., 0.),
