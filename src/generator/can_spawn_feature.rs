@@ -10,7 +10,7 @@ use std::cmp::Ordering::Equal;
 use itertools::Itertools;
 use std::iter;
 use float_cmp::{ApproxEq, F32Margin};
-use ncollide3d::interpolation::ConstantLinearVelocityRigidMotion;
+use ncollide3d::interpolation::{ConstantLinearVelocityRigidMotion, RigidMotion};
 use crate::generator::tilt_motion::ConstantVelocityZTiltMotion;
 
 /// Checks if a feature can be safely spawn so that it won't collide with any existing entities in
@@ -32,20 +32,34 @@ pub fn can_spawn_feature(
     let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs().z + feature_shift.z) / -min_z_velocity_in_a_feature;
     'prefabs_loop: for prefab in &feature.prefabs {
         'obstacles_loop: for obstacle in obstacles {
-            let prefab_spawn_position = prefab.position
-                - prefab.movement.linear_velocity * time_to_travel_to_origin_plane_from_worlds_start
-                - prefab.movement.linear_velocity * (feature.priority as f32)
-                + Vector3::new(feature_shift.x, feature_shift.y, 0.);
-            let obstacle_spawn_position = obstacle.spawn_position
-                + obstacle.movement.linear_velocity * (time_travelled - obstacle.spawn_time);
+            let prefab_motion = ConstantVelocityZTiltMotion::new(
+                time_to_travel_to_origin_plane_from_worlds_start + feature.priority as f32,
+                Isometry3::from_parts(Translation3::from(prefab.position + Vector3::new(feature_shift.x, feature_shift.y, 0.)), prefab.rotation),
+                prefab.movement.linear_velocity.clone(),
+                prefab.movement.z_axis_tilt_xy_direction.clone(),
+                prefab.movement.z_axis_tilt_angle,
+                prefab.movement.z_axis_tilt_distance,
+                prefab.movement.z_axis_tilt_easing_range,
+            );
+            let prefab_spawn_position_isometry: Isometry<f32, U3, UnitQuaternion<f32>> = prefab_motion.position_at_time(0.);
 
-            let prefab_spawn_position_isometry: Isometry<f32, U3, UnitQuaternion<f32>> = Isometry3::from_parts(Translation3::from(prefab_spawn_position), prefab.rotation);
+            let obstacle_motion = ConstantVelocityZTiltMotion::new(
+                obstacle.spawn_time - time_travelled,
+                Isometry3::from_parts(Translation3::from(obstacle.spawn_position), obstacle.rotation),
+                obstacle.movement.linear_velocity.clone(),
+                obstacle.movement.z_axis_tilt_xy_direction.clone(),
+                obstacle.movement.z_axis_tilt_angle,
+                obstacle.movement.z_axis_tilt_distance,
+                obstacle.movement.z_axis_tilt_easing_range,
+            );
+            let obstacle_spawn_position_isometry = obstacle_motion.position_at_time(0.);
+
             let prefab_world_bounds_toi = world.world_bounds
                 // This is required because sometimes, due to priority, prefab spawn position is outside world bounds
                 .merged(&prefab.bounding_box.transform_by(&prefab_spawn_position_isometry))
                 .toi_with_ray(
                     &Isometry3::new(nalgebra::zero(), nalgebra::zero()),
-                    &Ray::new(Point3::origin() + prefab_spawn_position, prefab.movement.linear_velocity),
+                    &Ray::new(Point3::origin() + prefab_spawn_position_isometry.translation.vector, prefab.movement.linear_velocity),
                     false,
                 ).unwrap()
                 +
@@ -56,7 +70,6 @@ pub fn can_spawn_feature(
                         false,
                     ).unwrap();
 
-            let obstacle_spawn_position_isometry = Isometry3::from_parts(Translation3::from(obstacle_spawn_position), obstacle.rotation);
             // TODO In reality this is a fix for a bug in query::time_of_impact
             let distance_at_spawn_point: f32 = query::distance_support_map_support_map(
                 &prefab_spawn_position_isometry,
@@ -67,35 +80,7 @@ pub fn can_spawn_feature(
             if distance_at_spawn_point.approx_eq(0., F32Margin { epsilon: 0.01, ulps: 2 }) {
                 return false;
             }
-            // let prefab_motion = ConstantLinearVelocityRigidMotion::new(
-            //     0.0,
-            //     prefab_spawn_position_isometry,
-            //     prefab.velocity.clone()
-            // );
-            // let obstacle_motion = ConstantLinearVelocityRigidMotion::new(
-            //     0.0,
-            //     obstacle_spawn_position_isometry,
-            //     obstacle.velocity.clone()
-            // );
 
-            let prefab_motion = ConstantVelocityZTiltMotion::new(
-                0.0,
-                prefab_spawn_position_isometry,
-                prefab.movement.linear_velocity.clone(),
-                nalgebra::zero(),
-                0.0,
-                0.0,
-                0.0,
-            );
-            let obstacle_motion = ConstantVelocityZTiltMotion::new(
-                0.0,
-                obstacle_spawn_position_isometry,
-                obstacle.movement.linear_velocity.clone(),
-                nalgebra::zero(),
-                0.0,
-                0.0,
-                0.0,
-            );
             let time_of_impact = query::nonlinear_time_of_impact(
                 &prefab_motion,
                 &Cuboid::new(prefab.bounding_box.half_extents()),
@@ -141,7 +126,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
             };
             let feature = Feature {
@@ -171,7 +156,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -201,7 +186,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
             };
             let feature = Feature {
@@ -231,7 +216,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -261,7 +246,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
             };
             let feature = Feature {
@@ -291,7 +276,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -321,7 +306,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
             };
             let feature = Feature {
@@ -351,7 +336,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -381,7 +366,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
             };
             let feature0 = Feature {
@@ -415,7 +400,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -442,7 +427,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
             };
             let feature0 = Feature {
@@ -476,7 +461,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -503,7 +488,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
             };
             let feature0 = Feature {
@@ -537,7 +522,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -570,7 +555,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
             };
             let feature = Feature {
@@ -600,7 +585,7 @@ mod tests {
                     z_axis_tilt_xy_direction: nalgebra::zero(),
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
-                    z_axis_tilt_easing_range: 0.0
+                    z_axis_tilt_easing_range: 0.0,
                 },
                 spawn_time: 5.0,
                 priority: 0,

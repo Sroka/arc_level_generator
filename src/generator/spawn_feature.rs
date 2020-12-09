@@ -1,8 +1,10 @@
 use std::collections::VecDeque;
 use crate::generator::types::{Feature, CollideableEntity, VisibleWorld};
-use nalgebra::Vector3;
+use nalgebra::{Vector3, Isometry3, Translation3};
 use std::cmp::Ordering::Equal;
 use itertools::Itertools;
+use crate::generator::tilt_motion::ConstantVelocityZTiltMotion;
+use ncollide3d::interpolation::RigidMotion;
 
 /// Spawns entities belonging to a feature at a given time of travel in a given world
 /// * `feature` - feature to spawn
@@ -32,8 +34,17 @@ pub fn spawn_feature(feature: &Feature,
         .unwrap();
     let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs().z + feature_shift.z) / -min_z_velocity_in_a_feature;
     for prefab in &feature.prefabs {
+        let prefab_motion = ConstantVelocityZTiltMotion::new(
+            time_to_travel_to_origin_plane_from_worlds_start,
+            Isometry3::from_parts(Translation3::from(prefab.position + Vector3::new(feature_shift.x, feature_shift.y, 0.)), prefab.rotation),
+            prefab.movement.linear_velocity.clone(),
+            prefab.movement.z_axis_tilt_xy_direction.clone(),
+            prefab.movement.z_axis_tilt_angle,
+            prefab.movement.z_axis_tilt_distance,
+            prefab.movement.z_axis_tilt_easing_range,
+        );
         let entity = CollideableEntity {
-            spawn_position: prefab.position + Vector3::new(feature_shift.x, feature_shift.y, 0.) - prefab.movement.linear_velocity * time_to_travel_to_origin_plane_from_worlds_start,
+            spawn_position: prefab_motion.position_at_time(0.).translation.vector,
             spawn_time: time + feature.priority as f32,
             movement: prefab.movement.clone(),
             rotation: prefab.rotation,
@@ -48,8 +59,56 @@ pub fn spawn_feature(feature: &Feature,
 
 #[cfg(test)]
 mod tests {
+    use crate::{Feature, Prefab, Movement, VisibleWorld};
+    use nalgebra::{Vector2, Vector3, Point3, UnitQuaternion};
+    use crate::generator::spawn_feature::spawn_feature;
+    use std::collections::VecDeque;
+    use ncollide3d::bounding_volume::AABB;
+
     #[test]
     fn test_spawn_feature() {
-        assert!(true)
+        let prefab = Prefab {
+            prefab_id: 1,
+            position: nalgebra::zero(),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -8.),
+                z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                z_axis_tilt_angle: 45.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 50.0,
+            },
+        };
+        let feature = Feature {
+            prefabs: vec![prefab],
+            spawn_period: 0.0,
+            is_spawn_period_strict: false,
+            spawn_count: 1,
+            trigger_time: 0.0,
+            priority: 0,
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: nalgebra::zero(),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: nalgebra::zero(),
+            translate_z: 0.0,
+            missed_spawns: 0,
+            last_spawn_attempt: 0.0,
+        };
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(100., 100., 100.)),
+        };
+        let generated_entities = &mut vec![];
+        spawn_feature(
+            &feature,
+            &mut VecDeque::new(),
+            generated_entities,
+            0.,
+            &world,
+            &nalgebra::zero(),
+        );
+        dbg!(generated_entities[0].spawn_position);
     }
 }
