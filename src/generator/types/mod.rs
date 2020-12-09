@@ -9,4 +9,5 @@ pub use collideable_entity::CollideableEntity;
 pub use feature::Feature;
 pub use prefab::Prefab;
 pub use visible_world::VisibleWorld;
+pub use movement::Movement;
 

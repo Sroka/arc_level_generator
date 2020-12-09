@@ -84,6 +84,7 @@ mod tests {
     use crate::generator::calculate_feature_shift::calculate_feature_shift;
     use rand::thread_rng;
     use rand::rngs::mock::StepRng;
+    use crate::generator::Movement;
 
 
     struct RngTest(Vec<u64>);
@@ -95,7 +96,13 @@ mod tests {
             position: Vector3::new(19.5, 0., 0.),
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(48., 0.5, 0.5)),
-            velocity: Vector3::new(0., -1., 0.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., -1., 0.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let feature = Feature {
             translate_x: true,

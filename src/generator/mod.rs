@@ -16,5 +16,5 @@ use self::calculate_feature_shift::calculate_feature_shift;
 use self::can_spawn_feature::can_spawn_feature;
 use self::spawn_feature::spawn_feature;
 
-pub use self::types::{VisibleWorld, Feature, Prefab, CollideableEntity};
+pub use self::types::{VisibleWorld, Feature, Prefab, CollideableEntity, Movement};
 pub use self::generate::generate;

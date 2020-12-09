@@ -43,6 +43,7 @@ mod tests {
 
     use nalgebra::{Vector3, Point3, UnitQuaternion};
     use ncollide3d::bounding_volume::AABB;
+    use crate::generator::Movement;
 
     #[test]
     fn test_trim_obstacles() {
@@ -52,7 +53,13 @@ mod tests {
         let obstacle0 = CollideableEntity {
             spawn_position: Vector3::new(0., 0., 0.),
             spawn_time: 10.0,
-            velocity: Vector3::new(0., 0., -1.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             rotation: UnitQuaternion::from_euler_angles(0., std::f32::consts::FRAC_PI_4, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             prefab_id: 0,

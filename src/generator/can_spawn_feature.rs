@@ -25,7 +25,7 @@ pub fn can_spawn_feature(
 ) -> bool {
     let min_z_velocity_in_a_feature = feature.prefabs
         .iter()
-        .map(|prefab| prefab.velocity.z)
+        .map(|prefab| prefab.movement.linear_velocity.z)
         .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal) })
         .last()
         .unwrap();
@@ -33,11 +33,11 @@ pub fn can_spawn_feature(
     'prefabs_loop: for prefab in &feature.prefabs {
         'obstacles_loop: for obstacle in obstacles {
             let prefab_spawn_position = prefab.position
-                - prefab.velocity * time_to_travel_to_origin_plane_from_worlds_start
-                - prefab.velocity * (feature.priority as f32)
+                - prefab.movement.linear_velocity * time_to_travel_to_origin_plane_from_worlds_start
+                - prefab.movement.linear_velocity * (feature.priority as f32)
                 + Vector3::new(feature_shift.x, feature_shift.y, 0.);
             let obstacle_spawn_position = obstacle.spawn_position
-                + obstacle.velocity * (time_travelled - obstacle.spawn_time);
+                + obstacle.movement.linear_velocity * (time_travelled - obstacle.spawn_time);
 
             let prefab_spawn_position_isometry: Isometry<f32, U3, UnitQuaternion<f32>> = Isometry3::from_parts(Translation3::from(prefab_spawn_position), prefab.rotation);
             let prefab_world_bounds_toi = world.world_bounds
@@ -45,14 +45,14 @@ pub fn can_spawn_feature(
                 .merged(&prefab.bounding_box.transform_by(&prefab_spawn_position_isometry))
                 .toi_with_ray(
                     &Isometry3::new(nalgebra::zero(), nalgebra::zero()),
-                    &Ray::new(Point3::origin() + prefab_spawn_position, prefab.velocity),
+                    &Ray::new(Point3::origin() + prefab_spawn_position, prefab.movement.linear_velocity),
                     false,
                 ).unwrap()
                 +
                 prefab.bounding_box
                     .toi_with_ray(
                         &Isometry3::from_parts(Translation3::identity(), prefab.rotation),
-                        &Ray::new(Point3::origin(), -prefab.velocity),
+                        &Ray::new(Point3::origin(), -prefab.movement.linear_velocity),
                         false,
                     ).unwrap();
 
@@ -81,7 +81,7 @@ pub fn can_spawn_feature(
             let prefab_motion = ConstantVelocityZTiltMotion::new(
                 0.0,
                 prefab_spawn_position_isometry,
-                prefab.velocity.clone(),
+                prefab.movement.linear_velocity.clone(),
                 nalgebra::zero(),
                 0.0,
                 0.0,
@@ -90,7 +90,7 @@ pub fn can_spawn_feature(
             let obstacle_motion = ConstantVelocityZTiltMotion::new(
                 0.0,
                 obstacle_spawn_position_isometry,
-                obstacle.velocity.clone(),
+                obstacle.movement.linear_velocity.clone(),
                 nalgebra::zero(),
                 0.0,
                 0.0,
@@ -127,6 +127,7 @@ mod tests {
     mod zero_travel_time {
         use super::*;
         use nalgebra::UnitQuaternion;
+        use crate::generator::Movement;
 
         #[test]
         fn test_can_spawn_feature_collision() {
@@ -135,7 +136,13 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., 0., -1.),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
             };
             let feature = Feature {
                 translate_x: false,
@@ -159,7 +166,13 @@ mod tests {
                 prefab_id: 0,
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
                 rotation: UnitQuaternion::identity(),
-                velocity: Vector3::new(0., -1., -1.),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., -1., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -183,7 +196,13 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., 0., -1.),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
             };
             let feature = Feature {
                 translate_x: false,
@@ -207,7 +226,13 @@ mod tests {
                 prefab_id: 0,
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -0., -0.5),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -0.5),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -231,7 +256,13 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., 0., -1.),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
             };
             let feature = Feature {
                 translate_x: false,
@@ -255,7 +286,13 @@ mod tests {
                 prefab_id: 0,
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -0., -0.5),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -0.5),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -279,7 +316,13 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., 0., -1.),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
             };
             let feature = Feature {
                 translate_x: false,
@@ -303,7 +346,13 @@ mod tests {
                 prefab_id: 0,
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -0., -1.0),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -327,7 +376,13 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
-                velocity: Vector3::new(0., 0., -1.),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
             };
             let feature0 = Feature {
                 translate_x: false,
@@ -355,7 +410,13 @@ mod tests {
                 prefab_id: 0,
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
-                velocity: Vector3::new(0., -0., -1.0),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -376,7 +437,13 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
-                velocity: Vector3::new(0., 0., -1.),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
             };
             let feature0 = Feature {
                 translate_x: false,
@@ -404,7 +471,13 @@ mod tests {
                 prefab_id: 0,
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
-                velocity: Vector3::new(0., -0., -1.0),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -425,7 +498,13 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
-                velocity: Vector3::new(0., 0., -2.),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -2.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
             };
             let feature0 = Feature {
                 translate_x: false,
@@ -453,7 +532,13 @@ mod tests {
                 prefab_id: 0,
                 rotation: UnitQuaternion::from_euler_angles(std::f32::consts::FRAC_PI_2, 0., 0.),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 4., 0.5)),
-                velocity: Vector3::new(0., -0., -1.0),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
                 spawn_time: 0.0,
                 priority: 0,
             };
@@ -471,6 +556,7 @@ mod tests {
     mod non_zero_travel_time_with_shift {
         use super::*;
         use nalgebra::UnitQuaternion;
+        use crate::Movement;
 
         #[test]
         fn test_can_spawn_feature_collision() {
@@ -479,7 +565,13 @@ mod tests {
                 position: Vector3::new(0., 0., 0.),
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., 0., -1.),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
             };
             let feature = Feature {
                 translate_x: false,
@@ -503,7 +595,13 @@ mod tests {
                 prefab_id: 0,
                 rotation: UnitQuaternion::identity(),
                 bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-                velocity: Vector3::new(0., -0.5, -0.5),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., -0.5, -0.5),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0
+                },
                 spawn_time: 5.0,
                 priority: 0,
             };

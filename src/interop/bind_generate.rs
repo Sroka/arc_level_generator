@@ -1,11 +1,12 @@
 use nalgebra::{Point3, UnitQuaternion};
-use crate::interop::types::{VisibleWorldDescription, FeatureDescription, EntitiesArrayDescription, EntityDescription};
+use crate::interop::types::{VisibleWorldDescription, FeatureDescription, EntitiesArrayDescription, EntityDescription, MovementDescription};
 use std::slice::from_raw_parts;
 use crate::{Feature, Prefab, VisibleWorld};
 use crate::generate;
 use ncollide3d::bounding_volume::AABB;
 use rand::thread_rng;
 use std::mem;
+use crate::generator::Movement;
 
 /// Unsafe wrapper around #generate() function. It is a callers responsibility to call
 /// #bind_deallocate_vec ona returned array. Otherwise this array will never be deallocated and
@@ -27,7 +28,13 @@ pub unsafe extern fn bind_generate(
                         position: prefab_description.position,
                         rotation: UnitQuaternion::from_euler_angles(prefab_description.euler_angles.x, prefab_description.euler_angles.y, prefab_description.euler_angles.z),
                         bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), prefab_description.half_extents),
-                        velocity: prefab_description.velocity,
+                        movement: Movement {
+                            linear_velocity: prefab_description.movement.linear_velocity,
+                            z_axis_tilt_xy_direction: prefab_description.movement.z_axis_tilt_xy_direction,
+                            z_axis_tilt_angle: prefab_description.movement.z_axis_tilt_angle,
+                            z_axis_tilt_distance: prefab_description.movement.z_axis_tilt_distance,
+                            z_axis_tilt_easing_range: prefab_description.movement.z_axis_tilt_easing_range,
+                        },
                     }
                 })
                 .collect();
@@ -73,7 +80,13 @@ pub unsafe extern fn bind_generate(
     let mut entities_descriptions: Vec<EntityDescription> = generated_entities.iter().map(|entity| EntityDescription {
         spawn_position: entity.spawn_position,
         spawn_time: entity.spawn_time,
-        velocity: entity.velocity,
+        movement: MovementDescription {
+            linear_velocity: entity.movement.linear_velocity,
+            z_axis_tilt_xy_direction: entity.movement.z_axis_tilt_xy_direction,
+            z_axis_tilt_angle: entity.movement.z_axis_tilt_angle,
+            z_axis_tilt_distance: entity.movement.z_axis_tilt_distance,
+            z_axis_tilt_easing_range: entity.movement.z_axis_tilt_easing_range,
+        },
         prefab_id: entity.prefab_id,
     }).collect();
     entities_descriptions.shrink_to_fit();

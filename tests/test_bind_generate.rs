@@ -2,7 +2,7 @@
 mod tests {
     extern crate arc_level_generator;
 
-    use self::arc_level_generator::{PrefabDescription, FeatureDescription, VisibleWorldDescription};
+    use self::arc_level_generator::{PrefabDescription, FeatureDescription, VisibleWorldDescription, MovementDescription};
     use nalgebra::{Vector3, Vector2};
     use std::slice::from_raw_parts;
 
@@ -12,35 +12,65 @@ mod tests {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., 0., -1.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description1 = PrefabDescription {
             prefab_id: 2,
             position: Vector3::new(1., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., 0., -1.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description2 = PrefabDescription {
             prefab_id: 3,
             position: Vector3::new(-1., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., 0., -1.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description3 = PrefabDescription {
             prefab_id: 4,
             position: Vector3::new(2., 0., 2.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(-1., -1., -1.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(-1., -1., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description4 = PrefabDescription {
             prefab_id: 5,
             position: Vector3::new(-2., 0., 2.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(2., 0., -1.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(2., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let features = [
@@ -118,14 +148,26 @@ mod tests {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., 0., -4.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(0., 0., -4.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let description1 = PrefabDescription {
             prefab_id: 2,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., 0., -6.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(0., 0., -6.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
         let features = [
@@ -187,14 +229,26 @@ mod tests {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., 0., -1.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };
         let description1 = PrefabDescription {
             prefab_id: 2,
             position: Vector3::new(0., 0., 0.),
             euler_angles: nalgebra::zero(),
-            velocity: Vector3::new(0., 0., -1.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };
         let features = [
@@ -256,14 +310,26 @@ mod tests {
             prefab_id: 0,
             position: Vector3::new(7.14, -4.21, 15.),
             euler_angles: Vector3::new(/* 0.,*/ 0.174533, 3.141593, 0.),
-            velocity: Vector3::new(0., 2., -4.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(0., 2., -4.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(8.4, 4.5, 18.),
         };
         let description1 = PrefabDescription {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
             euler_angles: Vector3::new(-0., 0., 0.),
-            velocity: Vector3::new(1., 0., -10.),
+            movement: MovementDescription {
+                linear_velocity: Vector3::new(1., 0., -10.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
             half_extents: Vector3::new(4.0, 4.0, 7.0),
         };
         let features = [

@@ -26,7 +26,7 @@ pub fn drain_upcoming_features(upcoming_features: &mut Vec<Feature>,
 
 #[cfg(test)]
 mod tests {
-    use crate::generator::types::{Feature, Prefab};
+    use crate::generator::types::{Feature, Prefab, Movement};
     use super::drain_upcoming_features;
 
     use std::collections::VecDeque;
@@ -42,7 +42,13 @@ mod tests {
             position: Vector3::new(0.0, 0.0, 0.0),
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-            velocity: Vector3::new(1.0, 1.0, 1.0),
+            movement: Movement {
+                linear_velocity: Vector3::new(1.0, 1.0, 1.0),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let feature0 = Feature {
             translate_x: false,

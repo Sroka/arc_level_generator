@@ -25,7 +25,7 @@ pub fn spawn_feature(feature: &Feature,
 ) {
     let min_z_velocity_in_a_feature = feature.prefabs
         .iter()
-        .map(|prefab| prefab.velocity.z)
+        .map(|prefab| prefab.movement.linear_velocity.z)
         .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal) })
         .last()
         .clone()
@@ -33,9 +33,9 @@ pub fn spawn_feature(feature: &Feature,
     let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs().z + feature_shift.z) / -min_z_velocity_in_a_feature;
     for prefab in &feature.prefabs {
         let entity = CollideableEntity {
-            spawn_position: prefab.position + Vector3::new(feature_shift.x, feature_shift.y, 0.) - prefab.velocity * time_to_travel_to_origin_plane_from_worlds_start,
+            spawn_position: prefab.position + Vector3::new(feature_shift.x, feature_shift.y, 0.) - prefab.movement.linear_velocity * time_to_travel_to_origin_plane_from_worlds_start,
             spawn_time: time + feature.priority as f32,
-            velocity: prefab.velocity,
+            movement: prefab.movement.clone(),
             rotation: prefab.rotation,
             bounding_box: prefab.bounding_box.clone(),
             prefab_id: prefab.prefab_id,

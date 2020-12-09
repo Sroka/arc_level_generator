@@ -2,7 +2,7 @@
 mod tests {
     use ncollide3d::bounding_volume::AABB;
     use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion, Unit};
-    use self::arc_level_generator::{VisibleWorld, Prefab, Feature};
+    use self::arc_level_generator::{VisibleWorld, Prefab, Feature, Movement};
 
     extern crate arc_level_generator;
 
@@ -13,7 +13,13 @@ mod tests {
             position: Vector3::new(0., 0., 0.),
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
-            velocity: Vector3::new(0., -1., 0.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., -1., 0.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let feature0 = Feature {
             translate_x: true,
@@ -53,14 +59,26 @@ mod tests {
             position: Vector3::new(0., 0., 0.),
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(4.0, 4.0, 4.0)),
-            velocity: Vector3::new(0., -1., 0.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., -1., 0.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let prefab1 = Prefab {
             prefab_id: 1,
             position: Vector3::new(0., 0., 0.),
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(4.0, 4.0, 4.0)),
-            velocity: Vector3::new(0., -1., 0.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., -1., 0.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let feature0 = Feature {
             translate_x: true,
@@ -117,7 +135,13 @@ mod tests {
             position: Vector3::new(0., 0., 0.),
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(5.0, 5.0, 5.0)),
-            velocity: Vector3::new(0., -1., 0.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., -1., 0.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let feature0 = Feature {
             translate_x: true,
@@ -157,7 +181,13 @@ mod tests {
             position: Vector3::new(0., 0., 0.),
             rotation: UnitQuaternion::from_euler_angles( 0., std::f32::consts::FRAC_PI_2, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
-            velocity: Vector3::new(0., 0., -1.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let feature0 = Feature {
             translate_x: false,
@@ -197,7 +227,13 @@ mod tests {
             position: Vector3::new(0., 0., 0.),
             rotation: UnitQuaternion::from_euler_angles( 0., std::f32::consts::FRAC_PI_2, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
-            velocity: Vector3::new(0., 0., -1.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let feature0 = Feature {
             translate_x: false,
@@ -237,7 +273,13 @@ mod tests {
             position: Vector3::new(0., -9.38, 0.),
             rotation: UnitQuaternion::from_euler_angles( -std::f32::consts::FRAC_PI_2, 0., std::f32::consts::PI),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
-            velocity: Vector3::new(0., 0., -1.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let feature0 = Feature {
             translate_x: false,
@@ -277,7 +319,13 @@ mod tests {
             position: Vector3::new(0., -20., 0.),
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(7.5, 7., 11.)),
-            velocity: Vector3::new(0., 0., -1.),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0
+            },
         };
         let feature0 = Feature {
             translate_x: false,

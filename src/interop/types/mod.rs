@@ -6,8 +6,8 @@ pub struct PrefabDescription {
     pub prefab_id: i32,
     pub position: Vector3<f32>,
     pub euler_angles: Vector3<f32>,
-    pub velocity: Vector3<f32>,
     pub half_extents: Vector3<f32>,
+    pub movement: MovementDescription,
 }
 
 #[derive(Debug, Clone)]
@@ -42,17 +42,17 @@ pub struct EntityDescription {
     pub prefab_id: i32,
     pub spawn_position: Vector3<f32>,
     pub spawn_time: f32,
-    pub velocity: Vector3<f32>,
+    pub movement: MovementDescription,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 #[repr(C)]
 pub struct MovementDescription {
     pub linear_velocity: Vector3<f32>,
-    pub z_axis_bend_direction: Vector2<f32>,
-    pub z_axis_bend_angle: f32,
-    pub z_axis_bend_finish_distance: f32,
-    pub z_axis_bend_easing_distance: f32,
+    pub z_axis_tilt_xy_direction: Vector2<f32>,
+    pub z_axis_tilt_angle: f32,
+    pub z_axis_tilt_distance: f32,
+    pub z_axis_tilt_easing_range: f32,
 }
 
 #[repr(C)]
