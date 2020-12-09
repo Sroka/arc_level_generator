@@ -7,6 +7,7 @@ mod can_spawn_feature;
 mod spawn_feature;
 mod generate;
 mod calculate_prefabs_spawn_bounds;
+mod tilt_motion;
 
 use self::drain_upcoming_features::drain_upcoming_features;
 use self::trim_active_features::trim_active_features;

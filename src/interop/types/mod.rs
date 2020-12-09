@@ -45,6 +45,16 @@ pub struct EntityDescription {
     pub velocity: Vector3<f32>,
 }
 
+#[derive(Debug, Clone)]
+#[repr(C)]
+pub struct MovementDescription {
+    pub linear_velocity: Vector3<f32>,
+    pub z_axis_bend_direction: Vector2<f32>,
+    pub z_axis_bend_angle: f32,
+    pub z_axis_bend_finish_distance: f32,
+    pub z_axis_bend_easing_distance: f32,
+}
+
 #[repr(C)]
 pub struct EntitiesArrayDescription {
     pub pointer: *mut EntityDescription,
