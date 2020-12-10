@@ -42,7 +42,7 @@ pub fn generate(
         trim_obstacles(&mut obstacles, &world, time_travelled);
         active_features.shuffle(rng);
 
-        for feature in &mut active_features {
+        'features_loop: for feature in &mut active_features {
             let should_try_spawning = if feature.is_spawn_period_strict {
                 time_travelled > feature.last_spawn_attempt + feature.spawn_period
             } else {
@@ -50,7 +50,7 @@ pub fn generate(
                 rng.gen_bool(chance_to_spawn)
             };
             if !should_try_spawning {
-                continue;
+                continue 'features_loop;
             }
             let spawn_time = if feature.is_spawn_period_strict { feature.last_spawn_attempt + feature.spawn_period } else { time_travelled };
             let feature_shift = calculate_feature_shift(rng, &world, feature);

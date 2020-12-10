@@ -2,6 +2,7 @@ use nalgebra::{Isometry, Vector3, UnitQuaternion, U3, Vector2};
 use ncollide3d::interpolation::RigidMotion;
 use float_cmp::{ApproxEq, F32Margin};
 
+#[derive(Debug)]
 pub struct ConstantVelocityZTiltMotion {
     /// The time at which this parametrization begins. Can be negative.
     pub t0: f32,

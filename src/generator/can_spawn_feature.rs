@@ -80,11 +80,18 @@ pub fn can_spawn_feature(
                 return false;
             }
 
+            let prefab_bounding_box = Cuboid::new(prefab.bounding_box.half_extents());
+            let obstacle_bounding_box = Cuboid::new(obstacle.bounding_box.half_extents());
+            dbg!(&prefab_motion);
+            dbg!(&prefab_bounding_box);
+            dbg!(&obstacle_motion);
+            dbg!(&obstacle_bounding_box);
+            dbg!(prefab_world_bounds_toi);
             let time_of_impact = query::nonlinear_time_of_impact(
                 &prefab_motion,
-                &Cuboid::new(prefab.bounding_box.half_extents()),
+                &prefab_bounding_box,
                 &obstacle_motion,
-                &Cuboid::new(obstacle.bounding_box.half_extents()),
+                &obstacle_bounding_box,
                 prefab_world_bounds_toi,
                 0.0,
             );

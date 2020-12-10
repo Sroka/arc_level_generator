@@ -75,7 +75,7 @@ mod tests {
             movement: Movement {
                 linear_velocity: Vector3::new(0., 0., -8.),
                 z_axis_tilt_xy_direction: Vector2::new(0., 1.),
-                z_axis_tilt_angle: 45.0,
+                z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
                 z_axis_tilt_easing_range: 50.0,
             },
@@ -84,7 +84,7 @@ mod tests {
             prefabs: vec![prefab],
             spawn_period: 0.0,
             is_spawn_period_strict: false,
-            spawn_count: 1,
+            spawn_count: 5,
             trigger_time: 0.0,
             priority: 0,
             translate_x: false,
@@ -109,6 +109,58 @@ mod tests {
             &world,
             &nalgebra::zero(),
         );
-        dbg!(generated_entities[0].spawn_position);
+
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entitity {}: {:?}", index, entity)
+        }
+    }
+
+    #[test]
+    fn test_spawn_feature_tiled() {
+        let prefab = Prefab {
+            prefab_id: 1,
+            position: nalgebra::zero(),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -8.),
+                z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                z_axis_tilt_angle: 45.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 50.0,
+            },
+        };
+        let feature = Feature {
+            prefabs: vec![prefab],
+            spawn_period: 0.0,
+            is_spawn_period_strict: false,
+            spawn_count: 5,
+            trigger_time: 0.0,
+            priority: 0,
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: nalgebra::zero(),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: nalgebra::zero(),
+            translate_z: 0.0,
+            missed_spawns: 0,
+            last_spawn_attempt: 0.0,
+        };
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(100., 100., 100.)),
+        };
+        let generated_entities = &mut vec![];
+        spawn_feature(
+            &feature,
+            &mut VecDeque::new(),
+            generated_entities,
+            0.,
+            &world,
+            &nalgebra::zero(),
+        );
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entitity {}: {:?}", index, entity)
+        }
     }
 }
