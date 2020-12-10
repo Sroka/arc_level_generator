@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use ncollide3d::bounding_volume::AABB;
-    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion, Unit};
+    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion};
     use self::arc_level_generator::{VisibleWorld, Prefab, Feature, Movement};
 
     extern crate arc_level_generator;

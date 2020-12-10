@@ -1,6 +1,5 @@
 use std::collections::VecDeque;
 use crate::{Feature, CollideableEntity, VisibleWorld};
-use std::iter::FromIterator;
 use rand::{RngCore, Rng};
 use rand::seq::SliceRandom;
 use crate::generator::drain_upcoming_features::drain_upcoming_features;
@@ -9,8 +8,6 @@ use crate::generator::trim_obstacles::trim_obstacles;
 use crate::generator::calculate_feature_shift::calculate_feature_shift;
 use crate::generator::can_spawn_feature::can_spawn_feature;
 use crate::generator::spawn_feature::spawn_feature;
-use itertools::Itertools;
-use nalgebra::Vector3;
 
 const STEP: f32 = 0.025;
 
@@ -45,7 +42,7 @@ pub fn generate(
         trim_obstacles(&mut obstacles, &world, time_travelled);
         active_features.shuffle(rng);
 
-        'features_loop: for feature in &mut active_features {
+        for feature in &mut active_features {
             let should_try_spawning = if feature.is_spawn_period_strict {
                 time_travelled > feature.last_spawn_attempt + feature.spawn_period
             } else {

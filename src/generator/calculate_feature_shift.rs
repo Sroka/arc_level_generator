@@ -1,8 +1,7 @@
 use rand::{RngCore, Rng};
 use crate::generator::types::{VisibleWorld, Feature};
 use nalgebra::{Vector3};
-use crate::generator::calculate_prefabs_spawn_bounds::{calculate_prefabs_spawn_bounds, calculate_prefabs_centers_bounds};
-use std::cmp::{max, min};
+use crate::generator::calculate_prefabs_spawn_bounds::{calculate_prefabs_spawn_bounds};
 
 /// Randomizes a shift with which all the entities belonging to this feature will be spawned. This
 /// function makes sure that after applying the shift no entity will be spawned outside visible
@@ -17,8 +16,8 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
     if feature.translate_x_using_bounds || feature.translate_y_using_bounds {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
         if feature.translate_x_using_bounds {
-            let mut min_x = (feature.translate_x_bounds.x.min(feature.translate_x_bounds.y) - feature_spawn_bounds.center().x + feature_spawn_bounds.half_extents().x);
-            let mut max_x = (feature.translate_x_bounds.x.max(feature.translate_x_bounds.y) - feature_spawn_bounds.center().x - feature_spawn_bounds.half_extents().x);
+            let mut min_x = feature.translate_x_bounds.x.min(feature.translate_x_bounds.y) - feature_spawn_bounds.center().x + feature_spawn_bounds.half_extents().x;
+            let mut max_x = feature.translate_x_bounds.x.max(feature.translate_x_bounds.y) - feature_spawn_bounds.center().x - feature_spawn_bounds.half_extents().x;
             if min_x >= max_x {
                 let half_way = (min_x + max_x) / 2.;
                 min_x = half_way - 0.001;
@@ -30,8 +29,8 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
             );
         }
         if feature.translate_y_using_bounds {
-            let mut min_y = (feature.translate_y_bounds.x.min(feature.translate_y_bounds.y) - feature_spawn_bounds.center().y + feature_spawn_bounds.half_extents().y);
-            let mut max_y = (feature.translate_y_bounds.x.max(feature.translate_y_bounds.y) - feature_spawn_bounds.center().y - feature_spawn_bounds.half_extents().y);
+            let mut min_y = feature.translate_y_bounds.x.min(feature.translate_y_bounds.y) - feature_spawn_bounds.center().y + feature_spawn_bounds.half_extents().y;
+            let mut max_y = feature.translate_y_bounds.x.max(feature.translate_y_bounds.y) - feature_spawn_bounds.center().y - feature_spawn_bounds.half_extents().y;
             if min_y >= max_y {
                 let half_way = (min_y + max_y) / 2.;
                 min_y = half_way - 0.001;
@@ -47,8 +46,8 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
         || (feature.translate_y && !feature.translate_y_using_bounds) {
         let feature_spawn_bounds = calculate_prefabs_spawn_bounds(feature.prefabs.as_slice());
         if feature.translate_x && !feature.translate_x_using_bounds {
-            let mut min_x = (world.world_bounds.mins().x - feature_spawn_bounds.center().x + feature_spawn_bounds.half_extents().x);
-            let mut max_x = (world.world_bounds.maxs().x - feature_spawn_bounds.center().x - feature_spawn_bounds.half_extents().x);
+            let mut min_x = world.world_bounds.mins().x - feature_spawn_bounds.center().x + feature_spawn_bounds.half_extents().x;
+            let mut max_x = world.world_bounds.maxs().x - feature_spawn_bounds.center().x - feature_spawn_bounds.half_extents().x;
             if min_x >= max_x {
                 let half_way = (min_x + max_x) / 2.;
                 min_x = half_way - 0.001;
@@ -60,8 +59,8 @@ pub fn calculate_feature_shift(rng: &mut impl RngCore, world: &VisibleWorld, fea
             );
         }
         if feature.translate_y && !feature.translate_y_using_bounds {
-            let mut min_y = (world.world_bounds.mins().y - feature_spawn_bounds.center().y + feature_spawn_bounds.half_extents().y);
-            let mut max_y = (world.world_bounds.maxs().y - feature_spawn_bounds.center().y - feature_spawn_bounds.half_extents().y);
+            let mut min_y = world.world_bounds.mins().y - feature_spawn_bounds.center().y + feature_spawn_bounds.half_extents().y;
+            let mut max_y = world.world_bounds.maxs().y - feature_spawn_bounds.center().y - feature_spawn_bounds.half_extents().y;
             if min_y >= max_y {
                 let half_way = (min_y + max_y) / 2.;
                 min_y = half_way - 0.001;
@@ -83,11 +82,8 @@ mod tests {
     use ncollide3d::bounding_volume::AABB;
     use crate::generator::calculate_feature_shift::calculate_feature_shift;
     use rand::thread_rng;
-    use rand::rngs::mock::StepRng;
     use crate::generator::Movement;
 
-
-    struct RngTest(Vec<u64>);
 
     #[test]
     fn test_feature_using_bounds() {

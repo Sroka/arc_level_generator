@@ -1,7 +1,6 @@
 use std::collections::VecDeque;
 use super::types::{CollideableEntity, VisibleWorld};
-use ncollide3d::bounding_volume::BoundingVolume;
-use nalgebra::{Isometry3, Translation3, UnitQuaternion};
+use nalgebra::{Isometry3, Translation3};
 
 /// Removes obstacles after they leave bounded volume of a visible world
 /// * `obstacles` - entity list to trim

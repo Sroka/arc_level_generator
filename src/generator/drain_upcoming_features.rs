@@ -1,4 +1,3 @@
-use std::collections::VecDeque;
 use super::types::Feature;
 
 /// Activated not yet active features that should start spawning at a given travelled distance
@@ -28,9 +27,6 @@ pub fn drain_upcoming_features(upcoming_features: &mut Vec<Feature>,
 mod tests {
     use crate::generator::types::{Feature, Prefab, Movement};
     use super::drain_upcoming_features;
-
-    use std::collections::VecDeque;
-    use std::iter::FromIterator;
 
     use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion};
     use ncollide3d::bounding_volume::AABB;
