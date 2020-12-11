@@ -85,9 +85,9 @@ pub fn can_spawn_feature(
             let prefab_bounding_box = Cuboid::new(prefab.bounding_box.half_extents());
             let obstacle_bounding_box = Cuboid::new(obstacle.bounding_box.half_extents());
             // dbg!(&prefab_motion);
-            dbg!(&prefab_spawn_position_isometry);
+            // dbg!(&prefab_spawn_position_isometry);
             // dbg!(&obstacle_motion);
-            dbg!(&obstacle_spawn_position_isometry);
+            // dbg!(&obstacle_spawn_position_isometry);
             let time_of_impact = query::nonlinear_time_of_impact(
                 &query::DefaultTOIDispatcher,
                 &prefab_motion,

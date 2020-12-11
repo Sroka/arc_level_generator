@@ -366,8 +366,8 @@ mod tests {
             prefab_id: 0,
             position: Vector3::new(0., 0., 0.),
             rotation: UnitQuaternion::identity(),
-            // bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(22.05775, 13.11225, 9.712485)),
-            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(22.05775, 13.11225, 9.5)),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(22.05775, 13.11225, 9.712485)),
+            // bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(22.05775, 13.11225, 9.5)),
             movement: Movement {
                 linear_velocity: Vector3::new(0., 0., -8.),
                 z_axis_tilt_xy_direction: nalgebra::zero(),
