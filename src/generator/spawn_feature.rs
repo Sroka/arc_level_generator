@@ -32,7 +32,7 @@ pub fn spawn_feature(feature: &Feature,
         .last()
         .clone()
         .unwrap();
-    let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs().z + feature_shift.z) / -min_z_velocity_in_a_feature;
+    let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs.z + feature_shift.z) / -min_z_velocity_in_a_feature;
     for prefab in &feature.prefabs {
         let prefab_motion = ConstantVelocityZTiltMotion::new(
             time_to_travel_to_origin_plane_from_worlds_start,

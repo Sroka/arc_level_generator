@@ -24,7 +24,7 @@ pub fn trim_obstacles(
             )
             );
         // FIXME Eh, just a hack for prefabs being spawned outside world
-        if current_entity_aabb.maxs().z > world.world_bounds.mins().z {
+        if current_entity_aabb.maxs.z > world.world_bounds.mins.z {
             return true;
         }
         false

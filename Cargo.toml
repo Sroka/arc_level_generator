@@ -11,8 +11,8 @@ name = "arc_level_generator"
 crate-type = ["staticlib", "dylib", "rlib"]
 
 [dependencies]
-ncollide3d = "0.21.0"
-nalgebra   = "0.19"
+ncollide3d = "0.26.1"
+nalgebra   = "0.23"
 rand = "0.7"
 itertools = "0.9"
 float-cmp = "0.8.0"

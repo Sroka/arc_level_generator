@@ -28,7 +28,7 @@ pub fn can_spawn_feature(
         .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal) })
         .last()
         .unwrap();
-    let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs().z + feature_shift.z) / -min_z_velocity_in_a_feature;
+    let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs.z + feature_shift.z) / -min_z_velocity_in_a_feature;
     for prefab in &feature.prefabs {
         for obstacle in obstacles {
             let prefab_motion = ConstantVelocityZTiltMotion::new(
@@ -59,6 +59,7 @@ pub fn can_spawn_feature(
                 .toi_with_ray(
                     &Isometry3::new(nalgebra::zero(), nalgebra::zero()),
                     &Ray::new(Point3::origin() + prefab_spawn_position_isometry.translation.vector, prefab.movement.linear_velocity),
+                    f32::MAX,
                     false,
                 ).unwrap()
                 +
@@ -66,6 +67,7 @@ pub fn can_spawn_feature(
                     .toi_with_ray(
                         &Isometry3::from_parts(Translation3::identity(), prefab.rotation),
                         &Ray::new(Point3::origin(), -prefab.movement.linear_velocity),
+                        f32::MAX,
                         false,
                     ).unwrap();
 
@@ -87,6 +89,7 @@ pub fn can_spawn_feature(
             // dbg!(&obstacle_motion);
             dbg!(&obstacle_spawn_position_isometry);
             let time_of_impact = query::nonlinear_time_of_impact(
+                &query::DefaultTOIDispatcher,
                 &prefab_motion,
                 &prefab_bounding_box,
                 &obstacle_motion,
@@ -95,10 +98,17 @@ pub fn can_spawn_feature(
                 0.0,
             );
             match time_of_impact {
-                Some(_toi) => {
-                    return false;
+                Ok(time_of_impact_option) => {
+                    match time_of_impact_option {
+                        None => {}
+                        Some(_) => {
+                            return false;
+                        }
+                    }
                 }
-                _ => {}
+                Err(error) => {
+                    panic!(error)
+                }
             }
         }
     }
