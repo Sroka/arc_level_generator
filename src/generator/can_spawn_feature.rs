@@ -42,7 +42,7 @@ pub fn can_spawn_feature(
             );
             let prefab_spawn_position_isometry: Isometry<f32, U3, UnitQuaternion<f32>> = prefab_motion.position_at_time(0.);
 
-            let obstacle_motion = ConstantVelocityZTiltMotion::new(
+            let obstacle_motion = ConstantVelocityZTiltMotion::new_from_tilted_start(
                 obstacle.spawn_time - time_travelled,
                 Isometry3::from_parts(Translation3::from(obstacle.spawn_position), obstacle.rotation),
                 obstacle.movement.linear_velocity.clone(),
@@ -82,11 +82,10 @@ pub fn can_spawn_feature(
 
             let prefab_bounding_box = Cuboid::new(prefab.bounding_box.half_extents());
             let obstacle_bounding_box = Cuboid::new(obstacle.bounding_box.half_extents());
-            dbg!(&prefab_motion);
-            dbg!(&prefab_bounding_box);
-            dbg!(&obstacle_motion);
-            dbg!(&obstacle_bounding_box);
-            dbg!(prefab_world_bounds_toi);
+            // dbg!(&prefab_motion);
+            dbg!(&prefab_spawn_position_isometry);
+            // dbg!(&obstacle_motion);
+            dbg!(&obstacle_spawn_position_isometry);
             let time_of_impact = query::nonlinear_time_of_impact(
                 &prefab_motion,
                 &prefab_bounding_box,
@@ -598,6 +597,258 @@ mod tests {
             };
             let world = VisibleWorld {
                 world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
+            };
+            let can_spawn = can_spawn_feature(
+                &feature,
+                &VecDeque::from_iter([obstacle].iter().cloned()),
+                &world,
+                5.,
+                &Vector3::new(0., 0., 0.),
+            );
+            assert_eq!(can_spawn, false);
+        }
+    }
+
+    mod not_collinear_not_tilted {
+        use super::*;
+        use nalgebra::UnitQuaternion;
+        use crate::Movement;
+
+        #[test]
+        fn test_cannot_spawn_if_collide_not_collinear() {
+            let prefab = Prefab {
+                prefab_id: 0,
+                position: Vector3::new(0., 0., 0.),
+                rotation: UnitQuaternion::identity(),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0,
+                },
+            };
+            let feature = Feature {
+                translate_x: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
+                prefabs: vec![prefab],
+                spawn_count: 1,
+                spawn_period: 1.,
+                trigger_time: 10.,
+                priority: 0,
+                missed_spawns: 0,
+                is_spawn_period_strict: false,
+                last_spawn_attempt: 0.0,
+                translate_z: 0.0,
+            };
+            let obstacle = CollideableEntity {
+                spawn_position: Vector3::new(0., 100., 100.),
+                prefab_id: 0,
+                rotation: UnitQuaternion::identity(),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., -1., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0,
+                },
+                spawn_time: 5.0,
+                priority: 0,
+            };
+            let world = VisibleWorld {
+                world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(100., 100., 100.)),
+            };
+            let can_spawn = can_spawn_feature(
+                &feature,
+                &VecDeque::from_iter([obstacle].iter().cloned()),
+                &world,
+                5.,
+                &Vector3::new(0., 0., 0.),
+            );
+            assert_eq!(can_spawn, false);
+        }
+    }
+
+    mod tilted {
+        use super::*;
+        use nalgebra::UnitQuaternion;
+        use crate::Movement;
+
+        #[test]
+        fn test_cannot_spawn_if_collide_obstacle_tilted() {
+            let prefab = Prefab {
+                prefab_id: 0,
+                position: Vector3::new(0., 0., 0.),
+                rotation: UnitQuaternion::identity(),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: nalgebra::zero(),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0,
+                },
+            };
+            let feature = Feature {
+                translate_x: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
+                prefabs: vec![prefab],
+                spawn_count: 1,
+                spawn_period: 1.,
+                trigger_time: 10.,
+                priority: 0,
+                missed_spawns: 0,
+                is_spawn_period_strict: false,
+                last_spawn_attempt: 0.0,
+                translate_z: 0.0,
+            };
+            let obstacle = CollideableEntity {
+                spawn_position: Vector3::new(0., 100., 100.),
+                prefab_id: 0,
+                rotation: UnitQuaternion::identity(),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                    z_axis_tilt_angle: 45.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0,
+                },
+                spawn_time: 5.0,
+                priority: 0,
+            };
+            let world = VisibleWorld {
+                world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(100., 100., 100.)),
+            };
+            let can_spawn = can_spawn_feature(
+                &feature,
+                &VecDeque::from_iter([obstacle].iter().cloned()),
+                &world,
+                5.,
+                &Vector3::new(0., 0., 0.),
+            );
+            assert_eq!(can_spawn, false);
+        }
+
+        #[test]
+        fn test_cannot_spawn_if_collide_prefab_tilted() {
+            let prefab = Prefab {
+                prefab_id: 0,
+                position: Vector3::new(0., 0., 0.),
+                rotation: UnitQuaternion::identity(),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                    z_axis_tilt_angle: 45.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0,
+                },
+            };
+            let feature = Feature {
+                translate_x: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
+                prefabs: vec![prefab],
+                spawn_count: 1,
+                spawn_period: 1.,
+                trigger_time: 10.,
+                priority: 0,
+                missed_spawns: 0,
+                is_spawn_period_strict: false,
+                last_spawn_attempt: 0.0,
+                translate_z: 0.0,
+            };
+            let obstacle = CollideableEntity {
+                spawn_position: Vector3::new(0., 0., 100.),
+                prefab_id: 0,
+                rotation: UnitQuaternion::identity(),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                    z_axis_tilt_angle: 0.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0,
+                },
+                spawn_time: 5.0,
+                priority: 0,
+            };
+            let world = VisibleWorld {
+                world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(100., 100., 100.)),
+            };
+            let can_spawn = can_spawn_feature(
+                &feature,
+                &VecDeque::from_iter([obstacle].iter().cloned()),
+                &world,
+                5.,
+                &Vector3::new(0., 0., 0.),
+            );
+            assert_eq!(can_spawn, false);
+        }
+
+        #[test]
+        fn test_cannot_spawn_if_collide_prefab_tilted_obstacle_tilted() {
+            let prefab = Prefab {
+                prefab_id: 0,
+                position: Vector3::new(0., 0., 0.),
+                rotation: UnitQuaternion::identity(),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                    z_axis_tilt_angle: 45.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0,
+                },
+            };
+            let feature = Feature {
+                translate_x: false,
+                translate_x_using_bounds: false,
+                translate_x_bounds: Vector2::new(0., 0.),
+                translate_y: false,
+                translate_y_using_bounds: false,
+                translate_y_bounds: Vector2::new(0., 0.),
+                prefabs: vec![prefab],
+                spawn_count: 1,
+                spawn_period: 1.,
+                trigger_time: 10.,
+                priority: 0,
+                missed_spawns: 0,
+                is_spawn_period_strict: false,
+                last_spawn_attempt: 0.0,
+                translate_z: 0.0,
+            };
+            let obstacle = CollideableEntity {
+                spawn_position: Vector3::new(0., 100., 100.),
+                prefab_id: 0,
+                rotation: UnitQuaternion::identity(),
+                bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+                movement: Movement {
+                    linear_velocity: Vector3::new(0., 0., -1.),
+                    z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                    z_axis_tilt_angle: 45.0,
+                    z_axis_tilt_distance: 0.0,
+                    z_axis_tilt_easing_range: 0.0,
+                },
+                spawn_time: 5.0,
+                priority: 0,
+            };
+            let world = VisibleWorld {
+                world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(100., 100., 100.)),
             };
             let can_spawn = can_spawn_feature(
                 &feature,

@@ -1,4 +1,4 @@
-use nalgebra::{Isometry, Vector3, UnitQuaternion, U3, Vector2};
+use nalgebra::{Isometry, Vector3, UnitQuaternion, U3, Vector2, Translation};
 use ncollide3d::interpolation::RigidMotion;
 use float_cmp::{ApproxEq, F32Margin};
 
@@ -27,6 +27,35 @@ impl ConstantVelocityZTiltMotion {
                tilt_distance: f32,
                tilt_easing_range: f32) -> Self {
         ConstantVelocityZTiltMotion { t0, start, linear_velocity, tilt_xy_direction, tilt_angle, tilt_distance, tilt_easing_range }
+    }
+
+    pub fn new_from_tilted_start(t0: f32,
+                                 start: Isometry<f32, U3, UnitQuaternion<f32>>,
+                                 linear_velocity: Vector3<f32>,
+                                 tilt_xy_direction: Vector2<f32>,
+                                 tilt_angle: f32,
+                                 tilt_distance: f32,
+                                 tilt_easing_range: f32) -> Self {
+        let not_tilted_motion = ConstantVelocityZTiltMotion { t0, start, linear_velocity, tilt_xy_direction, tilt_angle, tilt_distance, tilt_easing_range };
+        let mut tilt = not_tilted_motion.position_at_time(t0).translation.vector;
+        tilt.x -= start.translation.vector.x;
+        tilt.y -= start.translation.vector.y;
+
+        let mut tilt_stripped_start_position = start.translation.vector.clone();
+        tilt_stripped_start_position.x -= tilt.x;
+        tilt_stripped_start_position.y -= tilt.y;
+        ConstantVelocityZTiltMotion {
+            t0,
+            start: Isometry::from_parts(
+                Translation::from(tilt_stripped_start_position),
+                start.rotation
+            ),
+            linear_velocity: not_tilted_motion.linear_velocity,
+            tilt_xy_direction: not_tilted_motion.tilt_xy_direction,
+            tilt_angle,
+            tilt_distance,
+            tilt_easing_range,
+        }
     }
 }
 
