@@ -34,6 +34,7 @@ pub unsafe extern fn bind_generate(
                             z_axis_tilt_angle: prefab_description.movement.z_axis_tilt_angle,
                             z_axis_tilt_distance: prefab_description.movement.z_axis_tilt_distance,
                             z_axis_tilt_easing_range: prefab_description.movement.z_axis_tilt_easing_range,
+                            z_axis_tilt_rotation_strength: prefab_description.movement.z_axis_tilt_rotation_strength,
                         },
                     }
                 })
@@ -86,6 +87,7 @@ pub unsafe extern fn bind_generate(
             z_axis_tilt_angle: entity.movement.z_axis_tilt_angle,
             z_axis_tilt_distance: entity.movement.z_axis_tilt_distance,
             z_axis_tilt_easing_range: entity.movement.z_axis_tilt_easing_range,
+            z_axis_tilt_rotation_strength: entity.movement.z_axis_tilt_rotation_strength,
         },
         prefab_id: entity.prefab_id,
     }).collect();

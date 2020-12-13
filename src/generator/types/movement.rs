@@ -7,4 +7,5 @@ pub struct Movement {
     pub z_axis_tilt_angle: f32,
     pub z_axis_tilt_distance: f32,
     pub z_axis_tilt_easing_range: f32,
+    pub z_axis_tilt_rotation_strength: f32,
 }

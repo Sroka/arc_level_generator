@@ -97,7 +97,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
         };
         let feature = Feature {

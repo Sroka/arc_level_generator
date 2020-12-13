@@ -39,7 +39,7 @@ pub fn can_spawn_feature(
                 prefab.movement.z_axis_tilt_angle,
                 prefab.movement.z_axis_tilt_distance,
                 prefab.movement.z_axis_tilt_easing_range,
-                0.
+                prefab.movement.z_axis_tilt_rotation_strength,
             );
             let prefab_spawn_position_isometry: Isometry<f32, U3, UnitQuaternion<f32>> = prefab_motion.position_at_time(0.);
 
@@ -51,7 +51,7 @@ pub fn can_spawn_feature(
                 obstacle.movement.z_axis_tilt_angle,
                 obstacle.movement.z_axis_tilt_distance,
                 obstacle.movement.z_axis_tilt_easing_range,
-                0.
+                obstacle.movement.z_axis_tilt_rotation_strength,
             );
             let obstacle_spawn_position_isometry = obstacle_motion.position_at_time(0.);
 
@@ -144,6 +144,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature = Feature {
@@ -174,6 +175,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -204,6 +206,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature = Feature {
@@ -234,6 +237,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -264,6 +268,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature = Feature {
@@ -294,6 +299,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -324,6 +330,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature = Feature {
@@ -354,6 +361,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -384,6 +392,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature0 = Feature {
@@ -418,6 +427,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -445,6 +455,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature0 = Feature {
@@ -479,6 +490,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -506,6 +518,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature0 = Feature {
@@ -540,6 +553,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 0.0,
                 priority: 0,
@@ -573,6 +587,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature = Feature {
@@ -603,6 +618,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 5.0,
                 priority: 0,
@@ -639,6 +655,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature = Feature {
@@ -669,6 +686,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 5.0,
                 priority: 0,
@@ -705,6 +723,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature = Feature {
@@ -735,6 +754,7 @@ mod tests {
                     z_axis_tilt_angle: 45.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 5.0,
                 priority: 0,
@@ -765,6 +785,7 @@ mod tests {
                     z_axis_tilt_angle: 45.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature = Feature {
@@ -795,6 +816,7 @@ mod tests {
                     z_axis_tilt_angle: 0.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 5.0,
                 priority: 0,
@@ -825,6 +847,7 @@ mod tests {
                     z_axis_tilt_angle: 45.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
             };
             let feature = Feature {
@@ -855,6 +878,7 @@ mod tests {
                     z_axis_tilt_angle: 45.0,
                     z_axis_tilt_distance: 0.0,
                     z_axis_tilt_easing_range: 0.0,
+                    z_axis_tilt_rotation_strength: 0.,
                 },
                 spawn_time: 5.0,
                 priority: 0,

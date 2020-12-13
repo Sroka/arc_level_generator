@@ -17,7 +17,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -30,7 +31,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -43,7 +45,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -56,7 +59,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -69,7 +73,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -153,7 +158,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -166,7 +172,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -234,7 +241,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };
@@ -247,7 +255,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };
@@ -315,7 +324,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(8.4, 4.5, 18.),
         };
@@ -328,7 +338,8 @@ mod tests {
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
             half_extents: Vector3::new(4.0, 4.0, 7.0),
         };

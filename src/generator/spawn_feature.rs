@@ -42,7 +42,7 @@ pub fn spawn_feature(feature: &Feature,
             prefab.movement.z_axis_tilt_angle,
             prefab.movement.z_axis_tilt_distance,
             prefab.movement.z_axis_tilt_easing_range,
-            0.,
+            prefab.movement.z_axis_tilt_rotation_strength,
         );
         let entity = CollideableEntity {
             spawn_position: prefab_motion.position_at_time(0.).translation.vector,
@@ -79,6 +79,7 @@ mod tests {
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
                 z_axis_tilt_easing_range: 50.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
         };
         let feature = Feature {
@@ -129,6 +130,7 @@ mod tests {
                 z_axis_tilt_angle: 45.0,
                 z_axis_tilt_distance: 0.0,
                 z_axis_tilt_easing_range: 50.0,
+                z_axis_tilt_rotation_strength: 0.,
             },
         };
         let feature = Feature {

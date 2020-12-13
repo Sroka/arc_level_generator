@@ -44,7 +44,7 @@ impl ConstantVelocityZTiltMotion {
         let mut tilt_position = doubly_tilted_isometry.translation.vector;
         tilt_position.x -= start.translation.vector.x;
         tilt_position.y -= start.translation.vector.y;
-        let mut tilt_rotation = doubly_tilted_isometry.rotation * start.rotation.inverse();
+        let tilt_rotation = doubly_tilted_isometry.rotation * start.rotation.inverse();
 
         let mut start_position_with_stripped_tilt = start.translation.vector.clone();
         start_position_with_stripped_tilt.x -= tilt_position.x;
