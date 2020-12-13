@@ -42,6 +42,7 @@ pub fn spawn_feature(feature: &Feature,
             prefab.movement.z_axis_tilt_angle,
             prefab.movement.z_axis_tilt_distance,
             prefab.movement.z_axis_tilt_easing_range,
+            0.,
         );
         let entity = CollideableEntity {
             spawn_position: prefab_motion.position_at_time(0.).translation.vector,

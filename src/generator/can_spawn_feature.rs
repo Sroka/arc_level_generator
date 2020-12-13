@@ -39,6 +39,7 @@ pub fn can_spawn_feature(
                 prefab.movement.z_axis_tilt_angle,
                 prefab.movement.z_axis_tilt_distance,
                 prefab.movement.z_axis_tilt_easing_range,
+                0.
             );
             let prefab_spawn_position_isometry: Isometry<f32, U3, UnitQuaternion<f32>> = prefab_motion.position_at_time(0.);
 
@@ -50,6 +51,7 @@ pub fn can_spawn_feature(
                 obstacle.movement.z_axis_tilt_angle,
                 obstacle.movement.z_axis_tilt_distance,
                 obstacle.movement.z_axis_tilt_easing_range,
+                0.
             );
             let obstacle_spawn_position_isometry = obstacle_motion.position_at_time(0.);
 
@@ -687,7 +689,7 @@ mod tests {
 
     mod tilted {
         use super::*;
-        use nalgebra::UnitQuaternion;
+        use nalgebra::{UnitQuaternion};
         use crate::Movement;
 
         #[test]
@@ -868,6 +870,24 @@ mod tests {
                 &Vector3::new(0., 0., 0.),
             );
             assert_eq!(can_spawn, false);
+        }
+
+        #[test]
+        fn test_tilt_rotation() {
+            // let vector3 = Vector3::new(std::f32::consts::FRAC_PI_2, 0., 0.);
+            let local_rotation_axis = Vector3::x_axis();
+            let local_rotation_angle = std::f32::consts::FRAC_PI_4;
+            let local_rotation = UnitQuaternion::from_axis_angle(&local_rotation_axis, local_rotation_angle);
+            let world_rotation_axis = Vector3::y_axis();
+            let world_rotation_angle = std::f32::consts::FRAC_PI_4;
+            let world_rotation = UnitQuaternion::from_axis_angle(&world_rotation_axis, world_rotation_angle);
+            let combined_rotation = world_rotation * local_rotation;
+            // let combined_rotation = local_rotation * world_rotation;
+            let euler_angles = combined_rotation.euler_angles();
+            dbg!(world_rotation_angle);
+            dbg!(euler_angles.0);
+            dbg!(euler_angles.1);
+            dbg!(euler_angles.2);
         }
     }
 }
