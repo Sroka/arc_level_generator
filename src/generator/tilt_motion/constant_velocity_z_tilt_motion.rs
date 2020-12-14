@@ -1,6 +1,5 @@
-use nalgebra::{Unit, Isometry, Vector3, UnitQuaternion, U3, Vector2, Translation};
+use nalgebra::{ Isometry, Vector3, UnitQuaternion, U3, Vector2, Translation};
 use ncollide3d::interpolation::RigidMotion;
-use float_cmp::{ApproxEq, F32Margin};
 
 #[derive(Debug)]
 pub struct ConstantVelocityZTiltMotion {
@@ -44,19 +43,23 @@ impl ConstantVelocityZTiltMotion {
         let mut tilt_position = doubly_tilted_isometry.translation.vector;
         tilt_position.x -= start.translation.vector.x;
         tilt_position.y -= start.translation.vector.y;
-        let tilt_rotation = doubly_tilted_isometry.rotation * start.rotation.inverse();
+        // TODO Current toi algo does not work with rotating motions in ncollide
+        // let tilt_rotation = doubly_tilted_isometry.rotation * start.rotation.inverse();
 
         let mut start_position_with_stripped_tilt = start.translation.vector.clone();
         start_position_with_stripped_tilt.x -= tilt_position.x;
         start_position_with_stripped_tilt.y -= tilt_position.y;
-        let mut start_rotation_with_stripped_tilt = start.rotation.clone();
-        start_rotation_with_stripped_tilt = tilt_rotation.inverse() * start_rotation_with_stripped_tilt;
+        // TODO Current toi algo does not work with rotating motions in ncollide
+        // let mut start_rotation_with_stripped_tilt = start.rotation.clone();
+        // start_rotation_with_stripped_tilt = tilt_rotation.inverse() * start_rotation_with_stripped_tilt;
 
         ConstantVelocityZTiltMotion {
             t0,
             start: Isometry::from_parts(
                 Translation::from(start_position_with_stripped_tilt),
-                start_rotation_with_stripped_tilt,
+                start.rotation,
+                // TODO Current toi algo does not work with rotating motions in ncollide
+                // start_rotation_with_stripped_tilt,
             ),
             linear_velocity: doubly_tilted_motion.linear_velocity,
             tilt_xy_direction: doubly_tilted_motion.tilt_xy_direction,
@@ -71,8 +74,8 @@ impl ConstantVelocityZTiltMotion {
 impl RigidMotion<f32> for ConstantVelocityZTiltMotion {
     fn position_at_time(&self, t: f32) -> Isometry<f32, U3, UnitQuaternion<f32>> {
         let mut position_tilted = self.start.translation.vector + self.linear_velocity * (t - self.t0);
-        let mut rotation_tilted = self.start.rotation;
-        if !self.tilt_angle.approx_eq(0.0, F32Margin::zero()) {
+        let rotation_tilted = self.start.rotation;
+        if self.tilt_angle.is_normal() {
             let absolute_z_position = position_tilted.z.abs();
             let tilt_angle_radians = self.tilt_angle.to_radians();
             let direction_normalized = self.tilt_xy_direction.normalize();
@@ -86,8 +89,14 @@ impl RigidMotion<f32> for ConstantVelocityZTiltMotion {
             let tilt = direction_normalized * (easing_tilt + linear_tilt);
             position_tilted.x += tilt.x;
             position_tilted.y += tilt.y;
-            let rotation_axis = Unit::new_normalize(Vector3::new(self.tilt_xy_direction.x, self.tilt_xy_direction.y, 0.).cross(&Vector3::z_axis()));
-            rotation_tilted = UnitQuaternion::from_axis_angle(&rotation_axis, position_tilted.z.signum() * (easing_period_movement / self.tilt_easing_range) * tilt_angle_radians) * rotation_tilted;
+            // TODO Current toi algo does not work with rotating motions in ncollide
+            // let rotation_axis = Unit::new_normalize(Vector3::new(self.tilt_xy_direction.x, self.tilt_xy_direction.y, 0.).cross(&Vector3::z_axis()));
+            // let mut easing_period_movement_progress: f32 = 1.;
+            // if self.tilt_easing_range.is_normal() {
+            //     easing_period_movement_progress = easing_period_movement / self.tilt_easing_range;
+            // }
+            // let current_rotation_angle = position_tilted.z.signum() * (easing_period_movement_progress) * tilt_angle_radians;
+            // rotation_tilted = UnitQuaternion::from_axis_angle(&rotation_axis, current_rotation_angle) * rotation_tilted;
         }
 
         return Isometry::from_parts(
@@ -114,24 +123,25 @@ mod tests {
                                                       10.,
                                                       1.,
         );
+        // TODO Current toi algo does not work with rotating motions in ncollide
         assert_eq!(motion.position_at_time(0.).translation.vector, Vector3::new(0., 14.142136, 30.));
-        assert_eq!(motion.position_at_time(0.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(0.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
         assert_eq!(motion.position_at_time(2.).translation.vector, Vector3::new(0., 4.1421356, 20.));
-        assert_eq!(motion.position_at_time(2.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(2.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
         assert_eq!(motion.position_at_time(3.).translation.vector, Vector3::new(0., 0.9133787, 15.));
-        assert_eq!(motion.position_at_time(3.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_8));
+        // assert_eq!(motion.position_at_time(3.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_8));
         assert_eq!(motion.position_at_time(4.).translation.vector, Vector3::new(0., 0., 10.));
-        assert_eq!(motion.position_at_time(4.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
+        // assert_eq!(motion.position_at_time(4.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
         assert_eq!(motion.position_at_time(6.).translation.vector, Vector3::new(0., 0., 0.));
-        assert_eq!(motion.position_at_time(6.).rotation, UnitQuaternion::identity());
+        // assert_eq!(motion.position_at_time(6.).rotation, UnitQuaternion::identity());
         assert_eq!(motion.position_at_time(8.).translation.vector, Vector3::new(0., 0., -10.));
-        assert_eq!(motion.position_at_time(8.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
+        // assert_eq!(motion.position_at_time(8.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
         assert_eq!(motion.position_at_time(9.).translation.vector, Vector3::new(0., 0.9133787, -15.));
-        assert_eq!(motion.position_at_time(9.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_8));
+        // assert_eq!(motion.position_at_time(9.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_8));
         assert_eq!(motion.position_at_time(10.).translation.vector, Vector3::new(0., 4.1421356, -20.));
-        assert_eq!(motion.position_at_time(10.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(10.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
         assert_eq!(motion.position_at_time(12.).translation.vector, Vector3::new(0., 14.142136, -30.));
-        assert_eq!(motion.position_at_time(12.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(12.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
     }
 
     #[test]
@@ -145,24 +155,25 @@ mod tests {
                                                       10.,
                                                       1.,
         );
+        // TODO Current toi algo does not work with rotating motions in ncollide
         assert_eq!(motion.position_at_time(0.).translation.vector, Vector3::new(0., 24.142136, 30.));
-        assert_eq!(motion.position_at_time(0.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(0.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
         assert_eq!(motion.position_at_time(2.).translation.vector, Vector3::new(0., 14.1421356, 20.));
-        assert_eq!(motion.position_at_time(2.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(2.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
         assert_eq!(motion.position_at_time(3.).translation.vector, Vector3::new(0., 10.9133787, 15.));
-        assert_eq!(motion.position_at_time(3.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_8));
+        // assert_eq!(motion.position_at_time(3.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_8));
         assert_eq!(motion.position_at_time(4.).translation.vector, Vector3::new(0., 10., 10.));
-        assert_eq!(motion.position_at_time(4.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
+        // assert_eq!(motion.position_at_time(4.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
         assert_eq!(motion.position_at_time(6.).translation.vector, Vector3::new(0., 10., 0.));
-        assert_eq!(motion.position_at_time(6.).rotation, UnitQuaternion::identity());
+        // assert_eq!(motion.position_at_time(6.).rotation, UnitQuaternion::identity());
         assert_eq!(motion.position_at_time(8.).translation.vector, Vector3::new(0., 10., -10.));
-        assert_eq!(motion.position_at_time(8.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
+        // assert_eq!(motion.position_at_time(8.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
         assert_eq!(motion.position_at_time(9.).translation.vector, Vector3::new(0., 10.9133787, -15.));
-        assert_eq!(motion.position_at_time(9.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_8));
+        // assert_eq!(motion.position_at_time(9.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_8));
         assert_eq!(motion.position_at_time(10.).translation.vector, Vector3::new(0., 14.1421356, -20.));
-        assert_eq!(motion.position_at_time(10.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(10.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
         assert_eq!(motion.position_at_time(12.).translation.vector, Vector3::new(0., 24.142136, -30.));
-        assert_eq!(motion.position_at_time(12.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(12.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
     }
 
     #[test]
@@ -176,23 +187,24 @@ mod tests {
                                                                         10.,
                                                                         1.,
         );
+        // TODO Current toi algo does not work with rotating motions in ncollide
         assert_eq!(motion.position_at_time(0.).translation.vector, Vector3::new(0., 14.142136, 30.));
-        assert_eq!(motion.position_at_time(0.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(0.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
         assert_eq!(motion.position_at_time(2.).translation.vector, Vector3::new(0., 4.1421356, 20.));
-        assert_eq!(motion.position_at_time(2.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(2.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_4));
         assert_eq!(motion.position_at_time(3.).translation.vector, Vector3::new(0., 0.9133787, 15.));
-        assert_eq!(motion.position_at_time(3.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_8));
+        // assert_eq!(motion.position_at_time(3.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), std::f32::consts::FRAC_PI_8));
         assert_eq!(motion.position_at_time(4.).translation.vector, Vector3::new(0., 0., 10.));
-        assert_eq!(motion.position_at_time(4.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
+        // assert_eq!(motion.position_at_time(4.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
         assert_eq!(motion.position_at_time(6.).translation.vector, Vector3::new(0., 0., 0.));
-        assert_eq!(motion.position_at_time(6.).rotation, UnitQuaternion::identity());
+        // assert_eq!(motion.position_at_time(6.).rotation, UnitQuaternion::identity());
         assert_eq!(motion.position_at_time(8.).translation.vector, Vector3::new(0., 0., -10.));
-        assert_eq!(motion.position_at_time(8.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
+        // assert_eq!(motion.position_at_time(8.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), 0.));
         assert_eq!(motion.position_at_time(9.).translation.vector, Vector3::new(0., 0.9133787, -15.));
-        assert_eq!(motion.position_at_time(9.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_8));
+        // assert_eq!(motion.position_at_time(9.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_8));
         assert_eq!(motion.position_at_time(10.).translation.vector, Vector3::new(0., 4.1421356, -20.));
-        assert_eq!(motion.position_at_time(10.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(10.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
         assert_eq!(motion.position_at_time(12.).translation.vector, Vector3::new(0., 14.142136, -30.));
-        assert_eq!(motion.position_at_time(12.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
+        // assert_eq!(motion.position_at_time(12.).rotation, UnitQuaternion::from_axis_angle(&Vector3::x_axis(), -std::f32::consts::FRAC_PI_4));
     }
 }

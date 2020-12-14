@@ -41,6 +41,7 @@ pub struct VisibleWorldDescription {
 pub struct EntityDescription {
     pub prefab_id: i32,
     pub spawn_position: Vector3<f32>,
+    pub spawn_rotation_euler_angles: Vector3<f32>,
     pub spawn_time: f32,
     pub movement: MovementDescription,
 }

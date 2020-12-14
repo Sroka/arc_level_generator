@@ -6,9 +6,11 @@ use crate::generator::types::movement::Movement;
 #[derive(Clone, PartialEq, Debug)]
 pub struct CollideableEntity {
     pub spawn_position: Vector3<f32>,
+    pub spawn_rotation: UnitQuaternion<f32>,
+    // TODO This won't be necessary if ncollide ever support rotating toi algos
+    pub spawn_rotation_without_tilt: UnitQuaternion<f32>,
     pub spawn_time: f32,
     pub movement: Movement,
-    pub rotation: UnitQuaternion<f32>,
     pub bounding_box: AABB<f32>,
     pub prefab_id: i32,
     pub priority: i32,

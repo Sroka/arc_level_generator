@@ -1,4 +1,4 @@
-use nalgebra::{Point3, UnitQuaternion};
+use nalgebra::{Point3, UnitQuaternion, Vector3};
 use crate::interop::types::{VisibleWorldDescription, FeatureDescription, EntitiesArrayDescription, EntityDescription, MovementDescription};
 use std::slice::from_raw_parts;
 use crate::{Feature, Prefab, VisibleWorld};
@@ -26,7 +26,11 @@ pub unsafe extern fn bind_generate(
                     Prefab {
                         prefab_id: prefab_description.prefab_id,
                         position: prefab_description.position,
-                        rotation: UnitQuaternion::from_euler_angles(prefab_description.euler_angles.x, prefab_description.euler_angles.y, prefab_description.euler_angles.z),
+                        rotation: UnitQuaternion::from_euler_angles(
+                            prefab_description.euler_angles.x.to_radians(),
+                            prefab_description.euler_angles.y.to_radians(),
+                            prefab_description.euler_angles.z.to_radians(),
+                        ),
                         bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), prefab_description.half_extents),
                         movement: Movement {
                             linear_velocity: prefab_description.movement.linear_velocity,
@@ -78,18 +82,26 @@ pub unsafe extern fn bind_generate(
         &mut thread_rng(),
     );
 
-    let mut entities_descriptions: Vec<EntityDescription> = generated_entities.iter().map(|entity| EntityDescription {
-        spawn_position: entity.spawn_position,
-        spawn_time: entity.spawn_time,
-        movement: MovementDescription {
-            linear_velocity: entity.movement.linear_velocity,
-            z_axis_tilt_xy_direction: entity.movement.z_axis_tilt_xy_direction,
-            z_axis_tilt_angle: entity.movement.z_axis_tilt_angle,
-            z_axis_tilt_distance: entity.movement.z_axis_tilt_distance,
-            z_axis_tilt_easing_range: entity.movement.z_axis_tilt_easing_range,
-            z_axis_tilt_rotation_strength: entity.movement.z_axis_tilt_rotation_strength,
-        },
-        prefab_id: entity.prefab_id,
+    let mut entities_descriptions: Vec<EntityDescription> = generated_entities.iter().map(|entity| {
+        let rotation_euler_angles_tuple = entity.spawn_rotation.euler_angles();
+        EntityDescription {
+            spawn_position: entity.spawn_position,
+            spawn_rotation_euler_angles: Vector3::new(
+                rotation_euler_angles_tuple.0,
+                rotation_euler_angles_tuple.1,
+                rotation_euler_angles_tuple.2,
+            ),
+            spawn_time: entity.spawn_time,
+            movement: MovementDescription {
+                linear_velocity: entity.movement.linear_velocity,
+                z_axis_tilt_xy_direction: entity.movement.z_axis_tilt_xy_direction,
+                z_axis_tilt_angle: entity.movement.z_axis_tilt_angle,
+                z_axis_tilt_distance: entity.movement.z_axis_tilt_distance,
+                z_axis_tilt_easing_range: entity.movement.z_axis_tilt_easing_range,
+                z_axis_tilt_rotation_strength: entity.movement.z_axis_tilt_rotation_strength,
+            },
+            prefab_id: entity.prefab_id,
+        }
     }).collect();
     entities_descriptions.shrink_to_fit();
     dbg!(&entities_descriptions);

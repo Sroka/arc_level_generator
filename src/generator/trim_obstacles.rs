@@ -20,7 +20,7 @@ pub fn trim_obstacles(
         let current_entity_aabb = entity.bounding_box
             .transform_by(&Isometry3::from_parts(
                 Translation3::from(position),
-                entity.rotation,
+                entity.spawn_rotation_without_tilt,
             )
             );
         // FIXME Eh, just a hack for prefabs being spawned outside world
@@ -51,6 +51,8 @@ mod tests {
         };
         let obstacle0 = CollideableEntity {
             spawn_position: Vector3::new(0., 0., 0.),
+            spawn_rotation: UnitQuaternion::identity(),
+            spawn_rotation_without_tilt: UnitQuaternion::from_euler_angles(0., std::f32::consts::FRAC_PI_4, 0.),
             spawn_time: 10.0,
             movement: Movement {
                 linear_velocity: Vector3::new(0., 0., -1.),
@@ -60,7 +62,6 @@ mod tests {
                 z_axis_tilt_easing_range: 0.0,
                 z_axis_tilt_rotation_strength: 0.,
             },
-            rotation: UnitQuaternion::from_euler_angles(0., std::f32::consts::FRAC_PI_4, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             prefab_id: 0,
             priority: 0,
@@ -68,7 +69,7 @@ mod tests {
         let obstacle1 = CollideableEntity {
             priority: 5,
             spawn_time: 30.0,
-            rotation: UnitQuaternion::from_euler_angles(0., std::f32::consts::FRAC_PI_2, 0.),
+            spawn_rotation_without_tilt: UnitQuaternion::from_euler_angles(0., std::f32::consts::FRAC_PI_2, 0.),
             ..obstacle0.clone()
         };
         let mut obstacles: VecDeque<CollideableEntity> = VecDeque::from_iter([obstacle0.clone(), obstacle1.clone()].iter().cloned());
