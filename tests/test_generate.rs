@@ -7,6 +7,80 @@ mod tests {
     extern crate arc_level_generator;
 
     #[test]
+    fn test_generate_large_quantities() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
+            },
+        };
+        let prefab1 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(4., 2., 0.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
+            },
+        };
+        let prefab2 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0., 3., 0.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -1.),
+                z_axis_tilt_xy_direction: nalgebra::zero(),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 0.0,
+                z_axis_tilt_rotation_strength: 0.,
+            },
+        };
+        let feature0 = Feature {
+            translate_x: true,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_y: true,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab0, prefab1, prefab2],
+            spawn_count: 100,
+            spawn_period: 1.0,
+            is_spawn_period_strict: false,
+            trigger_time: 10.0,
+            priority: 0,
+            missed_spawns: 0,
+            last_spawn_attempt: 0.0,
+            translate_z: 0.0
+        };
+
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
+        };
+        let generated_entities = arc_level_generator::generate(
+            &world,
+            &[feature0],
+            &mut rand::thread_rng(),
+        );
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entitity {}: {:?}", index, entity)
+        }
+    }
+    #[test]
     fn test_generate() {
         let prefab0 = Prefab {
             prefab_id: 0,
