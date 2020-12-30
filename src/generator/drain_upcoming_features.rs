@@ -14,7 +14,7 @@ pub fn drain_upcoming_features(upcoming_features: &mut Vec<Feature>,
         return;
     }
     upcoming_features.retain(|feature| {
-        if feature.trigger_time <= time_travelled {
+        if feature.trigger_time - feature.priority as f32 <= time_travelled {
             active_features.push(feature.clone());
             false
         } else {
