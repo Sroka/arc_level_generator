@@ -1,11 +1,11 @@
-use nalgebra::{Vector3, Vector2};
+use nalgebra::{Vector3, Vector2, Vector4};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 #[repr(C)]
 pub struct PrefabDescription {
     pub prefab_id: i32,
     pub position: Vector3<f32>,
-    pub euler_angles: Vector3<f32>,
+    pub rotation: Vector4<f32>,
     pub half_extents: Vector3<f32>,
     pub movement: MovementDescription,
 }
@@ -41,7 +41,7 @@ pub struct VisibleWorldDescription {
 pub struct EntityDescription {
     pub prefab_id: i32,
     pub spawn_position: Vector3<f32>,
-    pub spawn_rotation_euler_angles: Vector3<f32>,
+    pub spawn_rotation: Vector4<f32>,
     pub spawn_time: f32,
     pub movement: MovementDescription,
 }
