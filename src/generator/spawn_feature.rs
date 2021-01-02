@@ -67,7 +67,7 @@ fn rotation_with_tilt(prefab: &Prefab) -> UnitQuaternion<f32> {
         prefab.movement.z_axis_tilt_xy_direction.len() > f32::EPSILON as usize {
         let rotation_axis = Unit::new_normalize(Vector3::new(prefab.movement.z_axis_tilt_xy_direction.x, prefab.movement.z_axis_tilt_xy_direction.y, 0.).cross(&Vector3::z_axis()));
         let angle = -prefab.movement.z_axis_tilt_angle.to_radians() * prefab.movement.z_axis_tilt_rotation_strength;
-        return prefab.rotation * UnitQuaternion::from_axis_angle(&rotation_axis, angle);
+        return UnitQuaternion::from_axis_angle(&rotation_axis, angle) * prefab.rotation;
     }
     return prefab.rotation;
 }
