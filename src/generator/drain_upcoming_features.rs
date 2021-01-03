@@ -1,4 +1,5 @@
 use super::types::Feature;
+use crate::VisibleWorld;
 
 /// Activated not yet active features that should start spawning at a given travelled distance
 /// and adds them to active entities queue
@@ -8,13 +9,14 @@ use super::types::Feature;
 /// * `distance_travelled` - distance travelled in a given world
 pub fn drain_upcoming_features(upcoming_features: &mut Vec<Feature>,
                                active_features: &mut Vec<Feature>,
+                               world: &VisibleWorld,
                                time_travelled: f32,
 ) {
     if upcoming_features.is_empty() {
         return;
     }
     upcoming_features.retain(|feature| {
-        if feature.trigger_time - feature.priority as f32 <= time_travelled {
+        if time_travelled >= feature.trigger_time - feature.max_time_to_travel(&world, feature.translate_z) - feature.priority as f32 {
             active_features.push(feature.clone());
             false
         } else {
@@ -30,16 +32,20 @@ mod tests {
 
     use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion};
     use ncollide3d::bounding_volume::AABB;
+    use crate::VisibleWorld;
 
     #[test]
     fn test_drain_upcoming_features() {
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(20., 20., 20.)),
+        };
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0.0, 0.0, 0.0),
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(1.0, 1.0, 1.0),
+                linear_velocity: Vector3::new(-1.0, -1.0, -1.0),
                 z_axis_tilt_xy_direction: nalgebra::zero(),
                 z_axis_tilt_angle: 0.0,
                 z_axis_tilt_distance: 0.0,
@@ -57,23 +63,23 @@ mod tests {
             prefabs: vec![prefab0],
             spawn_count: 1,
             spawn_period: 1.0,
-            trigger_time: 10.0,
+            trigger_time: 30.0,
             priority: 0,
             missed_spawns: 0,
             is_spawn_period_strict: false,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
+            translate_z: 0.0,
         };
         let feature1 = Feature {
-            trigger_time: 100.0,
+            trigger_time: 120.0,
             ..feature0.clone()
         };
         let feature2 = Feature {
-            trigger_time: 110.0,
+            trigger_time: 130.0,
             ..feature0.clone()
         };
         let feature3 = Feature {
-            trigger_time: 105.0,
+            trigger_time: 125.0,
             ..feature0.clone()
         };
 
@@ -85,10 +91,13 @@ mod tests {
         drain_upcoming_features(
             &mut upcoming_features,
             &mut active_features,
+            &world,
             distance_travelled,
         );
 
         let expected: Vec<Feature> = Vec::new();
+        dbg!(&active_features);
+        dbg!(&expected);
         assert!(active_features.iter().eq(expected.iter()));
 
         distance_travelled = 11.0;
@@ -96,6 +105,7 @@ mod tests {
         drain_upcoming_features(
             &mut upcoming_features,
             &mut active_features,
+            &world,
             distance_travelled,
         );
 
@@ -107,6 +117,7 @@ mod tests {
         drain_upcoming_features(
             &mut upcoming_features,
             &mut active_features,
+            &world,
             distance_travelled,
         );
 
@@ -118,10 +129,11 @@ mod tests {
         drain_upcoming_features(
             &mut upcoming_features,
             &mut active_features,
+            &world,
             distance_travelled,
         );
 
-        let expected = [feature0.clone(),feature1.clone(), feature3.clone()];
+        let expected = [feature0.clone(), feature1.clone(), feature3.clone()];
         assert!(active_features.iter().eq(expected.iter()));
 
         distance_travelled = 117.0;
@@ -129,10 +141,11 @@ mod tests {
         drain_upcoming_features(
             &mut upcoming_features,
             &mut active_features,
+            &world,
             distance_travelled,
         );
 
-        let expected = [feature0.clone(),feature1.clone(), feature3.clone(), feature2.clone()];
+        let expected = [feature0.clone(), feature1.clone(), feature3.clone(), feature2.clone()];
         assert!(active_features.iter().eq(expected.iter()));
     }
 }

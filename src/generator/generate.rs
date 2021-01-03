@@ -8,6 +8,8 @@ use crate::generator::trim_obstacles::trim_obstacles;
 use crate::generator::calculate_feature_shift::calculate_feature_shift;
 use crate::generator::can_spawn_feature::can_spawn_feature;
 use crate::generator::spawn_feature::spawn_feature;
+use itertools::Itertools;
+use std::cmp::Ordering::Equal;
 
 const STEP: f32 = 0.025;
 
@@ -28,8 +30,21 @@ pub fn generate(
 
     let mut generated_entities: Vec<CollideableEntity> = Vec::new();
     let mut obstacles: VecDeque<CollideableEntity> = VecDeque::new();
+    let highest_spawn_delay = features
+        .iter()
+        .map(|item| item.max_time_to_travel(&world, item.translate_z) + item.priority as f32)
+        .sorted_by(|a, b| a.partial_cmp(b).unwrap_or(Equal))
+        .last()
+        .unwrap();
+    // dbg!(highest_spawn_delay);
+    upcoming_features
+        .iter_mut()
+        .for_each(|item| {
+            item.trigger_time += highest_spawn_delay;
+            // dbg!(item);
+        });
 
-    let mut time_travelled = 0.0_f32;
+    let mut time_travelled = 0.;
 
     'main_loop: loop {
         if active_features.is_empty() && upcoming_features.is_empty() {
@@ -37,7 +52,7 @@ pub fn generate(
             break 'main_loop;
         }
         time_travelled += STEP;
-        drain_upcoming_features(&mut upcoming_features, &mut active_features, time_travelled);
+        drain_upcoming_features(&mut upcoming_features, &mut active_features, &world, time_travelled);
         trim_active_features(&mut active_features);
         trim_obstacles(&mut obstacles, &world, time_travelled);
         active_features.shuffle(rng);
@@ -79,5 +94,10 @@ pub fn generate(
             }
         }
     }
+    generated_entities
+        .iter_mut()
+        .for_each(|item| {
+            item.spawn_time -= highest_spawn_delay;
+        });
     generated_entities
 }

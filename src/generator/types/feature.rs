@@ -1,5 +1,8 @@
 use crate::generator::types::prefab::Prefab;
 use nalgebra::Vector2;
+use crate::VisibleWorld;
+use itertools::Itertools;
+use std::cmp::Ordering::Equal;
 
 /// Represents a description of a feature that can be spawned in a generated world. Single feature
 /// can consist of a multiple prefabs. The feature can only be spawned if all of its prefabs can be
@@ -21,4 +24,94 @@ pub struct Feature {
     pub translate_z: f32,
     pub missed_spawns: i32,
     pub last_spawn_attempt: f32,
+}
+
+impl Feature {
+    pub fn max_time_to_travel(&self, world: &VisibleWorld, z_shift: f32) -> f32 {
+        let min_z_velocity_in_a_feature = self.prefabs
+            .iter()
+            .map(|prefab| prefab.movement.linear_velocity.z)
+            .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal) })
+            .last()
+            .unwrap();
+        let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs.z + z_shift) / -min_z_velocity_in_a_feature;
+        time_to_travel_to_origin_plane_from_worlds_start
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use nalgebra::{UnitQuaternion, Point3, Vector3};
+    use ncollide3d::bounding_volume::AABB;
+    use crate::Movement;
+
+    #[test]
+    pub fn test_max_time_to_travel() {
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(20., 20., 20.)),
+        };
+        let prefab1 = Prefab {
+            prefab_id: 1,
+            position: nalgebra::zero(),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -8.),
+                z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 50.0,
+                z_axis_tilt_rotation_strength: 0.,
+            },
+        };
+        let prefab2 = Prefab {
+            prefab_id: 1,
+            position: nalgebra::zero(),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -4.),
+                z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 50.0,
+                z_axis_tilt_rotation_strength: 0.,
+            },
+        };
+        let prefab3 = Prefab {
+            prefab_id: 1,
+            position: nalgebra::zero(),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            movement: Movement {
+                linear_velocity: Vector3::new(0., 0., -2.),
+                z_axis_tilt_xy_direction: Vector2::new(0., 1.),
+                z_axis_tilt_angle: 0.0,
+                z_axis_tilt_distance: 0.0,
+                z_axis_tilt_easing_range: 50.0,
+                z_axis_tilt_rotation_strength: 0.,
+            },
+        };
+        let feature = Feature {
+            prefabs: vec![prefab1, prefab2, prefab3],
+            spawn_period: 0.0,
+            is_spawn_period_strict: false,
+            spawn_count: 5,
+            trigger_time: 0.0,
+            priority: 0,
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: nalgebra::zero(),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: nalgebra::zero(),
+            translate_z: 0.0,
+            missed_spawns: 0,
+            last_spawn_attempt: 0.0,
+        };
+        let max_time_to_travel = feature.max_time_to_travel(&world, feature.translate_z);
+        assert_eq!(max_time_to_travel, 10.);
+
+    }
 }

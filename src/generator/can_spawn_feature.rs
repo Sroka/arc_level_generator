@@ -6,8 +6,6 @@ use ncollide3d::query::{RayCast, Ray};
 use nalgebra::{Isometry3, Vector3, Point3, Translation3, Isometry, UnitQuaternion, U3, Translation, Unit};
 use rayon::prelude::*;
 use ncollide3d::bounding_volume::{BoundingVolume, AABB};
-use std::cmp::Ordering::Equal;
-use itertools::Itertools;
 use ncollide3d::interpolation::{RigidMotion};
 use crate::generator::types::Feature;
 use crate::generator::tilt_motion::ConstantVelocityZTiltMotion;
@@ -23,13 +21,7 @@ pub fn can_spawn_feature(
     time_travelled: f32,
     feature_shift: &Vector3<f32>,
 ) -> bool {
-    let min_z_velocity_in_a_feature = feature.prefabs
-        .iter()
-        .map(|prefab| prefab.movement.linear_velocity.z)
-        .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal) })
-        .last()
-        .unwrap();
-    let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs.z + feature_shift.z) / -min_z_velocity_in_a_feature;
+    let max_time_to_travel = feature.max_time_to_travel(&world, feature_shift.z);
     let any_prefab_in_feature_collides_with_any_obstacle = feature.prefabs
         .par_iter()
         .any(|prefab| {
@@ -37,7 +29,7 @@ pub fn can_spawn_feature(
                 .into_par_iter()
                 .any(|obstacle| {
                     let prefab_motion = ConstantVelocityZTiltMotion::new(
-                        time_to_travel_to_origin_plane_from_worlds_start + feature.priority as f32,
+                        max_time_to_travel + feature.priority as f32,
                         Isometry3::from_parts(Translation3::from(prefab.position + Vector3::new(feature_shift.x, feature_shift.y, 0.)), prefab.rotation),
                         prefab.movement.linear_velocity.clone(),
                         prefab.movement.z_axis_tilt_xy_direction.clone(),
