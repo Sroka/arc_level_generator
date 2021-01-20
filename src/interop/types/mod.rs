@@ -50,11 +50,17 @@ pub struct EntityDescription {
 #[repr(C)]
 pub struct MovementDescription {
     pub linear_velocity: Vector3<f32>,
-    pub z_axis_tilt_xy_direction: Vector2<f32>,
-    pub z_axis_tilt_angle: f32,
-    pub z_axis_tilt_distance: f32,
-    pub z_axis_tilt_easing_range: f32,
-    pub z_axis_tilt_rotation_strength: f32,
+    pub arcs_plane_normal: Vector3<f32>,
+
+    pub approach_arc_angle: f32,
+    pub approach_arc_center_distance: f32,
+    pub approach_arc_radius: f32,
+    pub approach_rotation_strength: f32,
+
+    pub departure_arc_angle: f32,
+    pub departure_arc_center_distance: f32,
+    pub departure_arc_radius: f32,
+    pub departure_rotation_strength: f32,
 }
 
 #[repr(C)]
