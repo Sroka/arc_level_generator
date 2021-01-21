@@ -1,5 +1,5 @@
 use std::collections::VecDeque;
-use crate::{Feature, CollideableEntity, VisibleWorld};
+use crate::{Feature, CollidableEntity, VisibleWorld};
 use rand::{RngCore, Rng};
 use rand::seq::SliceRandom;
 use crate::generator::drain_upcoming_features::drain_upcoming_features;
@@ -24,12 +24,12 @@ pub fn generate(
     world: &VisibleWorld,
     features: &[Feature],
     rng: &mut impl RngCore,
-) -> Vec<CollideableEntity> {
+) -> Vec<CollidableEntity> {
     let mut upcoming_features: Vec<Feature> = Vec::from(features);
     let mut active_features: Vec<Feature> = Vec::new();
 
-    let mut generated_entities: Vec<CollideableEntity> = Vec::new();
-    let mut obstacles: VecDeque<CollideableEntity> = VecDeque::new();
+    let mut generated_entities: Vec<CollidableEntity> = Vec::new();
+    let mut obstacles: VecDeque<CollidableEntity> = VecDeque::new();
     let highest_spawn_delay = features
         .iter()
         .map(|item| item.max_time_to_travel(&world, item.translate_z) + item.priority as f32)

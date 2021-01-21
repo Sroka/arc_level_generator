@@ -70,7 +70,7 @@ impl RigidMotion<f32> for BiArcCurveMotion {
 }
 
 impl BiArcCurveMotion {
-    fn rotation_at_time(&self, t: f32) -> UnitQuaternion<f32> {
+    pub fn rotation_at_time(&self, t: f32) -> UnitQuaternion<f32> {
         let baseline_position = t * &self.baseline_velocity;
         let baseline_distance = t.signum() * baseline_position.magnitude();
         let approach_easing_range = calculate_easing_range(self.approach_arc_radius, self.approach_arc_angle);
@@ -140,13 +140,13 @@ mod tests {
             1.,
         );
 
+        assert_eq!(motion.position_at_time(-27.07106781).translation.vector, Vector3::new(0., 12.9289322, 27.07106781));
+        assert_eq!(motion.position_at_time(-17.07106781).translation.vector, Vector3::new(0., 2.9289322, 17.07106781));
+        assert_eq!(motion.position_at_time(-10.).translation.vector, Vector3::new(0., 0., 10.));
         assert_eq!(motion.position_at_time(0.).translation.vector, Vector3::new(0., 0., 0.));
         assert_eq!(motion.position_at_time(10.).translation.vector, Vector3::new(0., 0., -10.));
         assert_eq!(motion.position_at_time(17.07106781).translation.vector, Vector3::new(0., 2.9289322, -17.07106781));
         assert_eq!(motion.position_at_time(27.07106781).translation.vector, Vector3::new(0., 12.9289322, -27.07106781));
-        assert_eq!(motion.position_at_time(-10.).translation.vector, Vector3::new(0., 0., 10.));
-        assert_eq!(motion.position_at_time(-17.07106781).translation.vector, Vector3::new(0., 2.9289322, 17.07106781));
-        assert_eq!(motion.position_at_time(-27.07106781).translation.vector, Vector3::new(0., 12.9289322, 27.07106781));
     }
 
 
@@ -167,13 +167,13 @@ mod tests {
             1.,
         );
 
+        assert_eq!(motion.position_at_time(-27.07106781).translation.vector, Vector3::new(0., -12.9289322, 27.07106781));
+        assert_eq!(motion.position_at_time(-17.07106781).translation.vector, Vector3::new(0., -2.9289322, 17.07106781));
+        assert_eq!(motion.position_at_time(-10.).translation.vector, Vector3::new(0., 0., 10.));
         assert_eq!(motion.position_at_time(0.).translation.vector, Vector3::new(0., 0., 0.));
         assert_eq!(motion.position_at_time(10.).translation.vector, Vector3::new(0., 0., -10.));
         assert_eq!(motion.position_at_time(17.07106781).translation.vector, Vector3::new(0., -2.9289322, -17.07106781));
         assert_eq!(motion.position_at_time(27.07106781).translation.vector, Vector3::new(0., -12.9289322, -27.07106781));
-        assert_eq!(motion.position_at_time(-10.).translation.vector, Vector3::new(0., 0., 10.));
-        assert_eq!(motion.position_at_time(-17.07106781).translation.vector, Vector3::new(0., -2.9289322, 17.07106781));
-        assert_eq!(motion.position_at_time(-27.07106781).translation.vector, Vector3::new(0., -12.9289322, 27.07106781));
     }
 
     #[test]
@@ -196,13 +196,13 @@ mod tests {
             1.,
         );
 
-        relative_eq!(motion.rotation_at_time(0.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(-10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(-17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(-27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(-27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(-17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(-10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(0.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
     }
 
 
@@ -226,12 +226,44 @@ mod tests {
             1.,
         );
 
-        relative_eq!(motion.rotation_at_time(0.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(-10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(-17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
-        relative_eq!(motion.rotation_at_time(-27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(-27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(-17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(-10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(0.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
+    }
+
+
+    #[test]
+    fn test_rotation_at_time_orthogonal() {
+        // TODO
+        assert!(false);
+        let motion = BiArcCurveMotion::new(
+            0.,
+            Isometry::from_parts(
+                Translation::from(Vector3::new(0., 0., 0.)),
+                UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(0., 1., 0.)), 45.0_f32.to_radians()),
+            ),
+            Vector3::new(0., 0., -1.),
+            Unit::new_normalize(Vector3::new(1., 0., 0.)),
+            45.0_f32.to_radians() as f32,
+            10.,
+            10.,
+            1.,
+            45.0_f32.to_radians() as f32,
+            10.,
+            10.,
+            1.,
+        );
+
+        // assert_relative_eq!(motion.rotation_at_time(-27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
+        // assert_relative_eq!(motion.rotation_at_time(-17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
+        // assert_relative_eq!(motion.rotation_at_time(-10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        // assert_relative_eq!(motion.rotation_at_time(0.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        // assert_relative_eq!(motion.rotation_at_time(10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        // assert_relative_eq!(motion.rotation_at_time(17.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
+        // assert_relative_eq!(motion.rotation_at_time(27.07106781), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 90.0_f32.to_radians()));
     }
 }

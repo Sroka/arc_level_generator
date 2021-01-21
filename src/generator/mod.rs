@@ -9,5 +9,5 @@ mod generate;
 mod calculate_prefabs_spawn_bounds;
 mod tilt_motion;
 
-pub use self::types::{VisibleWorld, Feature, Prefab, CollideableEntity, Movement};
+pub use self::types::{VisibleWorld, Feature, Prefab, CollidableEntity, Movement};
 pub use self::generate::generate;

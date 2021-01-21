@@ -30,7 +30,7 @@ impl Feature {
     pub fn max_time_to_travel(&self, world: &VisibleWorld, z_shift: f32) -> f32 {
         let min_z_velocity_in_a_feature = self.prefabs
             .iter()
-            .map(|prefab| prefab.movement.linear_velocity.z)
+            .map(|prefab| prefab.movement.baseline_velocity.z)
             .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal) })
             .last()
             .unwrap();
@@ -42,7 +42,7 @@ impl Feature {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nalgebra::{UnitQuaternion, Point3, Vector3};
+    use nalgebra::{UnitQuaternion, Point3, Vector3, Unit};
     use ncollide3d::bounding_volume::AABB;
     use crate::Movement;
 
@@ -57,12 +57,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -8.),
-                z_axis_tilt_xy_direction: Vector2::new(0., 1.),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 50.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -8.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 50.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0,
             },
         };
         let prefab2 = Prefab {
@@ -71,12 +75,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -4.),
-                z_axis_tilt_xy_direction: Vector2::new(0., 1.),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 50.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -4.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 50.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0,
             },
         };
         let prefab3 = Prefab {
@@ -85,12 +93,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -2.),
-                z_axis_tilt_xy_direction: Vector2::new(0., 1.),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 50.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -2.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 50.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0,
             },
         };
         let feature = Feature {
@@ -112,6 +124,5 @@ mod tests {
         };
         let max_time_to_travel = feature.max_time_to_travel(&world, feature.translate_z);
         assert_eq!(max_time_to_travel, 10.);
-
     }
 }

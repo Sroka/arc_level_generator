@@ -22,7 +22,7 @@ pub fn calculate_prefabs_spawn_bounds(prefabs: &[Prefab]) -> AABB<f32> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nalgebra::{Vector3, UnitQuaternion};
+    use nalgebra::{Vector3, UnitQuaternion, Unit};
     use crate::Movement;
 
     #[test]
@@ -33,12 +33,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(1., 1., 1.)),
             movement: Movement {
-                linear_velocity: Vector3::new(1., 1., 1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.0),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let prefab1 = Prefab {

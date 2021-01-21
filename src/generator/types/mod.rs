@@ -5,7 +5,7 @@ mod visible_world;
 mod movement;
 
 
-pub use collideable_entity::CollideableEntity;
+pub use collideable_entity::CollidableEntity;
 pub use feature::Feature;
 pub use prefab::Prefab;
 pub use visible_world::VisibleWorld;

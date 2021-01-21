@@ -1,23 +1,20 @@
 use nalgebra::{Vector3, UnitQuaternion};
-use ncollide3d::bounding_volume::AABB;
-use crate::generator::types::movement::Movement;
+use crate::Prefab;
 
 // Represents a spawned entity
 #[derive(Clone, PartialEq, Debug)]
-pub struct CollideableEntity {
+pub struct CollidableEntity {
+    pub movement_start_parameter: f32,
+    pub movement_end_parameter: f32,
     pub spawn_position: Vector3<f32>,
     pub spawn_rotation: UnitQuaternion<f32>,
-    // TODO This won't be necessary if ncollide ever support rotating toi algos
-    pub spawn_rotation_without_tilt: UnitQuaternion<f32>,
     pub spawn_time: f32,
-    pub movement: Movement,
-    pub bounding_box: AABB<f32>,
-    pub prefab_id: i32,
+    pub prefab: Prefab,
     pub priority: i32,
 }
 
-impl CollideableEntity {
+impl CollidableEntity {
     pub fn position(&self, time: f32) -> Vector3<f32> {
-        self.spawn_position + self.movement.linear_velocity * (time - self.spawn_time)
+        self.spawn_position + self.prefab.movement.baseline_velocity * (time - self.spawn_time)
     }
 }

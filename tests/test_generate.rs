@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use ncollide3d::bounding_volume::AABB;
-    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion};
+    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion, Unit};
     use self::arc_level_generator::{VisibleWorld, Prefab, Feature, Movement};
 
     extern crate arc_level_generator;
@@ -14,12 +14,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let prefab1 = Prefab {
@@ -28,12 +32,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let prefab2 = Prefab {
@@ -42,12 +50,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -88,12 +100,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -135,12 +151,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(4.0, 4.0, 4.0)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., -1., 0.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., -1., 0.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let prefab1 = Prefab {
@@ -149,12 +169,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(4.0, 4.0, 4.0)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., -1., 0.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., -1., 0.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -213,12 +237,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(5.0, 5.0, 5.0)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., -1., 0.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., -1., 0.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -260,12 +288,16 @@ mod tests {
             rotation: UnitQuaternion::from_euler_angles( 0., std::f32::consts::FRAC_PI_2, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -307,12 +339,16 @@ mod tests {
             rotation: UnitQuaternion::from_euler_angles( 0., std::f32::consts::FRAC_PI_2, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             }
         };
         let feature0 = Feature {
@@ -354,12 +390,16 @@ mod tests {
             rotation: UnitQuaternion::from_euler_angles( -std::f32::consts::FRAC_PI_2, 0., std::f32::consts::PI),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -401,12 +441,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(7.5, 7., 11.)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -451,12 +495,16 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(22.05775, 13.11225, 9.712485)),
             // bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(22.05775, 13.11225, 9.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -8.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -8.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -498,12 +546,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -8.),
-                z_axis_tilt_xy_direction: Vector2::new(0., 1.),
-                z_axis_tilt_angle: 45.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 50.0,
-                z_axis_tilt_rotation_strength: 1.,
+                baseline_velocity: Vector3::new(0., 0., -8.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 45.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 50.0,
+                approach_rotation_strength: 1.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -546,12 +598,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature0 = Feature {
@@ -577,12 +633,16 @@ mod tests {
             rotation: UnitQuaternion::identity(),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
-                linear_velocity: Vector3::new(0., 0., -1.),
-                z_axis_tilt_xy_direction: nalgebra::zero(),
-                z_axis_tilt_angle: 0.0,
-                z_axis_tilt_distance: 0.0,
-                z_axis_tilt_easing_range: 0.0,
-                z_axis_tilt_rotation_strength: 0.,
+                baseline_velocity: Vector3::new(0., 0., -1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
             },
         };
         let feature1 = Feature {
