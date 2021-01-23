@@ -55,6 +55,7 @@ mod tests {
             movement_end_parameter: 0.0,
             spawn_position: Vector3::new(0., 0., 0.),
             spawn_rotation: UnitQuaternion::identity(),
+            spawn_feature_shift: nalgebra::zero(),
             spawn_time: 10.0,
             priority: 0,
             prefab: Prefab {

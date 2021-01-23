@@ -1,5 +1,5 @@
 use crate::generator::types::prefab::Prefab;
-use nalgebra::Vector2;
+use nalgebra::{Vector2, Vector3};
 use crate::VisibleWorld;
 use itertools::Itertools;
 use std::cmp::Ordering::Equal;
@@ -27,15 +27,13 @@ pub struct Feature {
 }
 
 impl Feature {
-    pub fn max_time_to_travel(&self, world: &VisibleWorld, z_shift: f32) -> f32 {
-        let min_z_velocity_in_a_feature = self.prefabs
+    pub fn max_time_to_travel(&self, world: &VisibleWorld, shift: &Vector3<f32>) -> f32 {
+        self.prefabs
             .iter()
-            .map(|prefab| prefab.movement.baseline_velocity.z)
+            .map(|prefab| prefab.find_approach_time_in_world(&world, &shift))
             .sorted_by(|a, b| { a.partial_cmp(b).unwrap_or(Equal) })
             .last()
-            .unwrap();
-        let time_to_travel_to_origin_plane_from_worlds_start = (world.world_bounds.maxs.z + z_shift) / -min_z_velocity_in_a_feature;
-        time_to_travel_to_origin_plane_from_worlds_start
+            .unwrap()
     }
 }
 
@@ -122,7 +120,7 @@ mod tests {
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
         };
-        let max_time_to_travel = feature.max_time_to_travel(&world, feature.translate_z);
-        assert_eq!(max_time_to_travel, 10.);
+        let max_time_to_travel = feature.max_time_to_travel(&world, &Vector3::new(0.,0.,0.));
+        assert_eq!(max_time_to_travel, 10.25);
     }
 }

@@ -1,5 +1,6 @@
 use super::types::Feature;
 use crate::VisibleWorld;
+use nalgebra::Vector3;
 
 /// Activated not yet active features that should start spawning at a given travelled distance
 /// and adds them to active entities queue
@@ -16,7 +17,7 @@ pub fn drain_upcoming_features(upcoming_features: &mut Vec<Feature>,
         return;
     }
     upcoming_features.retain(|feature| {
-        if time_travelled >= feature.trigger_time - feature.max_time_to_travel(&world, feature.translate_z) - feature.priority as f32 {
+        if time_travelled >= feature.trigger_time - feature.max_time_to_travel(&world, &Vector3::new(0.,0.,0.)) - feature.priority as f32 {
             active_features.push(feature.clone());
             false
         } else {

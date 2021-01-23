@@ -8,6 +8,7 @@ pub struct CollidableEntity {
     pub movement_end_parameter: f32,
     pub spawn_position: Vector3<f32>,
     pub spawn_rotation: UnitQuaternion<f32>,
+    pub spawn_feature_shift: Vector3<f32>,
     pub spawn_time: f32,
     pub prefab: Prefab,
     pub priority: i32,

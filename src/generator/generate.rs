@@ -10,6 +10,7 @@ use crate::generator::can_spawn_feature::can_spawn_feature;
 use crate::generator::spawn_feature::spawn_feature;
 use itertools::Itertools;
 use std::cmp::Ordering::Equal;
+use nalgebra::Vector3;
 
 const STEP: f32 = 0.025;
 
@@ -32,7 +33,7 @@ pub fn generate(
     let mut obstacles: VecDeque<CollidableEntity> = VecDeque::new();
     let highest_spawn_delay = features
         .iter()
-        .map(|item| item.max_time_to_travel(&world, item.translate_z) + item.priority as f32)
+        .map(|item| item.max_time_to_travel(&world, &Vector3::new(0.,0.,0.)) + item.priority as f32)
         .sorted_by(|a, b| a.partial_cmp(b).unwrap_or(Equal))
         .last()
         .unwrap();

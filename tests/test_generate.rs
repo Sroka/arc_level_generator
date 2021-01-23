@@ -548,7 +548,7 @@ mod tests {
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -8.),
                 arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
-                approach_arc_angle: 45.0,
+                approach_arc_angle: 45.0_f32.to_radians(),
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 50.0,
                 approach_rotation_strength: 1.,
