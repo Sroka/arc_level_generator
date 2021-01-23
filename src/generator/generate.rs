@@ -55,7 +55,7 @@ pub fn generate(
         time_travelled += STEP;
         drain_upcoming_features(&mut upcoming_features, &mut active_features, &world, time_travelled);
         trim_active_features(&mut active_features);
-        trim_obstacles(&mut obstacles, &world, time_travelled);
+        trim_obstacles(&mut obstacles, time_travelled);
         active_features.shuffle(rng);
 
         'features_loop: for feature in &mut active_features {
