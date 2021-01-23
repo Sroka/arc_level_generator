@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 use crate::generator::types::{Feature, CollidableEntity, VisibleWorld};
 use nalgebra::{Vector3, Isometry3, Translation3, };
-use crate::generator::tilt_motion::{BiArcCurveMotion};
+use crate::generator::bi_arc_motion::{BiArcCurveMotion};
 use ncollide3d::interpolation::RigidMotion;
 
 /// Spawns entities belonging to a feature at a given time of travel in a given world

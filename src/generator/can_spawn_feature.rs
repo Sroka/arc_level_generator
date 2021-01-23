@@ -5,8 +5,7 @@ use ncollide3d::query;
 use nalgebra::{Isometry3, Vector3, Translation3};
 use rayon::prelude::*;
 use crate::generator::types::Feature;
-use crate::generator::tilt_motion::{BiArcCurveMotion};
-use ncollide3d::interpolation::RigidMotion;
+use crate::generator::bi_arc_motion::{BiArcCurveMotion};
 
 /// Checks if a feature can be safely spawn so that it won't collide with any existing entities in
 /// a visible world
@@ -57,8 +56,6 @@ pub fn can_spawn_feature(
 
                     let prefab_bounding_box = Cuboid::new(prefab.bounding_box.half_extents());
                     let obstacle_bounding_box = Cuboid::new(obstacle.prefab.bounding_box.half_extents());
-                    dbg!(&prefab_motion.position_at_time(100.25));
-                    dbg!(&obstacle_motion.position_at_time(100.25));
                     let time_of_impact = query::nonlinear_time_of_impact(
                         &query::DefaultTOIDispatcher,
                         &prefab_motion,

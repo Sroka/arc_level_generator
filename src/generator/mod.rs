@@ -7,7 +7,7 @@ mod can_spawn_feature;
 mod spawn_feature;
 mod generate;
 mod calculate_prefabs_spawn_bounds;
-mod tilt_motion;
+mod bi_arc_motion;
 
 pub use self::types::{VisibleWorld, Feature, Prefab, CollidableEntity, Movement};
 pub use self::generate::generate;

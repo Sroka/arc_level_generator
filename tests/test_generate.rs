@@ -664,7 +664,7 @@ mod tests {
         };
 
         let world = VisibleWorld {
-            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(10., 10., 10.)),
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(100., 100., 100.)),
         };
         let generated_entities = arc_level_generator::generate(
             &world,
