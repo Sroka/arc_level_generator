@@ -45,6 +45,8 @@ pub struct EntityDescription {
     pub spawn_position: Vector3<f32>,
     pub spawn_rotation: Vector4<f32>,
     pub spawn_time: f32,
+    pub movement_start_parameter: f32,
+    pub movement_end_parameter: f32,
     pub movement: MovementDescription,
 }
 
@@ -124,6 +126,8 @@ impl From<CollidableEntity> for EntityDescription {
             spawn_position: entity.spawn_position,
             spawn_rotation: entity.spawn_rotation.coords.clone(),
             spawn_time: entity.spawn_time,
+            movement_start_parameter: entity.movement_start_parameter,
+            movement_end_parameter: entity.movement_end_parameter,
             movement: entity.prefab.movement.into()
         }
     }
