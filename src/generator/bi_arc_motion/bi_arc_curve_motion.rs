@@ -31,7 +31,7 @@ impl BiArcCurveMotion {
 
 impl RigidMotion<f32> for BiArcCurveMotion {
     fn position_at_time(&self, t: f32) -> Isometry<f32, U3, UnitQuaternion<f32>> {
-        let arc_direction = self.arcs_plane_normal.cross(&self.baseline_velocity);
+        let arc_direction = self.arcs_plane_normal.cross(&self.baseline_velocity.normalize());
         let baseline_position = (t - self.t0) * &self.baseline_velocity;
         let baseline_distance = (t - self.t0).signum() * baseline_position.magnitude();
         let approach_easing_range = calculate_easing_range(self.approach_arc_radius, self.approach_arc_angle);
@@ -71,8 +71,9 @@ impl RigidMotion<f32> for BiArcCurveMotion {
 
 impl BiArcCurveMotion {
     pub fn rotation_at_time(&self, t: f32) -> UnitQuaternion<f32> {
-        let baseline_position = (t - self.t0) * &self.baseline_velocity;
-        let baseline_distance = (t - self.t0).signum() * baseline_position.magnitude();
+        let param = (t - self.t0);
+        let baseline_position = param * &self.baseline_velocity;
+        let baseline_distance = param.signum() * baseline_position.magnitude();
         let approach_easing_range = calculate_easing_range(self.approach_arc_radius, self.approach_arc_angle);
         let departure_easing_range = calculate_easing_range(self.departure_arc_radius, self.departure_arc_angle);
         let approach_easing_range_position = baseline_distance
@@ -86,20 +87,24 @@ impl BiArcCurveMotion {
             .sub(self.departure_arc_center_distance)
             .abs();
 
-        UnitQuaternion::from_axis_angle(
+
+        let approach_progress = if approach_easing_range <= f32::EPSILON { param.signum().min(0.) } else { -approach_easing_range_position / approach_easing_range };
+        let approach_rotation = UnitQuaternion::from_axis_angle(
             &self.arcs_plane_normal,
-            -self.approach_rotation_strength *
-                self.approach_arc_angle *
-                approach_easing_range_position / approach_easing_range,
-        ) *
+            self.approach_rotation_strength * self.approach_arc_angle * approach_progress,
+        );
+        let departure_progress = if departure_easing_range <= f32::EPSILON { param.signum().max(0.) } else { departure_easing_range_position / departure_easing_range };
+        let departure_rotation =
             UnitQuaternion::from_axis_angle(
                 &self.arcs_plane_normal,
-                self.departure_rotation_strength *
-                    self.departure_arc_angle *
-                    departure_easing_range_position / departure_easing_range,
-            )
-            *
-            self.start.rotation
+                self.departure_rotation_strength * self.departure_arc_angle * departure_progress,
+            );
+        dbg!(&approach_rotation);
+        dbg!(&departure_rotation);
+        dbg!(&self.start.rotation);
+        let result = approach_rotation * departure_rotation * self.start.rotation;
+        dbg!(&result);
+        result
     }
 }
 
@@ -271,5 +276,32 @@ mod tests {
         assert_relative_eq!(motion.rotation_at_time(17.07106781).euler_angles().1.to_degrees(), 45.);
         assert_relative_eq!(motion.rotation_at_time(27.07106781).euler_angles().0.to_degrees(), 45.);
         assert_relative_eq!(motion.rotation_at_time(27.07106781).euler_angles().1.to_degrees(), 45.);
+    }
+
+    #[test]
+    fn test_rotation_at_time_with_zero_center_distances() {
+        let motion = BiArcCurveMotion::new(
+            0.,
+            Isometry::from_parts(
+                Translation::from(Vector3::new(0., 0., 0.)),
+                UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()),
+            ),
+            Vector3::new(0., 0., -1.),
+            Unit::new_normalize(Vector3::new(1., 0., 0.)),
+            45.0_f32.to_radians() as f32,
+            0.,
+            0.,
+            1.,
+            45.0_f32.to_radians() as f32,
+            0.,
+            0.,
+            1.,
+        );
+
+        assert_relative_eq!(motion.rotation_at_time(-10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), -45.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(-0.01), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), -45.0_f32.to_radians()));
+        // assert_relative_eq!(motion.rotation_at_time(0.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 0.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(0.01), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
+        assert_relative_eq!(motion.rotation_at_time(10.), UnitQuaternion::from_axis_angle(&Unit::new_normalize(Vector3::new(1., 0., 0.)), 45.0_f32.to_radians()));
     }
 }

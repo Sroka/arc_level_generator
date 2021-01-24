@@ -30,8 +30,8 @@ impl Prefab {
             return baseline_movement_velocity_toi;
         }
 
-        let arc_direction = self.movement.arcs_plane_normal.cross(&self.movement.baseline_velocity);
-        let approach_movement_line_direction = (-self.movement.baseline_velocity.normalize() +
+        let arc_direction = self.movement.arcs_plane_normal.cross(&self.movement.baseline_velocity.normalize());
+        let approach_movement_line_direction = (-self.movement.baseline_velocity +
             arc_direction * self.movement.approach_arc_angle.tan() * baseline_velocity_magnitude).normalize();
 
         let approach_movement_line_start = &self.position + shift - self.movement.baseline_velocity.normalize() * baseline_movement_line_length;
@@ -63,8 +63,8 @@ impl Prefab {
             return baseline_movement_velocity_toi;
         }
 
-        let arc_direction = self.movement.arcs_plane_normal.cross(&self.movement.baseline_velocity);
-        let departure_movement_line_direction = (self.movement.baseline_velocity.normalize() +
+        let arc_direction = self.movement.arcs_plane_normal.cross(&self.movement.baseline_velocity.normalize());
+        let departure_movement_line_direction = (self.movement.baseline_velocity +
             arc_direction * self.movement.departure_arc_angle.tan() * baseline_velocity_magnitude).normalize();
 
         let departure_movement_line_start = &self.position + shift + self.movement.baseline_velocity.normalize() * baseline_movement_line_length;

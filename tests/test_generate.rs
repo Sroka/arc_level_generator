@@ -548,9 +548,9 @@ mod tests {
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -8.),
                 arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
-                approach_arc_angle: 45.0_f32.to_radians(),
+                approach_arc_angle: 10.0_f32.to_radians(),
                 approach_arc_center_distance: 0.0,
-                approach_arc_radius: 50.0,
+                approach_arc_radius: 0.0,
                 approach_rotation_strength: 1.,
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
@@ -577,7 +577,7 @@ mod tests {
         };
 
         let world = VisibleWorld {
-            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 175.), Vector3::new(50., 50., 200.)),
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(200., 200., 200.)),
         };
         let generated_entities = arc_level_generator::generate(
             &world,
