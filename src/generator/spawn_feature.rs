@@ -95,7 +95,6 @@ mod tests {
             translate_y: false,
             translate_y_using_bounds: false,
             translate_y_bounds: nalgebra::zero(),
-            translate_z: 0.0,
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
         };
@@ -150,7 +149,6 @@ mod tests {
             translate_y: false,
             translate_y_using_bounds: false,
             translate_y_bounds: nalgebra::zero(),
-            translate_z: 0.0,
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
         };

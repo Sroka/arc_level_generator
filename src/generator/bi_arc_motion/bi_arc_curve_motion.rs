@@ -71,7 +71,7 @@ impl RigidMotion<f32> for BiArcCurveMotion {
 
 impl BiArcCurveMotion {
     pub fn rotation_at_time(&self, t: f32) -> UnitQuaternion<f32> {
-        let param = (t - self.t0);
+        let param = t - self.t0;
         let baseline_position = param * &self.baseline_velocity;
         let baseline_distance = param.signum() * baseline_position.magnitude();
         let approach_easing_range = calculate_easing_range(self.approach_arc_radius, self.approach_arc_angle);
@@ -99,11 +99,7 @@ impl BiArcCurveMotion {
                 &self.arcs_plane_normal,
                 self.departure_rotation_strength * self.departure_arc_angle * departure_progress,
             );
-        dbg!(&approach_rotation);
-        dbg!(&departure_rotation);
-        dbg!(&self.start.rotation);
         let result = approach_rotation * departure_rotation * self.start.rotation;
-        dbg!(&result);
         result
     }
 }

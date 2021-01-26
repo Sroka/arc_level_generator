@@ -73,7 +73,6 @@ mod tests {
             missed_spawns: 0,
             is_spawn_period_strict: false,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0,
         };
         let feature1 = Feature {
             trigger_time: 120.0,

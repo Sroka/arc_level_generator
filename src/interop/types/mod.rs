@@ -28,7 +28,6 @@ pub struct FeatureDescription {
     pub translate_y: bool,
     pub translate_y_using_bounds: bool,
     pub translate_y_bounds: Vector2<f32>,
-    pub translate_z: f32,
 }
 
 #[derive(Debug, Clone)]

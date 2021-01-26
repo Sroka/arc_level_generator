@@ -77,7 +77,6 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -127,7 +126,6 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -196,7 +194,6 @@ mod tests {
             missed_spawns: 0,
             is_spawn_period_strict: false,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
         let feature1 = Feature {
             translate_x: true,
@@ -213,7 +210,6 @@ mod tests {
             missed_spawns: 0,
             is_spawn_period_strict: false,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -264,7 +260,6 @@ mod tests {
             missed_spawns: 0,
             is_spawn_period_strict: false,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -315,7 +310,6 @@ mod tests {
             missed_spawns: 0,
             is_spawn_period_strict: false,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -366,7 +360,6 @@ mod tests {
             missed_spawns: 0,
             is_spawn_period_strict: true,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -417,7 +410,6 @@ mod tests {
             missed_spawns: 0,
             is_spawn_period_strict: true,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -468,7 +460,6 @@ mod tests {
             missed_spawns: 0,
             is_spawn_period_strict: true,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -522,7 +513,6 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -573,7 +563,6 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
 
         let world = VisibleWorld {
@@ -625,7 +614,6 @@ mod tests {
             priority: 1000,
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
-            translate_z: 0.0
         };
         let prefab1 = Prefab {
             prefab_id: 0,
@@ -660,7 +648,6 @@ mod tests {
             priority: 0,
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
-            translate_z: 10.0
         };
 
         let world = VisibleWorld {
@@ -669,6 +656,55 @@ mod tests {
         let generated_entities = arc_level_generator::generate(
             &world,
             &[feature0, feature1],
+            &mut rand::thread_rng(),
+        );
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entitity {}: {:?}", index, entity)
+        }
+    }
+
+    #[test]
+    fn test_generate_negative_arc_angles() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
+            movement: Movement {
+                baseline_velocity: Vector3::new(0., 0., -10.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(-1., 0., 0.)),
+                approach_arc_angle: -45.0_f32.to_radians(),
+                approach_arc_center_distance: 20.0,
+                approach_arc_radius: 100.0,
+                approach_rotation_strength: 1.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
+            },
+        };
+        let feature0 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab0],
+            spawn_count: 1,
+            spawn_period: 0.01,
+            is_spawn_period_strict: false,
+            trigger_time: 0.0,
+            priority: 1000,
+            missed_spawns: 0,
+            last_spawn_attempt: 0.0,
+        };
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 175.), Vector3::new(250., 250., 200.)),
+        };
+        let generated_entities = arc_level_generator::generate(
+            &world,
+            &[feature0],
             &mut rand::thread_rng(),
         );
         for (index, entity) in generated_entities.iter().enumerate() {

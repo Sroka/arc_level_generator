@@ -136,7 +136,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
             let obstacle = CollidableEntity {
                 movement_start_parameter: -10.5,
@@ -213,7 +212,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
             let obstacle = CollidableEntity {
                 movement_start_parameter: -10.5,
@@ -290,7 +288,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
             let obstacle = CollidableEntity {
                 movement_start_parameter: -24.,
@@ -367,7 +364,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
             let obstacle = CollidableEntity {
                 movement_start_parameter: -10.5,
@@ -446,7 +442,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
 
             let world = VisibleWorld {
@@ -524,7 +519,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
 
             let world = VisibleWorld {
@@ -603,7 +597,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
 
             let world = VisibleWorld {
@@ -688,7 +681,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
             let obstacle = CollidableEntity {
                 movement_start_parameter: -15.5,
@@ -772,7 +764,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
             let obstacle = CollidableEntity {
                 movement_start_parameter: -100.25,
@@ -856,7 +847,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
             let obstacle = CollidableEntity {
                 movement_start_parameter: -100.5,
@@ -933,7 +923,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
             let obstacle = CollidableEntity {
                 movement_start_parameter: -100.5,
@@ -1011,7 +1000,6 @@ mod tests {
                 missed_spawns: 0,
                 is_spawn_period_strict: false,
                 last_spawn_attempt: 0.0,
-                translate_z: 0.0,
             };
             let obstacle = CollidableEntity {
                 movement_start_parameter: -100.25,
