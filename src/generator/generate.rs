@@ -31,18 +31,27 @@ pub fn generate(
 
     let mut generated_entities: Vec<CollidableEntity> = Vec::new();
     let mut obstacles: VecDeque<CollidableEntity> = VecDeque::new();
-    let highest_spawn_delay = features
+    let highest_time_to_travel = features
         .iter()
-        .map(|item| item.max_time_to_travel(&world, &Vector3::new(0.,0.,0.)) + item.priority as f32)
+        .map(|item| item.max_time_to_travel(&world, &nalgebra::zero()))
         .sorted_by(|a, b| a.partial_cmp(b).unwrap_or(Equal))
         .last()
         .unwrap();
-    // dbg!(highest_spawn_delay);
+    upcoming_features
+        .iter_mut()
+        .for_each(|item| {
+            item.priority += (highest_time_to_travel - item.max_time_to_travel(&world, &nalgebra::zero())) as i32;
+        });
+    let highest_spawn_delay = features
+        .iter()
+        .map(|item| item.max_time_to_travel(&world, &nalgebra::zero()) + item.priority as f32)
+        .sorted_by(|a, b| a.partial_cmp(b).unwrap_or(Equal))
+        .last()
+        .unwrap();
     upcoming_features
         .iter_mut()
         .for_each(|item| {
             item.trigger_time += highest_spawn_delay;
-            // dbg!(item);
         });
 
     let mut time_travelled = 0.;

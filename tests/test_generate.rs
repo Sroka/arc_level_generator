@@ -711,4 +711,127 @@ mod tests {
             println!("Generated entitity {}: {:?}", index, entity)
         }
     }
+
+    #[test]
+    fn test_generate_priority_and_max_distance() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(1.0, 1.0, 1.0)),
+            movement: Movement {
+                baseline_velocity: Vector3::new(0., 0., -10.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
+            },
+        };
+        let feature0 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab0],
+            spawn_count: 10,
+            spawn_period: 0.01,
+            is_spawn_period_strict: false,
+            trigger_time: 20.0,
+            priority: 1000,
+            missed_spawns: 0,
+            last_spawn_attempt: 0.0,
+        };
+        let prefab1 = Prefab {
+            prefab_id: 1,
+            position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(1.0, 1.0, 1.0)),
+            movement: Movement {
+                baseline_velocity: Vector3::new(0., 0., -10.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 45.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 10.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
+            },
+        };
+        let feature1 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab1],
+            spawn_count: 10,
+            spawn_period: 0.01,
+            is_spawn_period_strict: false,
+            trigger_time: 18.0,
+            priority: 1000,
+            missed_spawns: 0,
+            last_spawn_attempt: 0.0,
+        };
+        let prefab2 = Prefab {
+            prefab_id: 2,
+            position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(1.0, 1.0, 1.0)),
+            movement: Movement {
+                baseline_velocity: Vector3::new(0., 0., -10.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 20.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0
+            },
+        };
+        let feature2 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab2],
+            spawn_count: 1,
+            spawn_period: 0.01,
+            is_spawn_period_strict: false,
+            trigger_time: 0.0,
+            priority: 1000,
+            missed_spawns: 0,
+            last_spawn_attempt: 0.0,
+        };
+
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 450.), Vector3::new(100., 100., 1100.)),
+        };
+        let generated_entities = arc_level_generator::generate(
+            &world,
+            &[feature0, feature1],
+            &mut rand::thread_rng(),
+        );
+        let time = 18.0;
+        for (index, entity) in generated_entities.iter().enumerate() {
+            // let movement = BiArcCurveMotion::new();
+            let movement_time = time - entity.spawn_time;
+            // println!("Generated entitity {}: {:?}", index, entity);
+            let position_in_0 = &entity.spawn_position + movement_time * &entity.prefab.movement.baseline_velocity;
+            println!("Prefab: {}, Priority:{}, Position in 0: {}", entity.prefab.prefab_id, entity.priority, position_in_0.z);
+        }
+    }
 }
