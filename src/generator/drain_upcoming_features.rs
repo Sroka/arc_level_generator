@@ -17,7 +17,8 @@ pub fn drain_upcoming_features(upcoming_features: &mut Vec<Feature>,
         return;
     }
     upcoming_features.retain(|feature| {
-        if time_travelled >= feature.trigger_time - feature.max_time_to_travel(&world, &Vector3::new(0.,0.,0.)) - feature.priority as f32 {
+        let trigger_adjusted = feature.trigger_time - feature.max_approach_time(&world, &Vector3::new(0., 0., 0.)) - feature.priority as f32;
+        if time_travelled >= trigger_adjusted {
             active_features.push(feature.clone());
             false
         } else {

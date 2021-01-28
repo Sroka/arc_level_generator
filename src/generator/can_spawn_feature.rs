@@ -17,7 +17,7 @@ pub fn can_spawn_feature(
     time_travelled: f32,
     feature_shift: &Vector3<f32>,
 ) -> bool {
-    let max_time_to_travel = feature.max_time_to_travel(&world, &feature_shift);
+    let max_time_to_travel = feature.max_approach_time(&world, &feature_shift);
     let any_prefab_in_feature_collides_with_any_obstacle = feature.prefabs
         .par_iter()
         .any(|prefab| {

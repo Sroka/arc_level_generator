@@ -26,7 +26,7 @@ pub struct Feature {
 }
 
 impl Feature {
-    pub fn max_time_to_travel(&self, world: &VisibleWorld, shift: &Vector3<f32>) -> f32 {
+    pub fn max_approach_time(&self, world: &VisibleWorld, shift: &Vector3<f32>) -> f32 {
         self.prefabs
             .iter()
             .map(|prefab| prefab.find_approach_time_in_world(&world, &shift))
@@ -118,7 +118,7 @@ mod tests {
             missed_spawns: 0,
             last_spawn_attempt: 0.0,
         };
-        let max_time_to_travel = feature.max_time_to_travel(&world, &Vector3::new(0.,0.,0.));
+        let max_time_to_travel = feature.max_approach_time(&world, &Vector3::new(0., 0., 0.));
         assert_eq!(max_time_to_travel, 10.25);
     }
 }

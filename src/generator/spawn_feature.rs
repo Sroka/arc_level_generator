@@ -23,7 +23,7 @@ pub fn spawn_feature(feature: &Feature,
                      world: &VisibleWorld,
                      feature_shift: &Vector3<f32>,
 ) {
-    let max_time_to_travel = feature.max_time_to_travel(&world, &feature_shift);
+    let max_time_to_travel = feature.max_approach_time(&world, &feature_shift);
     for prefab in &feature.prefabs {
         let prefab_motion = BiArcCurveMotion::new(
             max_time_to_travel,

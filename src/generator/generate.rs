@@ -33,18 +33,18 @@ pub fn generate(
     let mut obstacles: VecDeque<CollidableEntity> = VecDeque::new();
     let highest_time_to_travel = features
         .iter()
-        .map(|item| item.max_time_to_travel(&world, &nalgebra::zero()))
+        .map(|item| item.max_approach_time(&world, &nalgebra::zero()))
         .sorted_by(|a, b| a.partial_cmp(b).unwrap_or(Equal))
         .last()
         .unwrap();
     upcoming_features
         .iter_mut()
         .for_each(|item| {
-            item.priority += (highest_time_to_travel - item.max_time_to_travel(&world, &nalgebra::zero())) as i32;
+            item.priority += (highest_time_to_travel - item.max_approach_time(&world, &nalgebra::zero())) as i32;
         });
     let highest_spawn_delay = features
         .iter()
-        .map(|item| item.max_time_to_travel(&world, &nalgebra::zero()) + item.priority as f32)
+        .map(|item| item.max_approach_time(&world, &nalgebra::zero()) + item.priority as f32)
         .sorted_by(|a, b| a.partial_cmp(b).unwrap_or(Equal))
         .last()
         .unwrap();
