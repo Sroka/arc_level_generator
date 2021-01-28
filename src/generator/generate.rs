@@ -10,7 +10,6 @@ use crate::generator::can_spawn_feature::can_spawn_feature;
 use crate::generator::spawn_feature::spawn_feature;
 use itertools::Itertools;
 use std::cmp::Ordering::Equal;
-use nalgebra::Vector3;
 
 const STEP: f32 = 0.025;
 
@@ -68,8 +67,11 @@ pub fn generate(
         active_features.shuffle(rng);
 
         'features_loop: for feature in &mut active_features {
+            if feature.last_spawn_attempt == f32::MIN {
+                feature.last_spawn_attempt = time_travelled - feature.spawn_period;
+            }
             let should_try_spawning = if feature.is_spawn_period_strict {
-                time_travelled > feature.last_spawn_attempt + feature.spawn_period
+                time_travelled >= feature.last_spawn_attempt + feature.spawn_period
             } else {
                 let chance_to_spawn = ((STEP * (1 + feature.missed_spawns) as f32 / feature.spawn_period) as f64).min(1.0);
                 rng.gen_bool(chance_to_spawn)

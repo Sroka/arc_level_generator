@@ -15,7 +15,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -23,7 +23,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let prefab1 = Prefab {
@@ -33,7 +33,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -41,7 +41,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let prefab2 = Prefab {
@@ -51,7 +51,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -59,7 +59,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -91,6 +91,7 @@ mod tests {
             println!("Generated entitity {}: {:?}", index, entity)
         }
     }
+
     #[test]
     fn test_generate() {
         let prefab0 = Prefab {
@@ -100,7 +101,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -108,7 +109,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -150,7 +151,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(4.0, 4.0, 4.0)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., -1., 0.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -158,7 +159,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let prefab1 = Prefab {
@@ -168,7 +169,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(4.0, 4.0, 4.0)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., -1., 0.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -176,7 +177,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -234,7 +235,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(5.0, 5.0, 5.0)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., -1., 0.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -242,7 +243,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -280,11 +281,11 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0., 0., 0.),
-            rotation: UnitQuaternion::from_euler_angles( 0., std::f32::consts::FRAC_PI_2, 0.),
+            rotation: UnitQuaternion::from_euler_angles(0., std::f32::consts::FRAC_PI_2, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -292,7 +293,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -330,11 +331,11 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0., 0., 0.),
-            rotation: UnitQuaternion::from_euler_angles( 0., std::f32::consts::FRAC_PI_2, 0.),
+            rotation: UnitQuaternion::from_euler_angles(0., std::f32::consts::FRAC_PI_2, 0.),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -342,8 +343,8 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
-            }
+                departure_rotation_strength: 0.0,
+            },
         };
         let feature0 = Feature {
             translate_x: false,
@@ -380,11 +381,11 @@ mod tests {
         let prefab0 = Prefab {
             prefab_id: 0,
             position: Vector3::new(0., -9.38, 0.),
-            rotation: UnitQuaternion::from_euler_angles( -std::f32::consts::FRAC_PI_2, 0., std::f32::consts::PI),
+            rotation: UnitQuaternion::from_euler_angles(-std::f32::consts::FRAC_PI_2, 0., std::f32::consts::PI),
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(8.0, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -392,7 +393,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -434,7 +435,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(7.5, 7., 11.)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -442,7 +443,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -487,7 +488,7 @@ mod tests {
             // bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(22.05775, 13.11225, 9.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -8.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -495,7 +496,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -537,7 +538,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -8.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 10.0_f32.to_radians(),
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -545,7 +546,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -588,7 +589,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -596,7 +597,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -622,7 +623,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(0.5, 0.5, 0.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -1.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -630,7 +631,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature1 = Feature {
@@ -680,7 +681,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -721,7 +722,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(14.72452, 14.45472, 14.72456)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -8.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -729,7 +730,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature0 = Feature {
@@ -755,7 +756,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(12.438405, 8.28537, 32.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(0., 0., -8.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,1.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 1., 0.)),
                 approach_arc_angle: -30.0_f32.to_radians(),
                 approach_arc_center_distance: 30.0,
                 approach_arc_radius: 200.0,
@@ -763,7 +764,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature1 = Feature {
@@ -789,7 +790,7 @@ mod tests {
             bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(12.438405, 8.28537, 32.5)),
             movement: Movement {
                 baseline_velocity: Vector3::new(2., 0., -8.),
-                arcs_plane_normal: Unit::new_normalize(Vector3::new(1.,0.,0.)),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
                 approach_arc_angle: 0.0,
                 approach_arc_center_distance: 0.0,
                 approach_arc_radius: 0.0,
@@ -797,7 +798,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
         };
         let feature2 = Feature {
@@ -829,7 +830,60 @@ mod tests {
         for (index, entity) in generated_entities.iter().enumerate() {
             // let movement = BiArcCurveMotion::new();
             let movement_time = time - entity.spawn_time;
-            // println!("Generated entitity {}: {:?}", index, entity);
+            println!("Generated entitity {}: {:?}", index, entity);
+            let position_in_0 = &entity.spawn_position + movement_time * &entity.prefab.movement.baseline_velocity;
+            println!("Prefab: {}, Priority:{}, Position in 0: {}", entity.prefab.prefab_id, entity.priority, position_in_0.z);
+        }
+    }
+
+    #[test]
+    fn test_strict_spawn_period() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(1., 1., 1.)),
+            movement: Movement {
+                baseline_velocity: Vector3::new(0., 0., -8.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0,
+            },
+        };
+        let feature0 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab0],
+            spawn_count: 5,
+            spawn_period: 1.0,
+            is_spawn_period_strict: true,
+            trigger_time: 100.0,
+            priority: 1000,
+            missed_spawns: 0,
+            last_spawn_attempt: f32::MIN,
+        };
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 575.), Vector3::new(250., 250., 600.)),
+        };
+        let generated_entities = arc_level_generator::generate(
+            &world,
+            &[feature0],
+            &mut rand::thread_rng(),
+        );
+        let time = 100.0;
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entitity {}: {:?}", index, entity);
+            let movement_time = time - entity.spawn_time;
             let position_in_0 = &entity.spawn_position + movement_time * &entity.prefab.movement.baseline_velocity;
             println!("Prefab: {}, Priority:{}, Position in 0: {}", entity.prefab.prefab_id, entity.priority, position_in_0.z);
         }

@@ -38,7 +38,7 @@ pub unsafe extern fn bind_generate(
                 translate_y_using_bounds: feature_description.translate_y_using_bounds,
                 translate_y_bounds: feature_description.translate_y_bounds.clone(),
                 missed_spawns: 0,
-                last_spawn_attempt: 0.0,
+                last_spawn_attempt: f32::MIN,
             }
         })
         .collect();
