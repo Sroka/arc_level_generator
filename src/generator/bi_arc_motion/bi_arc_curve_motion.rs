@@ -150,6 +150,60 @@ mod tests {
         assert_eq!(motion.position_at_time(27.07106781).translation.vector, Vector3::new(0., 12.9289322, -27.07106781));
     }
 
+    #[test]
+    fn test_position_at_time_other_direction() {
+        let motion = BiArcCurveMotion::new(
+            0.,
+            Isometry::from_parts(Translation::from(Vector3::new(0., 0., 0.)), UnitQuaternion::identity()),
+            Vector3::new(0., 0., 1.),
+            Unit::new_normalize(Vector3::new(1., 0., 0.)),
+            45.0_f32.to_radians() as f32,
+            10.,
+            10.,
+            1.,
+            45.0_f32.to_radians() as f32,
+            10.,
+            10.,
+            1.,
+        );
+
+        assert_eq!(motion.position_at_time(-27.07106781).translation.vector, Vector3::new(0., -12.9289322, -27.07106781));
+        assert_eq!(motion.position_at_time(-17.07106781).translation.vector, Vector3::new(0., -2.9289322, -17.07106781));
+        assert_eq!(motion.position_at_time(-10.).translation.vector, Vector3::new(0., 0., -10.));
+        assert_eq!(motion.position_at_time(0.).translation.vector, Vector3::new(0., 0., 0.));
+        assert_eq!(motion.position_at_time(10.).translation.vector, Vector3::new(0., 0., 10.));
+        assert_eq!(motion.position_at_time(17.07106781).translation.vector, Vector3::new(0., -2.9289322, 17.07106781));
+        assert_eq!(motion.position_at_time(27.07106781).translation.vector, Vector3::new(0., -12.9289322, 27.07106781));
+    }
+
+    #[test]
+    fn test_position_at_time_single_ended() {
+        let motion = BiArcCurveMotion::new(
+            0.,
+            Isometry::from_parts(Translation::from(Vector3::new(0., 0., 0.)), UnitQuaternion::identity()),
+            Vector3::new(0., 0., 1.),
+            Unit::new_normalize(Vector3::new(1., 0., 0.)),
+            45.0_f32.to_radians() as f32,
+            0.,
+            0.,
+            0.,
+            45.0_f32.to_radians() as f32,
+            50.,
+           0.,
+            0.,
+        );
+
+        assert_eq!(motion.position_at_time(-27.07106781).translation.vector, Vector3::new(0., -27.07106781, -27.07106781));
+        assert_eq!(motion.position_at_time(-17.07106781).translation.vector, Vector3::new(0., -17.07106781, -17.07106781));
+        assert_eq!(motion.position_at_time(-10.).translation.vector, Vector3::new(0., -10., -10.));
+        assert_eq!(motion.position_at_time(0.).translation.vector, Vector3::new(0., 0., 0.));
+        assert_eq!(motion.position_at_time(10.).translation.vector, Vector3::new(0., 0., 10.));
+        assert_eq!(motion.position_at_time(17.07106781).translation.vector, Vector3::new(0., 0., 17.07106781));
+        assert_eq!(motion.position_at_time(27.07106781).translation.vector, Vector3::new(0., 0., 27.07106781));
+        assert_eq!(motion.position_at_time(49.).translation.vector, Vector3::new(0., 0., 49.0));
+        assert_eq!(motion.position_at_time(55.).translation.vector, Vector3::new(0., -5., 55.0));
+    }
+
 
     #[test]
     fn test_position_at_time_with_negative_angles() {

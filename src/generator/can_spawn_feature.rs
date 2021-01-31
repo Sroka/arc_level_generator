@@ -33,10 +33,10 @@ pub fn can_spawn_feature(
                         prefab.movement.approach_arc_center_distance,
                         prefab.movement.approach_arc_radius,
                         prefab.movement.approach_rotation_strength,
-                        prefab.movement.approach_arc_angle,
-                        prefab.movement.approach_arc_center_distance,
-                        prefab.movement.approach_arc_radius,
-                        prefab.movement.approach_rotation_strength,
+                        prefab.movement.departure_arc_angle,
+                        prefab.movement.departure_arc_center_distance,
+                        prefab.movement.departure_arc_radius,
+                        prefab.movement.departure_rotation_strength,
                     );
 
                     let obstacle_motion = BiArcCurveMotion::new(
@@ -48,10 +48,10 @@ pub fn can_spawn_feature(
                         obstacle.prefab.movement.approach_arc_center_distance,
                         obstacle.prefab.movement.approach_arc_radius,
                         obstacle.prefab.movement.approach_rotation_strength,
-                        obstacle.prefab.movement.approach_arc_angle,
-                        obstacle.prefab.movement.approach_arc_center_distance,
-                        obstacle.prefab.movement.approach_arc_radius,
-                        obstacle.prefab.movement.approach_rotation_strength,
+                        obstacle.prefab.movement.departure_arc_angle,
+                        obstacle.prefab.movement.departure_arc_center_distance,
+                        obstacle.prefab.movement.departure_arc_radius,
+                        obstacle.prefab.movement.departure_rotation_strength,
                     );
 
                     let prefab_bounding_box = Cuboid::new(prefab.bounding_box.half_extents());

@@ -1,8 +1,9 @@
 #[cfg(test)]
 mod tests {
     use ncollide3d::bounding_volume::AABB;
-    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion, Unit};
-    use self::arc_level_generator::{VisibleWorld, Prefab, Feature, Movement};
+    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion, Unit, Isometry3, Translation3};
+    use self::arc_level_generator::{VisibleWorld, Prefab, Feature, Movement, BiArcCurveMotion};
+    use ncollide3d::interpolation::RigidMotion;
 
     extern crate arc_level_generator;
 
@@ -886,6 +887,107 @@ mod tests {
             let movement_time = time - entity.spawn_time;
             let position_in_0 = &entity.spawn_position + movement_time * &entity.prefab.movement.baseline_velocity;
             println!("Prefab: {}, Priority:{}, Position in 0: {}", entity.prefab.prefab_id, entity.priority, position_in_0.z);
+        }
+    }
+
+    #[test]
+    fn test_arc_with_straight_collision() {
+        let prefab0 = Prefab {
+            prefab_id: 0,
+            position: Vector3::new(0., 0., 0.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(5., 5., 5.)),
+            movement: Movement {
+                baseline_velocity: Vector3::new(0., 0., 1.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
+                approach_arc_angle: 45.0_f32.to_radians(),
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 45.0_f32.to_radians(),
+                departure_arc_center_distance: 50.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0,
+            },
+        };
+        let prefab1 = Prefab {
+            prefab_id: 1,
+            position: Vector3::new(0., 0., 1.),
+            rotation: UnitQuaternion::identity(),
+            bounding_box: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(5., 5., 5.)),
+            movement: Movement {
+                baseline_velocity: Vector3::new(0., 0., -10.),
+                arcs_plane_normal: Unit::new_normalize(Vector3::new(1., 0., 0.)),
+                approach_arc_angle: 0.0,
+                approach_arc_center_distance: 0.0,
+                approach_arc_radius: 0.0,
+                approach_rotation_strength: 0.,
+                departure_arc_angle: 0.0,
+                departure_arc_center_distance: 0.0,
+                departure_arc_radius: 0.0,
+                departure_rotation_strength: 0.0,
+            },
+        };
+        let feature0 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab0],
+            spawn_count: 1,
+            spawn_period: 0.01,
+            is_spawn_period_strict: false,
+            trigger_time: 0.0,
+            priority: 1000,
+            missed_spawns: 0,
+            last_spawn_attempt: f32::MIN,
+        };
+        let feature1 = Feature {
+            translate_x: false,
+            translate_x_using_bounds: false,
+            translate_x_bounds: Vector2::new(0., 0.),
+            translate_y: false,
+            translate_y_using_bounds: false,
+            translate_y_bounds: Vector2::new(0., 0.),
+            prefabs: vec![prefab1],
+            spawn_count: 1,
+            spawn_period: 0.01,
+            is_spawn_period_strict: false,
+            trigger_time: 10.0,
+            priority: 1000,
+            missed_spawns: 0,
+            last_spawn_attempt: f32::MIN,
+        };
+        let world = VisibleWorld {
+            world_bounds: AABB::from_half_extents(Point3::new(0., 0., 0.), Vector3::new(250., 250., 500.)),
+        };
+        let generated_entities = arc_level_generator::generate(
+            &world,
+            &[feature0, feature1],
+            &mut rand::thread_rng(),
+        );
+        let time = 50.;
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entitity {}: {:?}", index, entity);
+            let movement_time = time - entity.spawn_time;
+            let position_in_0 = &entity.spawn_position + movement_time * &entity.prefab.movement.baseline_velocity;
+            let motion = BiArcCurveMotion::new(
+                -entity.movement_start_parameter,
+                Isometry3::from_parts(Translation3::from(entity.prefab.position), entity.prefab.rotation),
+                entity.prefab.movement.baseline_velocity.clone(),
+                entity.prefab.movement.arcs_plane_normal.clone(),
+                entity.prefab.movement.approach_arc_angle,
+                entity.prefab.movement.approach_arc_center_distance,
+                entity.prefab.movement.approach_arc_radius,
+                entity.prefab.movement.approach_rotation_strength,
+                entity.prefab.movement.departure_arc_angle,
+                entity.prefab.movement.departure_arc_center_distance,
+                entity.prefab.movement.departure_arc_radius,
+                entity.prefab.movement.departure_rotation_strength,
+            );
+            println!("Prefab: {}, Priority:{}, time: {}, Position in time: {}, Position2 in time: {}", entity.prefab.prefab_id, entity.priority, time, position_in_0.z, motion.position_at_time(movement_time).translation.vector);
         }
     }
 }

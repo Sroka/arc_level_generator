@@ -10,4 +10,5 @@ mod calculate_prefabs_spawn_bounds;
 mod bi_arc_motion;
 
 pub use self::types::{VisibleWorld, Feature, Prefab, CollidableEntity, Movement};
+pub use self::bi_arc_motion::{BiArcCurveMotion};
 pub use self::generate::generate;
