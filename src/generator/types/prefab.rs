@@ -3,13 +3,16 @@ use ncollide3d::bounding_volume::{AABB};
 use crate::generator::types::movement::Movement;
 use crate::VisibleWorld;
 use ncollide3d::query::{RayCast, Ray};
+use serde::{Serialize, Deserialize};
+use crate::generator::types::{serialize_aabb, deserialize_aabb};
 
 /// Represents single smallest piece of a generated level
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
 pub struct Prefab {
     pub prefab_id: i32,
     pub position: Vector3<f32>,
     pub rotation: UnitQuaternion<f32>,
+    #[serde(serialize_with = "serialize_aabb", deserialize_with = "deserialize_aabb")]
     pub bounding_box: AABB<f32>,
     pub movement: Movement,
 }

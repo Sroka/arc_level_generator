@@ -3,11 +3,12 @@ use nalgebra::{Vector2, Vector3};
 use crate::VisibleWorld;
 use itertools::Itertools;
 use std::cmp::Ordering::Equal;
+use serde::{Serialize, Deserialize};
 
 /// Represents a description of a feature that can be spawned in a generated world. Single feature
 /// can consist of a multiple prefabs. The feature can only be spawned if all of its prefabs can be
 /// spawned so that they won't collide with any of other already spawned entities
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
 pub struct Feature {
     pub prefabs: Vec<Prefab>,
     pub spawn_period: f32,

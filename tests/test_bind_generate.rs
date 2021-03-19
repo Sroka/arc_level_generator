@@ -40,7 +40,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -58,7 +58,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -76,7 +76,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -94,7 +94,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -180,7 +180,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -198,7 +198,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -269,7 +269,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };
@@ -287,7 +287,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(4.0, 4.0, 4.0),
         };
@@ -359,7 +359,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(0.5, 0.5, 0.5),
         };
@@ -415,7 +415,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(12.43841, 8.28537, 30.5627),
         };
@@ -471,7 +471,7 @@ mod tests {
                 departure_arc_angle: 0.0,
                 departure_arc_center_distance: 0.0,
                 departure_arc_radius: 0.0,
-                departure_rotation_strength: 0.0
+                departure_rotation_strength: 0.0,
             },
             half_extents: Vector3::new(12.43841, 8.28537, 30.5627),
         };

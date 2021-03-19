@@ -49,11 +49,9 @@ pub unsafe extern fn bind_generate(
             world_description.position.x,
             world_description.position.y,
             world_description.position.z,
-        ), world_description.half_extents),
+        ), world_description.half_extents).into(),
     };
 
-    dbg!(&world);
-    dbg!(&features);
 
     let generated_entities = generate(
         &world,
@@ -63,7 +61,7 @@ pub unsafe extern fn bind_generate(
 
     let mut entities_descriptions: Vec<EntityDescription> = generated_entities.iter().map(|entity| entity.clone().into()).collect();
     entities_descriptions.shrink_to_fit();
-    dbg!(&entities_descriptions);
+    // dbg!(&entities_descriptions);
     assert_eq!(entities_descriptions.capacity(), entities_descriptions.len());
     let pointer = entities_descriptions.as_mut_ptr();
     let length = entities_descriptions.len() as i32;

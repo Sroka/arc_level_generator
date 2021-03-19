@@ -1,6 +1,7 @@
 use nalgebra::{Vector3, Unit};
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
 pub struct Movement {
     pub baseline_velocity: Vector3<f32>,
     pub arcs_plane_normal: Unit<Vector3<f32>>,

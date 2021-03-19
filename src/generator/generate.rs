@@ -25,6 +25,12 @@ pub fn generate(
     features: &[Feature],
     rng: &mut impl RngCore,
 ) -> Vec<CollidableEntity> {
+    let world_json = serde_json::to_string(&world).unwrap();
+    let features_json = serde_json::to_string(&features).unwrap();
+    println!("WORLD DESCRIPTION:");
+    println!("{}", &world_json);
+    println!("FEATURES DESCRIPTION:");
+    println!("{}", &features_json);
     let mut upcoming_features: Vec<Feature> = Vec::from(features);
     let mut active_features: Vec<Feature> = Vec::new();
 

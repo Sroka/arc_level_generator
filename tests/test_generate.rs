@@ -1,9 +1,10 @@
 #[cfg(test)]
 mod tests {
+    use nalgebra::{Isometry3, Point, Point3, Quaternion, Translation3, Unit, UnitQuaternion, Vector2, Vector3};
     use ncollide3d::bounding_volume::AABB;
-    use nalgebra::{Vector3, Point3, Vector2, UnitQuaternion, Unit, Isometry3, Translation3};
-    use self::arc_level_generator::{VisibleWorld, Prefab, Feature, Movement, BiArcCurveMotion};
     use ncollide3d::interpolation::RigidMotion;
+
+    use self::arc_level_generator::{BiArcCurveMotion, Feature, Movement, Prefab, VisibleWorld};
 
     extern crate arc_level_generator;
 
@@ -966,6 +967,41 @@ mod tests {
         let generated_entities = arc_level_generator::generate(
             &world,
             &[feature0, feature1],
+            &mut rand::thread_rng(),
+        );
+        let time = 50.;
+        for (index, entity) in generated_entities.iter().enumerate() {
+            println!("Generated entitity {}: {:?}", index, entity);
+            let movement_time = time - entity.spawn_time;
+            let position_in_0 = &entity.spawn_position + movement_time * &entity.prefab.movement.baseline_velocity;
+            let motion = BiArcCurveMotion::new(
+                -entity.movement_start_parameter,
+                Isometry3::from_parts(Translation3::from(entity.prefab.position), entity.prefab.rotation),
+                entity.prefab.movement.baseline_velocity.clone(),
+                entity.prefab.movement.arcs_plane_normal.clone(),
+                entity.prefab.movement.approach_arc_angle,
+                entity.prefab.movement.approach_arc_center_distance,
+                entity.prefab.movement.approach_arc_radius,
+                entity.prefab.movement.approach_rotation_strength,
+                entity.prefab.movement.departure_arc_angle,
+                entity.prefab.movement.departure_arc_center_distance,
+                entity.prefab.movement.departure_arc_radius,
+                entity.prefab.movement.departure_rotation_strength,
+            );
+            println!("Prefab: {}, Priority:{}, time: {}, Position in time: {}, Position2 in time: {}", entity.prefab.prefab_id, entity.priority, time, position_in_0.z, motion.position_at_time(movement_time).translation.vector);
+        }
+    }
+
+    #[test]
+    pub fn test_reverse_bug() {
+        let world_json = r#"{"world_bounds":[-10.0,-10.0,-10.0,10.0,10.0,10.0]}"#;
+        let world: VisibleWorld = serde_json::from_str(&world_json).unwrap();
+        let features_json = r#"[{"prefabs":[{"prefab_id":0,"position":[0.0,0.0,0.0],"rotation":[0.0,0.0,0.0,1.0],"bounding_box":[-5.0,-5.0,-5.0,5.0,5.0,5.0],"movement":{"baseline_velocity":[0.0,0.0,1.0],"arcs_plane_normal":[1.0,0.0,0.0],"approach_arc_angle":0.7853982,"approach_arc_center_distance":0.0,"approach_arc_radius":0.0,"approach_rotation_strength":0.0,"departure_arc_angle":0.7853982,"departure_arc_center_distance":50.0,"departure_arc_radius":0.0,"departure_rotation_strength":0.0}}],"spawn_period":0.01,"is_spawn_period_strict":false,"spawn_count":1,"trigger_time":0.0,"priority":1000,"translate_x":false,"translate_x_using_bounds":false,"translate_x_bounds":[0.0,0.0],"translate_y":false,"translate_y_using_bounds":false,"translate_y_bounds":[0.0,0.0],"missed_spawns":0,"last_spawn_attempt":-3.4028235e38},{"prefabs":[{"prefab_id":1,"position":[0.0,0.0,1.0],"rotation":[0.0,0.0,0.0,1.0],"bounding_box":[-5.0,-5.0,-5.0,5.0,5.0,5.0],"movement":{"baseline_velocity":[0.0,0.0,-10.0],"arcs_plane_normal":[1.0,0.0,0.0],"approach_arc_angle":0.0,"approach_arc_center_distance":0.0,"approach_arc_radius":0.0,"approach_rotation_strength":0.0,"departure_arc_angle":0.0,"departure_arc_center_distance":0.0,"departure_arc_radius":0.0,"departure_rotation_strength":0.0}}],"spawn_period":0.01,"is_spawn_period_strict":false,"spawn_count":1,"trigger_time":10.0,"priority":1000,"translate_x":false,"translate_x_using_bounds":false,"translate_x_bounds":[0.0,0.0],"translate_y":false,"translate_y_using_bounds":false,"translate_y_bounds":[0.0,0.0],"missed_spawns":0,"last_spawn_attempt":-3.4028235e38}]"#;
+        let features: Vec<Feature> = serde_json::from_str(&features_json).unwrap();
+
+        let generated_entities = arc_level_generator::generate(
+            &world,
+            &features.as_slice(),
             &mut rand::thread_rng(),
         );
         let time = 50.;
